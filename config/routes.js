@@ -13,11 +13,22 @@ const incidents = require('incidents'); // require the incidents controller
 
 module.exports = function (app, passport) {
 
-  app.get('/', home.index);
+  // app.get('/', home.index);
+  app.get('/', function (req, res) {
+    res.redirect('/incidents');
+  })
 
-  app.param('incidentId', incidents.load);
-  app.get('/incidents', incidents.index);
-  app.get('/incidents/:articleId', incidents.show);
+  /**
+   * Incident routes
+   */
+  app.param('incidentId',                 incidents.load);
+  app.get('/incidents',                   incidents.index);
+  app.get('/incidents/new',               incidents.new);
+  app.get('/incidents/:incidentId',       incidents.show);
+  app.get('/incidents/:incidentId/edit',  incidents.edit);
+  app.post('/incidents',                  incidents.create);
+  app.put('/incidents/:incidentId',       incidents.update);
+  app.delete('/incidents/:incidentId',    incidents.destroy);
 
   /**
    * Error handling

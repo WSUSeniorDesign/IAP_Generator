@@ -1,5 +1,17 @@
 extends ../layouts/default.jade
 
+mixin formGroup(labelText, value)
+  .form-group
+    label= labelText
+    div: p.form-static-control= value
+
+block main
+  h2= title
+
 block content
-  p Incident name: #{incident.name}
-  p Incident Commander: #{incident.commander.name}
+  .row
+    .col-xs-12
+      form(role="form")
+        +formGroup("Incident Name", incident.name)
+        +formGroup("Location", incident.location)
+        +formGroup("Active", incident.active)

@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "NODE_PATH=./config:./app/controllers NODE_ENV=development ./node_modules/.bin/nodemon server.js",
+    "debug": "NODE_PATH=./config:./app/controllers NODE_ENV=development ./node_modules/.bin/nodemon --debug server.js",
     "test": "make test"
   },
   "dependencies": {
@@ -28,6 +29,7 @@
     "mongoose": "4.0.6",
     "mongoose-user": "latest",
     "morgan": "1.6.1",
+    "only": "0.0.2",
     "passport": "0.2.2",
     "passport-local": "1.0.0",
     "swig": "1.4.2",
