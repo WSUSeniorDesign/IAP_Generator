@@ -5,6 +5,7 @@
 
 var mongoose = require('mongoose');
 var home = require('home');
+const incidents = require('incidents'); // require the incidents controller
 
 /**
  * Expose
@@ -13,6 +14,10 @@ var home = require('home');
 module.exports = function (app, passport) {
 
   app.get('/', home.index);
+
+  app.param('incidentId', incidents.load);
+  app.get('/incidents', incidents.index);
+  app.get('/incidents/:articleId', incidents.show);
 
   /**
    * Error handling
