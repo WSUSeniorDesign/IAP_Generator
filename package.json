@@ -7,8 +7,8 @@
     "node": "0.12.x"
   },
   "scripts": {
-    "start": "NODE_PATH=./config:./app/controllers NODE_ENV=development ./node_modules/.bin/nodemon server.js",
-    "debug": "NODE_PATH=./config:./app/controllers NODE_ENV=development ./node_modules/.bin/nodemon --debug server.js",
+    "start": "./node_modules/.bin/nodemon server.js",
+    "debug": "./node_modules/.bin/nodemon --debug server.js",
     "test": "make test"
   },
   "dependencies": {

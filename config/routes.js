@@ -4,8 +4,9 @@
  */
 
 var mongoose = require('mongoose');
-var home = require('home');
-const incidents = require('incidents'); // require the incidents controller
+var home = require('../app/controllers/home');
+
+const incidents = require('../app/controllers/incidents'); // require the incidents controller
 
 /**
  * Expose
