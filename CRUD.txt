@@ -1,0 +1,60 @@
+// Assumes the database is already created, and that it is the current working database.
+
+// Creation capability
+db.ICS_204.save({
+	incidentName: "testIncident",
+	operationalPeriod: { 
+		start: new Date(), 
+		end: new Date()
+	},
+	field3: { 
+		branch: "testBranch", 
+		division: "testDivision", 
+		group: "testGroup", 
+		stagingArea: "testStagingArea" 
+	},
+	operationsPersonnel: { 
+		operationsSectionChiefName: "testOperationsSectionChiefName", 
+		operationsSectionChiefContactNumber: 0,
+		branchDirectorName: "testBranchDirectorName",
+		branchDirectorContactNumber: 0,
+		divisionGroupSupervisorName: "testDivisionGroupSupervisorName",
+		divisionGroupSupervisorContactNumber: 0
+	},
+	resourcesAssigned: [{
+		resourceIdentifier: "testResourceIdentifier", 
+		leader: "testLeader", 
+		numOfPersons: 0, 
+		contact: "testContact"
+	}],
+	workAssignments: "testWorkAssignments",
+	specialInstructions: "testSpecialInstructions",
+	incidentName: "testIncidentName",
+	operationalPeriod: { 
+		start: new Date(),
+		end: new Date()
+	},
+	
+	communications: [{
+		name: "testName",
+		function: "testFunction",
+		primaryContact: "testPrimaryContact"
+	}],
+	preparedBy: {
+		name: "testName",
+		positionTitle: "testPositionTitle",
+		signature: "testSignature",
+		dateTime: new Date()
+	}
+});
+
+// Read capability
+db.ICS_204.find().pretty()
+
+// Update Capability
+db.ICS_204.update({"incidentName" : "testIncidentName"}, {$set: {"incidentName" : "updatedTestIncidentName" }})
+db.ICS_204.find().pretty()
+
+// Delete Capability
+db.ICS_204.remove({"incidentName" : "updatedTestIncidentName" })
+db.ICS_204.find().pretty()
