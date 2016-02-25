@@ -15,3 +15,10 @@ block content
         +formGroup("Incident Name", incident.name)
         +formGroup("Location", incident.location)
         +formGroup("Active", incident.active)
+        .form-group
+          h3 ICS 204:
+          p: a(href=`/incidents/${incident._id}/form/ics204/new`) + Create new ICS 204
+          ul
+            if incident.hasOwnProperty('forms') && incident.forms.hasOwnProperty('ics204')
+              each form in incident.forms.ics204
+                li: a(href=`/incidents/${incident._id}/form/ics204/${form._id}`)= form._id

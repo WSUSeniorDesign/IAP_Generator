@@ -1,7 +1,8 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var ICS204Schema = mongoose.Schema({
-  incidentName: String,
+const ICS204Schema = new Schema({
+  incidentId: { type: Schema.Types.ObjectId, required: true },
   operationalPeriod: { 
     start: Date, 
     end: Date 
@@ -24,7 +25,7 @@ var ICS204Schema = mongoose.Schema({
     resourceIdentifier: String, 
     leader: String, 
     numOfPersons: Number, 
-    Contact: String
+    contact: String
   }],
   workAssignments: String,
   specialInstructions: String,
@@ -40,5 +41,19 @@ var ICS204Schema = mongoose.Schema({
     dateTime: Date
   }
 });
+
+ICS204Schema.statics = {
+  // A helper function to execute a Mongoose query to fetch an Incident by ID.
+  load: function(_id) {
+    return this.findOne({_id})
+      .exec();
+  },
+
+  loadByIncidentId: function(incidentId) {
+    return this.find({incidentId: incidentId})
+      .select('_id')
+      .exec();
+  }
+};
 
 mongoose.model("ICS204", ICS204Schema);
