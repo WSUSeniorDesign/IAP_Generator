@@ -41,9 +41,14 @@ module.exports = function (app, passport) {
   // :incidentId, :operationalPeriodId, :formNumber, and :formId.
   // Ex: /incidents/:incidentId/:operationalPeriodId/:formNumber/:formId
 
-  app.get('/incidents/:incidentId/form/ics204/new',     ics204.new); // a form to create a new ICS204 document
-  app.get('/incidents/:incidentId/form/ics204/:formId', ics204.show);
-  app.post('/incidents/:incidentId/form/ics204',        ics204.create);
+  app.param('ics204formId',                                        ics204.load);
+
+  app.get('/incidents/:incidentId/form/ics204/new',                ics204.new); // a form to create a new ICS204 document
+  app.get('/incidents/:incidentId/form/ics204/:ics204formId',      ics204.show);
+  app.delete('/incidents/:incidentId/form/ics204/:ics204formId',   ics204.destroy);
+  app.get('/incidents/:incidentId/form/ics204/:ics204formId/edit', ics204.edit);
+  app.put('/incidents/:incidentId/form/ics204/:ics204formId',      ics204.update);
+  app.post('/incidents/:incidentId/form/ics204',                   ics204.create);
 
   /**
    * Error handling
