@@ -29,6 +29,7 @@
     "mongoose": "4.0.6",
     "mongoose-user": "latest",
     "morgan": "1.6.1",
+    "nunjucks": "^2.4.0",
     "only": "0.0.2",
     "passport": "0.2.2",
     "passport-local": "1.0.0",

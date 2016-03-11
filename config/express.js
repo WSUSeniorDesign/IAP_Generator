@@ -12,6 +12,7 @@ var cookieSession = require('cookie-session');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var csrf = require('csurf');
+var nunjucks = require('nunjucks');
 
 var mongoStore = require('connect-mongo')(session);
 var flash = require('connect-flash');
@@ -57,7 +58,11 @@ module.exports = function (app, passport) {
 
   // set views path and default layout
   app.set('views', config.root + '/app/views');
-  app.set('view engine', 'jade');
+  nunjucks.configure('views', {
+      autoescape: true,
+      express: app
+  });
+  app.set('view engine', 'html');
 
   // expose package.json to views
   app.use(function (req, res, next) {
