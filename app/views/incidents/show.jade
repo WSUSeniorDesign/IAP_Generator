@@ -28,7 +28,7 @@ block content
                 tbody
                   each form in incident.forms.ics204
                     tr
-                      td= form.constructor.modelName //- the name of the form mongoose model, e.g. ICS204
+                      td= form.constructor.modelName
                       td: a(href="/incidents/#{incident.id}/form/ics204/#{form.id}")= form.id
                       td.text-right
                         form(action="/incidents/#{incident.id}/form/ics204/#{form.id}", method="post", onsubmit="return confirm('Are you sure?')")
