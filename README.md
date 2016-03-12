@@ -19,7 +19,7 @@ A few key highlights from the many NPM packages listed in `package.json` which o
 - [mongoose](http://mongoosejs.com/) for object modeling and simpler interaction with MongoDB
 - [passport](http://passportjs.org/) for user authentication
 - [mocha](https://mochajs.org/) testing framework
-- [jade](http://jade-lang.com/) template engine for generating HTML
+- [swig](https://paularmstrong.github.io/swig/) template engine for generating HTML
 
 ## Installation
 > In this README, a `$` followed by a command indicates that it should be executed on the command line. On Windows, 
