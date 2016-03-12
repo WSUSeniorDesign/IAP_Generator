@@ -9,7 +9,7 @@
   "scripts": {
     "start": "./node_modules/.bin/nodemon server.js",
     "debug": "./node_modules/.bin/nodemon --debug server.js",
-    "test": "make test"
+    "test": "env NODE_ENV=test ./node_modules/.bin/mocha --reporter spec --ui tdd test/*.js test/**/*.js test/**/**/*.js"
   },
   "dependencies": {
     "async": "1.3.0",
