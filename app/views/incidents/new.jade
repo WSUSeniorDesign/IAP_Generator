@@ -11,7 +11,7 @@ block main
 block content
   .row
     .col-xs-12
-      form(method="post", action="/incidents", role="form")
+      form(method="POST", action="/incidents", role="form")
         input(type="hidden", name="_csrf", value=csrf_token)
         +formGroup("text", "name", "Incident Name")
         +formGroup("text", "location", "Location")

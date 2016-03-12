@@ -1,0 +1,126 @@
+//- A multipurpose HTML form for ICS204. If the form passed to this view is
+//- new, the method will be POST and the action will be the create route. If
+//- the form pass to this view is NOT new, the method will be PUT and the
+//- action will be the update route.
+
+extends ../../layouts/default.jade
+
+mixin labeledInput(name, label, value)
+  .form-group
+    label.control-label(for=name)= label
+    input(type='text', id=name, name=name, value=value, class="form-control")&attributes(attributes)
+
+block main
+  h2= title
+
+block content
+  //- set values based on whether the form is new or being edited
+  - var action = `/incidents/${incident._id}/form/ics204`
+  if !form.isNew
+    - action = action + "/" + form.id
+
+  div.row
+    div.col-xs-6
+      form(id="form-ics-204", method="post", action=action, role="form")
+        input(type="hidden", name="_csrf", value=csrf_token)
+        if !form.isNew
+          input(type="hidden", name="_method", value="PUT")
+        .form-group
+          label 1. Incident Name
+          input(type='text', class="form-control", value=incident.name, readonly)
+        hr
+        .form-group
+          label 2. Operational Period
+          br
+          +labeledInput('operationalPeriod[start]', 'Date From', form.operationalPeriod.start)(placeholder="Type: Date")
+          +labeledInput('operationalPeriod[end]', 'Date To', form.operationalPeriod.end)(placeholder="Type: Date")
+        hr
+        .form-group
+          label 3.
+          br
+          +labeledInput('field3[branch]', 'Branch', form.field3.branch)
+          +labeledInput('field3[division]', 'Division', form.field3.division)
+          +labeledInput('field3[group]', 'Group', form.field3.group)
+          +labeledInput('field3[stagingArea]', 'Staging Area', form.field3.stagingArea)
+        hr
+        .form-group
+          label 4. Operations Personnel
+          br
+          +labeledInput(
+            'operationsPersonnel[operationsSectionChiefName]',
+            'Operations Section Chief (Name)',
+            form.operationsPersonnel.operationsSectionChiefName
+          )
+          +labeledInput(
+            'operationsPersonnel[operationsSectionChiefContactNumber]',
+            'Operations Section Chief (Contact Number)',
+            form.operationsPersonnel.operationsSectionChiefContactNumber
+          )(placeholder="Type: Number")
+          +labeledInput(
+            'operationsPersonnel[branchDirectorName]',
+            'Branch Director (Name)',
+            form.operationsPersonnel.branchDirectorName
+          )
+          +labeledInput(
+            'operationsPersonnel[branchDirectorContactNumber]',
+            'Branch Director (Contact Number)',
+            form.operationsPersonnel.branchDirectorContactNumber
+          )(placeholder="Type: Number")
+          +labeledInput(
+            'operationsPersonnel[divisionGroupSupervisorName]',
+            'Division/Group Supervisor (Name)',
+            form.operationsPersonnel.divisionGroupSupervisorName
+          )
+          +labeledInput(
+            'operationsPersonnel[divisionGroupSupervisorContactNumber]',
+            'Division/Group Supervisor (Contact Number)',
+            form.operationsPersonnel.divisionGroupSupervisorContactNumber
+          )(placeholder="Type: Number")
+
+        hr
+        div.form-group
+          label 5. Resources Assigned
+          br
+          +labeledInput(
+            'resourcesAssigned[resourceIdentifier]',
+            'Resource Identifier',
+            form.resourcesAssigned.resourceIdentifier
+          )
+          +labeledInput('resourcesAssigned[leader]', 'Leader', form.resourcesAssigned.leader)
+          +labeledInput(
+            'resourcesAssigned[numOfPersons]',
+            '# of Persons',
+            form.resourcesAssigned.numOfPersons
+          )(placeholder="Type: Number")
+          +labeledInput(
+            'resourcesAssigned[contact]',
+            'Contact (e.g., phone, pager, radio frequency, etc.)',
+            form.resourcesAssigned.contact
+          )
+        hr
+        .form-group
+          +labeledInput('workAssignments', '6. Work Assignments', form.workAssignments)
+        hr
+        .form-group
+          +labeledInput('specialInstructions', '7. Special Instructions', form.specialInstructions)
+        hr
+        .form-group
+          label 8. Communications
+          +labeledInput('communications[name]', 'Name', form.communications.name)
+          +labeledInput('communications[function]', 'Function', form.communications.function)
+          +labeledInput(
+            'communications[primaryContact]',
+            'Primary Contact: indicate cell, pager, or radio (frequency/system/channel)',
+            form.communications.primaryContact
+          )
+        hr
+        .form-group
+          label Prepared by
+          br
+          +labeledInput('preparedBy[name]', 'Name', form.preparedBy.name)
+          +labeledInput('preparedBy[positionTitle]', 'Postion/Title', form.preparedBy.positionTitle)
+          +labeledInput('preparedBy[signature]', 'Signature', form.preparedBy.signature)
+          +labeledInput('preparedBy[dateTime]', 'Date/Time', form.preparedBy.dateTime)(placeholder="Type: Date")
+        hr
+        .form-group
+          button.btn.btn-primary(type="submit") Submit

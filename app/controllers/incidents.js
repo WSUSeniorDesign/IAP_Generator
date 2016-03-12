@@ -6,7 +6,7 @@
 // The co-express module allows you to use generators as Express middleware.
 // See: https://github.com/mciparelli/co-express
 // See: https://davidwalsh.name/es6-generators
-const wrap = require('co-express');
+const co = require('co-express');
 
 // only() is used to isolate object properties, returning only properties requested.
 // See: https://github.com/tj/node-only
@@ -14,6 +14,7 @@ const only = require('only');
 
 const mongoose = require('mongoose');
 const Incident = mongoose.model('Incident');
+const Ics204 = mongoose.model('ICS204');
 
 /**
  * This is a helper function, which attempts to load an Incident
@@ -28,7 +29,7 @@ const Incident = mongoose.model('Incident');
  * the Incident will be loaded and added to the req object, and can be
  * accessed via req.incident (see the code in the show() function below).
  */
-exports.load = wrap(function* (req, res, next, id) {
+exports.load = co(function* (req, res, next, id) {
   req.incident = yield Incident.load(id);
   if (!req.incident) return next(new Error('Incident not found'));
   next();
@@ -40,7 +41,7 @@ exports.load = wrap(function* (req, res, next, id) {
  * index() renders the ./app/views/incidents/index.jade view,
  * showing a paged list of Incidents.
  */
-exports.index = wrap(function* (req, res) {
+exports.index = co(function* (req, res) {
   const page = (req.query.page > 0 ? req.query.page : 1) - 1;
   const limit = 30;
   const options = {
@@ -70,11 +71,15 @@ exports.index = wrap(function* (req, res) {
  * showing a single Incident. The Incident is pre-loaded into the 
  * req object as req.incident by the load() function defined above.
  */
-exports.show = function (req, res){
+exports.show = co(function* (req, res){
+  req.incident.forms = {
+    ics204: yield Ics204.loadByIncidentId(req.incident._id)
+  };
+
   res.render('incidents/show', {
     incident: req.incident
   });
-};
+});
 
 /**
  * FORM TO CREATE A NEW INCIDENT
@@ -93,7 +98,7 @@ exports.new = function (req, res){
  * create() adds a new Incident to the database in response to a user
  * submitting the form given by the new() function above.
  */
-exports.create = wrap(function* (req, res) {
+exports.create = co(function* (req, res) {
   const incident = new Incident(only(req.body, 'name location active'));
 
   // incident.user = req.user;
@@ -120,7 +125,7 @@ exports.edit = function (req, res) {
  * UPDATE INCIDENT
  * update() updates and saves an Incident in the database
  */
-exports.update = wrap(function* (req, res){
+exports.update = co(function* (req, res){
   const incident = req.incident;
 
   // Object.assign() merges objects from right to left. Here, the
@@ -142,7 +147,7 @@ exports.update = wrap(function* (req, res){
  * DELETE AN INCIDENT
  * delete() removes an Incident from the database.
  */
-exports.destroy = wrap(function* (req, res) {
+exports.destroy = co(function* (req, res) {
   yield req.incident.remove();
   req.flash('success', 'Deleted successfully');
   res.redirect('/incidents');

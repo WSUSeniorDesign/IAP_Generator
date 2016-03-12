@@ -6,7 +6,7 @@ var Schema = mongoose.Schema;
 const IncidentSchema = new Schema({
   name: {type: String, required: true},
   location: String,
-  commander: {type: Schema.Types.ObjectId, ref: 'User'},
+  // commander: {type: Schema.Types.ObjectId, ref: 'User'},
   active: {
     type: Boolean,
     // default to false because checkboxes are only sent by the browser if they're checked,
@@ -22,7 +22,7 @@ IncidentSchema.statics = {
   // A helper function to execute a Mongoose query to fetch an Incident by ID.
   load: function(_id) {
     return this.findOne({_id})
-      .populate('commander', 'name') // we want to de-reference the commander and include its name field
+      // .populate('commander', 'name') // we want to de-reference the commander and include its name field
       .exec();
   },
 

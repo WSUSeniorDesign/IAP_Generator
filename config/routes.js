@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 var home = require('../app/controllers/home');
 
 const incidents = require('../app/controllers/incidents'); // require the incidents controller
+const ics204 = require('../app/controllers/ics204');
 
 /**
  * Expose
@@ -23,13 +24,31 @@ module.exports = function (app, passport) {
    * Incident routes
    */
   app.param('incidentId',                 incidents.load);
-  app.get('/incidents',                   incidents.index);
-  app.get('/incidents/new',               incidents.new);
-  app.get('/incidents/:incidentId',       incidents.show);
+
+  app.get('/incidents',                   incidents.index); // a list of all incidents
+  app.get('/incidents/new',               incidents.new); // a form to add a new incident
+  app.get('/incidents/:incidentId',       incidents.show); 
   app.get('/incidents/:incidentId/edit',  incidents.edit);
   app.post('/incidents',                  incidents.create);
   app.put('/incidents/:incidentId',       incidents.update);
   app.delete('/incidents/:incidentId',    incidents.destroy);
+
+  /**
+   * ICS 204
+   */
+
+  // There should probably be one controller for all forms, with params 
+  // :incidentId, :operationalPeriodId, :formNumber, and :formId.
+  // Ex: /incidents/:incidentId/:operationalPeriodId/:formNumber/:formId
+
+  app.param('ics204formId',                                        ics204.load);
+
+  app.get('/incidents/:incidentId/form/ics204/new',                ics204.new); // a form to create a new ICS204 document
+  app.get('/incidents/:incidentId/form/ics204/:ics204formId',      ics204.show);
+  app.delete('/incidents/:incidentId/form/ics204/:ics204formId',   ics204.destroy);
+  app.get('/incidents/:incidentId/form/ics204/:ics204formId/edit', ics204.edit);
+  app.put('/incidents/:incidentId/form/ics204/:ics204formId',      ics204.update);
+  app.post('/incidents/:incidentId/form/ics204',                   ics204.create);
 
   /**
    * Error handling
