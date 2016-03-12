@@ -24,7 +24,6 @@
     "express": "4.13.1",
     "express-session": "1.11.3",
     "forever": "0.14.2",
-    "jade": "^1.11.0",
     "method-override": "2.3.3",
     "mongoose": "4.0.6",
     "mongoose-user": "latest",
@@ -32,7 +31,7 @@
     "only": "0.0.2",
     "passport": "0.2.2",
     "passport-local": "1.0.0",
-    "swig": "1.4.2",
+    "swig": "^1.4.2",
     "view-helpers": "0.1.5",
     "winston": "1.0.1"
   },

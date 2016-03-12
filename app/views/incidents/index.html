@@ -1,0 +1,53 @@
+{% extends "../layouts/default.html" %}
+
+{% block main %}
+  <h2>
+    {{ title }}
+    <div class="pull-right">
+      <a href="/incidents/new" class="btn btn-default btn-sm">Add Incident</a>
+    </div>
+  </h2>
+{% endblock %}
+
+{% block content %}
+  {% if count > 0 %}
+    <div>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Active</th>
+            <th class="text-right">Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for incident in incidents %}
+            <tr>
+              <td><a href="/incidents/{{ incident.id }}">{{ incident.name }}</a></td>
+              <td>{{ incident.location }}</td>
+              <td>{{ incident.active }}</td>
+              <td class="text-right">
+                <form action="/incidents/{{ incident.id }}" method="post" onsubmit="return confirm('Are you sure?')">
+                  <a href="/incidents/{{ incident.id }}/edit" class="btn btn-default btn-xs">Edit</a>
+                  &nbsp;
+                  <input type="hidden" name="_csrf" value="csrf_token">
+                  <input type="hidden" name="_method" value="DELETE">
+                  <button class="btn btn-danger btn-xs" type="submit">Delete</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    <div class="text-center">
+      <p>TODO: add pager.</p>
+    </div>
+  {% else %}
+    <div class="text-center">
+      <p class="lead">There are no Incidents.</p>
+      <br>
+      <a href="/incidents/new" class="btn btn-primary btn-lg">Add Incident</a>
+    </div>
+  {% endif %}
+{% endblock %}

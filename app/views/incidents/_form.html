@@ -1,0 +1,36 @@
+<div class="row">
+  <div class="col-xs-12">
+    {% set action = "/incidents" %}
+    {% if !incident.isNew %}
+      {% set action += "/" + incident.id %}
+    {% endif %}
+    <form action="/incidents" method="POST" role="form">
+      <input type="hidden" name="_csrf" value="{{ csrf }}">
+      {% if !incident.isNew %}
+        <input type="hidden" name="_method" value="PUT">
+      {% endif %}
+      <div class="form-group">
+        <label for="name" class="control-label">Incident Name</label>
+        <input type="text" id="name" name="name" class="form-control" value="{{ incident.name }}">
+      </div>
+      <div class="form-group">
+        <label for="Location" class="control-label">Location</label>
+        <input type="text" id="location" name="location" class="form-control" value="{{ incident.location }}">
+      </div>
+      <div class="form-group">
+        <div class="checkbox">
+          <label>
+            {% if incident.isNew or incident.checked %}
+              {% set checked = 'checked' %}
+            {% endif %}
+            <input type="checkbox" id="active" name="active" {{ checked }}>
+            Active
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary" type="submit">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

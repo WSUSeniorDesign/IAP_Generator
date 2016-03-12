@@ -1,0 +1,78 @@
+{% extends "../layouts/default.html" %}
+
+mixin formGroup(labelText, value)
+  .form-group
+    label.control-label= labelText
+    div: p.form-static-control= value
+
+{% block main %}
+  <h2>{{ title }}</h2>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="form">
+
+        <div class="form-group">
+          <label class="control-label">Incident Name</label>
+          <div>
+            <p class="form-static-control">{{ incident.name }}</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label">Location</label>
+          <div>
+            <p class="form-static-control">{{ incident.location }}</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label">Active</label>
+          <div>
+            <p class="form-static-control">{{ incident.active }}</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <h3>Forms</h3>
+          <p><a href="/incidents/{{ incident.id }}/form/ics204/new">+ Create new ICS 204</a></p>
+          {% if incident.forms.ics204.length %}
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Form</th>
+                  <th>ID</th>
+                  <th class="text-right">Options</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for form in incident.forms.ics204 %}
+                  {% set url = "/incidents/" %}
+                  {% set url += incident.id %}
+                  {% set url += "/form/ics204/" %}
+                  {% set url += form.id %}
+                  <tr>
+                    <td>{{ form.constructor.modelName }}</td>
+                    <td><a href="{{ url }}">{{ form.id }}</a></td>
+                    <td class="text-right">
+                      <form action="{{ url }}" method="POST" onsubmit="return confirm('Are you sure?')">
+                        <a href="{{ url }}/edit" class="btn btn-default btn-xs">Edit</a>
+                        &nbsp;
+                        <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button class="btn btn-danger btn-xs" type="submit">Delete</button>
+                      </form>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+{% endblock %}
