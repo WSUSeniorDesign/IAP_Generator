@@ -1,0 +1,175 @@
+{# A multipurpose HTML form for ICS204. If the form passed to this view is
+new, the method will be POST and the action will be the create route. If
+the form pass to this view is NOT new, the method will be PUT and the
+action will be the update route.
+#}
+
+{% extends ../../layouts/default.jade %}
+
+mixin labeledInput(name, label, value)
+  .form-group
+    label.control-label(for=name)= label
+    input(type='text', id=name, name=name, value=value, class="form-control")&attributes(attributes)
+
+{% block main %}
+<h2>{{ title }} </h2>
+{% endblock main %}
+
+{% block content %}
+  {# set values based on whether the form is new or being edited
+  #}
+  {% set action = "/incidents/${incident._id}/form/ics204" %}
+  {% if !form.isNew %}
+	{% set action = action %}
+	{% set action += "/" %}
+	{% set action += form.id %}
+  {% endif %}
+<div class = "row">
+	<div class = "col-xs-6">
+		<div class = "form" id="form-ics-204" method="post" action=action role="form">
+			<input type="hidden" name="_csrf" value=csrf_token>
+			{% if !form.isNew %}
+				<input type="hidden" name="_method" value="PUT">
+			{% endif %}
+			<div class ="row">
+				<!-- Boxes 1-4 -->
+				<div class = "col-sm-8">
+					<!-- Boxes 1, 2, and 4-->
+					<div class = "row" style = "border:1px solid black">
+						<!-- Boxes 1 and 2-->
+						<div class="col-sm-5" >
+							<!-- Box 1 -->
+							<p class = "text-left">
+								<label for="iName"> <b>1. Incident Name:</b> </label>
+								<input type="text" class="form-control" id="iName">
+							</p>
+						</div>
+						<div class="col-sm-7" style = "border:1px solid black">
+							<!-- Box 2 -->
+							<p class = "text-left">
+								<b>2. Operational Period: </b>
+							</p>
+							<div class="col-sm-6">
+								<label for="dFrom">Date From:</label>
+								<input type="text" class="form-control" id="dFrom">
+								<br><br>
+								<label for="tFrom">Time From:</label>
+								<input type="text" class="form-control" id="tFrom">
+							</div>
+							<div class="col-sm-6">
+								<label for="dTo">Date To:</label>
+								<input type="text" class="form-control" id="dTo">
+								<br><br>
+								<label for="tTo">Time To:</label>
+								<input type="text" class="form-control" id="tTo">
+							</div>
+						</div>
+					</div>
+					<div class = "row" style = "border:1px solid black" >
+						<!-- Box 4 --> 
+						<div class = "col-sm-4">
+							<p class = "text-left">
+								<b>4. Operations Personnel </b>
+							</p>
+							<p class = "text-right">
+								<label for="oSecChief">Operations Section Chief:</label>
+								<input type="text" class="form-control" id="oSecChief">
+								<br><br>
+								<label for="bDirector">Branch Director:</label>
+								<input type="text" class="form-control" id="bDirector">
+								<br><br>
+								<label for="dSupervisor">Division/Group Supervisor:</label>
+								<input type="text" class="form-control" id="dSupervisor">
+							</p>
+						</div>
+						<div class = "col-sm-4">
+							<label for="name"> <u> Name </u> </label>
+							<input type="text" class="form-control" id="name">
+						</div>
+						<div class = "col-sm-4">
+							<label for="cNum"> <u> Contact Number(s) </u> </label>
+							<input type="text" class="form-control" id="cNum">
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-4" style = "border:1px solid black">
+					<!-- Box 3 -->
+					<p class = "text-left">
+						<b>3.</b>
+						<br><br>
+						
+						<label for="branch">Branch:</label>
+						<input type="text" class="form-control" id="branch">
+						<br>
+						<label for="division">Division:</label>
+						<input type="text" class="form-control" id="division">
+						<br><br><br>
+						<label for="group">Group:</label>
+						<input type="text" class="form-control" id="group">
+						<br><br>
+						<label for="staging">Staging </label>
+						<input type="text" class="form-control" id="staging">
+						<br>
+						<label for="area">Area:</label>
+						<input type="text" class="form-control" id="area">
+						<br><br>
+					</p>
+				</div>	
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+	{#
+																									<div class = "form-group">
+																										<label class = "control-label">Resources Assigned</label>
+          br
+          +labeledInput(
+            'resourcesAssigned[resourceIdentifier]',
+            'Resource Identifier',
+            form.resourcesAssigned.resourceIdentifier
+          )
+          +labeledInput('resourcesAssigned[leader]', 'Leader', form.resourcesAssigned.leader)
+          +labeledInput(
+            'resourcesAssigned[numOfPersons]',
+            '# of Persons',
+            form.resourcesAssigned.numOfPersons
+          )(placeholder="Type: Number")
+          +labeledInput(
+            'resourcesAssigned[contact]',
+            'Contact (e.g., phone, pager, radio frequency, etc.)',
+            form.resourcesAssigned.contact
+          )
+																									</div>
+																									<div class = "form-group">
+          +labeledInput('workAssignments', '6. Work Assignments', form.workAssignments)
+																									</div>
+																									<div class = "form-group">
+          +labeledInput('specialInstructions', '7. Special Instructions', form.specialInstructions)
+																									</div>
+																									<div class = "form-group">
+																										<label class = "control-label">Communications</label>
+          +labeledInput('communications[name]', 'Name', form.communications.name)
+          +labeledInput('communications[function]', 'Function', form.communications.function)
+          +labeledInput(
+            'communications[primaryContact]',
+            'Primary Contact: indicate cell, pager, or radio (frequency/system/channel)',
+            form.communications.primaryContact
+          )
+																									</div>
+																									<div class = "form-group">
+																										<label class = "control-label">Prepared by </label>
+          +labeledInput('preparedBy[name]', 'Name', form.preparedBy.name)
+          +labeledInput('preparedBy[positionTitle]', 'Postion/Title', form.preparedBy.positionTitle)
+          +labeledInput('preparedBy[signature]', 'Signature', form.preparedBy.signature)
+          +labeledInput('preparedBy[dateTime]', 'Date/Time', form.preparedBy.dateTime)(placeholder="Type: Date")
+																									</div>
+																									<div class = "form-group">
+																										<button class="btn btn-primary" type="submit">Submit</button>
+																									</div>
+																								</div>
+																							</div>
+																						</div>
+	#}
+{% endblock content %}
