@@ -4,8 +4,8 @@
  */
 
 var mongoose = require('mongoose');
-var home = require('../app/controllers/home');
 
+const users = require('../app/controllers/users');
 const incidents = require('../app/controllers/incidents'); // require the incidents controller
 const ics204 = require('../app/controllers/ics204');
 
@@ -19,6 +19,22 @@ module.exports = function (app, passport) {
   app.get('/', function (req, res) {
     res.redirect('/incidents');
   })
+
+  
+/**
+   * User routes
+   */
+  app.get('/login', users.login);
+  app.get('/signup', users.signup);
+  app.get('/logout', users.logout);
+  app.post('/users', users.create);
+  app.post('/users/session',
+    passport.authenticate('local', {
+      failureRedirect: '/login',
+      failureFlash: 'Invalid email or password.'
+    }), users.session);
+  app.get('/users/:userId', users.show);
+  app.param('userId', users.load);
 
   /**
    * Incident routes

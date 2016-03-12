@@ -8,7 +8,7 @@ var express = require('express');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var config = require('./config/config');
-var credentials = require('./credentials.js');
+var mongolabUri = require('./credentials.js');
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -19,7 +19,9 @@ var mongoose = require ("mongoose"); // The reason for this demo.
 
 // Here we find an appropriate database to connect to, defaulting to
 // localhost if we don't find one.
-var uristring = credentials.mongolab_uri;
+var uristring = 
+mongolabUri ||
+'mongodb://localhost/HelloMongoose';
 
 // The http server will listen to an appropriate port, or default to
 // port 5000.
