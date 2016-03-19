@@ -5,7 +5,7 @@
       {% set action += "/" + incident.id %}
     {% endif %}
     <form action="/incidents" method="POST" role="form">
-      <input type="hidden" name="_csrf" value="{{ csrf }}">
+      <input type="hidden" name="_csrf" value="{{ csrf_token }}">
       {% if !incident.isNew %}
         <input type="hidden" name="_method" value="PUT">
       {% endif %}
