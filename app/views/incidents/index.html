@@ -31,7 +31,7 @@
                 <form action="/incidents/{{ incident.id }}" method="post" onsubmit="return confirm('Are you sure?')">
                   <a href="/incidents/{{ incident.id }}/edit" class="btn btn-default btn-xs">Edit</a>
                   &nbsp;
-                  <input type="hidden" name="_csrf" value="csrf_token">
+                  <input type="hidden" name="_csrf" value="{{ csrf_token }}">
                   <input type="hidden" name="_method" value="DELETE">
                   <button class="btn btn-danger btn-xs" type="submit">Delete</button>
                 </form>
