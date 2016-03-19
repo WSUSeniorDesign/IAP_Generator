@@ -68,6 +68,11 @@ UserSchema.path('email').validate(function (email) {
   return email.length;
 }, 'Email cannot be blank');
 
+UserSchema.path('phoneNumber').validate(function (phoneNumber) {
+  if (this.skipValidation()) return true;
+  return phoneNumber.length;
+}, 'Phone number cannot be blank');
+
 UserSchema.path('email').validate(function (email, fn) {
   const User = mongoose.model('User');
   if (this.skipValidation()) fn(true);
