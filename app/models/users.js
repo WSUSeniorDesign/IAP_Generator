@@ -15,6 +15,7 @@ var Schema = mongoose.Schema;
 const UserSchema = new Schema({
   name: { type: String, default: '' },
   email: { type: String, default: '' },
+  phoneNumber: { type: String, default: ''},
   username: { type: String, default: '' },
   provider: { type: String, default: '' },
   hashed_password: { type: String, default: '' },
@@ -184,7 +185,7 @@ UserSchema.statics = {
    */
 
   load: function (options, cb) {
-    options.select = options.select || 'name username';
+    options.select = options.select || 'name username email phoneNumber';
     return this.findOne(options.criteria)
       .select(options.select)
       .exec(cb);
