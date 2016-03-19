@@ -4,7 +4,7 @@ the form pass to this view is NOT new, the method will be PUT and the
 action will be the update route.
 #}
 
-{% extends ../../layouts/default.jade %}
+{% extends "../../layouts/default.html" %}
 
 {% block head %}
 <h2>ASSIGNMENT LIST (ICS 204) </h2>
@@ -20,65 +20,68 @@ action will be the update route.
 
 {% block content %}
   {# set values based on whether the form is new or being edited #}
-  {% set action = "/incidents/${incident._id}/form/ics204" %}
+  {% set action = "/incidents/" %}
+  {% set action += incident.id %}
+  {% set action += "/form/ics204" %}
   {% if !form.isNew %}
-	{% set action = action %}
 	{% set action += "/" %}
 	{% set action += form.id %}
   {% endif %}
 
-<div class = "form" id="form-ics-204" method="post" action=action role="form">
-	<input type="hidden" name="_csrf" value=csrf_token>
+<form class="form" id="form-ics-204" method="post" action="{{action}}" role="form">
+	<input type="hidden" name="_csrf" value="{{csrf_token}}">
 		{% if !form.isNew %}
 			<input type="hidden" name="_method" value="PUT">
 		{% endif %}
 	<div class="container">
 		<div class="Title">
-			<h3 align = "center">ASSIGNMENT LIST (ICS 204)</h3>
+			<h3 align="center">ASSIGNMENT LIST (ICS 204)</h3>
 		</div>
-		<div class ="row">
+		<div class="row">
 			<!-- Boxes 1-4 -->
 			<div class = "col-sm-8">
 				<!-- Boxes 1, 2, and 4-->
-				<div class = "row" style = "border:1px solid black">
+				<div class="row" style = "border:1px solid black">
 					<!-- Boxes 1 and 2-->
 					<div class="col-sm-5" >
 						<!-- Box 1 -->
-						<p class = "text-left">
-							<label for="iName"> <b>1. Incident Name:</b> </label>
-							<input type="text" class="form-control" id="iName"></input>
+						<p class="text-left">
+							<label> <b>1. Incident Name:</b> </label>
+							<input type="text" class="form-control" value="{{incident.name}}">
 						</p>
 					</div>
-					<div class="col-sm-7" style = "border:1px solid black">
+					<div class="col-sm-7" style="border:1px solid black">
 						<!-- Box 2 -->
 						<p class = "text-left">
 							<b>2. Operational Period: </b>
 						</p>
 						<div class="col-sm-6">
-							<label for="dFrom">Date From:</label>
-							<input type="text" class="form-control" id="dFrom">
+							<label for="operationalPeriod[start]">Date From:</label>
+							<input type="text" class="form-control" name="operationalPeriod[start]" value="{{form.operationalPeriod.start.toISOString()}}">
 							<br><br>
-							<label for="tFrom">Time From:</label>
-							<input type="text" class="form-control" id="tFrom">
+							<label for="operationalPeriod[end]">Time From:</label>
+							<input type="text" class="form-control" name="operationalPeriod[end]" value="{{form.operationalPeriod.end.toISOString()}}">
 							<br>
 						</div>
+						<!--
 						<div class="col-sm-6">
-							<label for="dTo">Date To:</label>
-							<input type="text" class="form-control" id="dTo">
+							<label for="startTime">Date To:</label>
+							<input type="text" class="form-control" name="startTime">
 							<br><br>
-							<label for="tTo">Time To:</label>
-							<input type="text" class="form-control" id="tTo">
+							<label for="endTime">Time To:</label>
+							<input type="text" class="form-control" name="endTime">
 							<br>
 						</div>
+						-->
 					</div>
 				</div>
-				<div class = "row" style = "border:1px solid black" >
+				<div class="row" style="border:1px solid black" >
 					<!-- Box 4 --> 
-					<div class = "col-sm-4">
-						<p class = "text-left">
+					<div class="col-sm-4">
+						<p class="text-left">
 							<b>4. Operations Personnel </b>
 						</p>
-						<p class = "text-right">
+						<p class="text-right">
 							<label for="oSecChief">Operations Section Chief:</label>
 							<br><br>
 							<label for="bDirector">Branch Director:</label>
@@ -86,22 +89,22 @@ action will be the update route.
 							<label for="dSupervisor">Division/Group Supervisor:</label>
 						</p>
 					</div>
-					<div class = "col-sm-4">
+					<div class="col-sm-4">
 						<label for="name"> <u> Name </u> </label>
-						<input type="text" class="form-control" id="oSecChiefName">
+						<input type="text" class="form-control" name="operationsPersonnel[operationsSectionChiefName]" value="{{form.operationsPersonnel.operationsSectionChiefName}}">
 						<br>
-						<input type="text" class="form-control" id="bDirectorName">
+						<input type="text" class="form-control" name="operationsPersonnel[branchDirectorName]" value="{{form.operationsPersonnel.branchDirectorName}}">
 						<br>
-						<input type="text" class="form-control" id="dSupervisorName">
+						<input type="text" class="form-control" name="operationsPersonnel[divisionGroupSupervisorName]" value="{{form.operationsPersonnel.divisionGroupSupervisorName}}">
 
 					</div>
-					<div class = "col-sm-4">
+					<div class="col-sm-4">
 						<label for="cNum"> <u> Contact Number(s) </u> </label>
-						<input type="text" class="form-control" id="oSecChiefContact">
+						<input type="text" class="form-control" name="operationsPersonnel[operationsSectionChiefContactNumber]" value="{{form.operationsPersonnel.operationsSectionChiefContactNumber}}">
 						<br>
-						<input type="text" class="form-control" id="bDirectorContact">
+						<input type="text" class="form-control" name="operationsPersonnel[branchDirectorContactNumber]" value="{{form.operationsPersonnel.branchDirectorContactNumber}}">
 						<br>
-						<input type="text" class="form-control" id="dSupervisorContact">
+						<input type="text" class="form-control" name="operationsPersonnel[divisionGroupSupervisorContactNumber]" value="{{form.operationsPersonnel.divisionGroupSupervisorContactNumber}}">
 
 					</div>
 				</div>
@@ -111,68 +114,71 @@ action will be the update route.
 				<p class = "text-left">
 					<b>3.</b>
 					<br>
-					<label for="branch">Branch:</label>
-					<input type="text" class="form-control" id="branch">
+					<label for="field3[branch]">Branch:</label>
+					<input type="text" class="form-control" name="field3[branch]" value="{{form.field3.branch}}">
 					<br>
-					<label for="division">Division:</label>
-					<input type="text" class="form-control" id="division">
+					<label for="field3[division]">Division:</label>
+					<input type="text" class="form-control" name="field3[division]" value="{{form.field3.division}}">
 					<br>
-					<label for="group">Group:</label>
-					<input type="text" class="form-control" id="group">
+					<label for="field3[group]">Group:</label>
+					<input type="text" class="form-control" name="field3[group]" value="{{form.field3.group}}">
 					<br>
-					<label for="stagingArea">Staging Area:</label>
-					<input type="text" class="form-control" id="area">
+					<label for="field3[stagingArea]">Staging Area:</label>
+					<input type="text" class="form-control" name="field3[stagingArea]" value="{{form.field3.stagingArea}}">
 					<br><br><br>
 				</p>
 			</div>	
 		</div>
 		
-		<div class="row" style = "border:1px solid black"> <!-- Box 5 -->
-			<div class ="row"> <!-- Headers -->
-				<div class = "col-sm-4"> <!-- Resources Assigned/Resource Identifier/Leader -->
-					<div class = "row">
-						<div class = "col-sm-12" >
+		<div class="row" style="border:1px solid black"> <!-- Box 5 -->
+			<div class="row"> <!-- Headers -->
+				<div class="col-sm-4"> <!-- Resources Assigned/Resource Identifier/Leader -->
+					<div class="row">
+						<div class="col-sm-12" >
 							<b>5. Resources Assigned:</b>
 						</div>
 					</div>
-					<div class = "row">
-						<div class = "col-sm-6" >
+					<div class="row">
+						<div class="col-sm-6" >
 							Resource Identifier:
 						</div>
-						<div class = "col-sm-6" >
+						<div class="col-sm-6" >
 							Leader:
 
 						</div>
 					</div>
 				</div>
-				<div class = "col-sm-1">
+				<div class="col-sm-1">
 					# of Persons
 				</div>
-				<div class = "col-sm-3">
+				<div class="col-sm-3">
 					Contact, e.g., phone, pager, radio frequency, etc.
 				</div>
-				<div class = "col-sm-4">
+				<div class="col-sm-4">
 					Reporting Location, Special Equipment and Supplies, Remarks, Notes, Information
 				</div>
 			</div>
 			<table class="table table-bordered">
 				<thead>
 					<tr>
-						<th class = "col-sm-2"></th>
-						<th class = "col-sm-2"></th>
-						<th class = "col-sm-1"></th>
-						<th class = "col-sm-3"></th>
-						<th class = "col-sm-4"></th>
+						<th class="col-sm-2"></th>
+						<th class="col-sm-2"></th>
+						<th class="col-sm-1"></th>
+						<th class="col-sm-3"></th>
+						<th class="col-sm-4"></th>
 					</tr>
 				</thead>
 				<tbody>
+					{% for resource in form.resourcesAssigned %}
 					<tr>
-						<td><input type="text" class="form-control" id="t11"></td>
-						<td><input type="text" class="form-control" id="t12"></td>
-						<td><input type="text" class="form-control" id="t13"></td>
-						<td><input type="text" class="form-control" id="t14"></td>
-						<td><input type="text" class="form-control" id="t15"></td>
+						<td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][resourceIdentifier]" value="{{resource.resourceIdentifier}}"></td>
+						<td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][loop.[leader]" value="{{resource.leader}}"></td>
+						<td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][numOfPersons]" value="{{resource.numOfPersons}}"></td>
+						<td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][contact]" value="{{resource.contact}}"></td>
+						<td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][notes]" value="{{resource.notes}}"></td>
 					</tr>
+					{% endfor %}
+					<!--
 					<tr>
 						<td><input type="text" class="form-control" id="t21"></td>
 						<td><input type="text" class="form-control" id="t22"></td>
@@ -229,84 +235,90 @@ action will be the update route.
 						<td><input type="text" class="form-control" id="t94"></td>
 						<td><input type="text" class="form-control" id="t95"></td>
 					</tr>
+					-->
 				</tbody>
 			</table>
 		</div> 
-		<div class="row" style ="border:1px solid black"> <!-- Box 6 -->
+		<div class="row" style="border:1px solid black"> <!-- Box 6 -->
 			<b>6. Work Assignments:</b><br>
-			<textarea rows="8" cols="185"></textarea>
+			<textarea rows="8" cols="180" name="workAssignments">{{form.workAssignments}}"</textarea>
 		</div>
-		<div class="row" style ="border:1px solid black"> <!-- Box 7 -->
+		<div class="row" style="border:1px solid black"> <!-- Box 7 -->
 			<b>7. Special Instructions:</b><br>
-			<textarea rows="8" cols="185"></textarea>
+			<textarea rows="8" cols="180" name="specialInstructions">{{form.specialInstructions}}</textarea>
 		</div>
-		<div class="row" style ="border:1px solid black"> <!-- Box 8 -->
+		<div class="row" style="border:1px solid black"> <!-- Box 8 -->
 			<b>8. Communications </b> (radio and/or phone contact numbers needed for this assignment):
 			<table class="table table-bordered">
 				<thead>
 					<tr>
-						<th class = "col-sm-3">Name</th>
-						<th class = "col-sm-1">Function</th>
-						<th class = "col-sm-8">Primary Contact: indicate cell, pager, or radio (frequency/system/channel)</th>
+						<th class="col-sm-3">Name</th>
+						<th class="col-sm-1">Function</th>
+						<th class="col-sm-8">Primary Contact: indicate cell, pager, or radio (frequency/system/channel)</th>
+					</tr>
+					
+					<tr>
+						{% for communication in form.communications %}
+						<td><input type="text" class="form-control" name="communications[loop.index0][name]" value="{{communication.name}}"></td>
+						<td><input type="text" class="form-control" name="communications[loop.index0][function]" value="{{communication.function}}"></td>
+						<td><input type="text" class="form-control" name="communications[loop.index0][primaryContact]" value="{{communication.primaryContact}}"></td>
+						{% endfor %}
+					</tr>
+					<!--
+					<tr>
+						<td><input type="text" class="form-control" id="communications[name]"></td>
+						<td><input type="text" class="form-control" id="communications[function]"></td>
+						<td><input type="text" class="form-control" id="communications[primaryContact]"></td>
 					</tr>
 					<tr>
-						<td><input type="text" class="form-control" id="t81"></td>
-						<td><input type="text" class="form-control" id="t81"></td>
-						<td><input type="text" class="form-control" id="t81"></td>
+						<td><input type="text" class="form-control" id="communications[name]"></td>
+						<td><input type="text" class="form-control" id="communications[function]"></td>
+						<td><input type="text" class="form-control" id="communications[primaryContact]"></td>
 					</tr>
 					<tr>
-						<td><input type="text" class="form-control" id="t81"></td>
-						<td><input type="text" class="form-control" id="t81"></td>
-						<td><input type="text" class="form-control" id="t81"></td>
+						<td><input type="text" class="form-control" id="communications[name]"></td>
+						<td><input type="text" class="form-control" id="communications[function]"></td>
+						<td><input type="text" class="form-control" id="communications[primaryContact]"></td>
 					</tr>
-					<tr>
-						<td><input type="text" class="form-control" id="t81"></td>
-						<td><input type="text" class="form-control" id="t81"></td>
-						<td><input type="text" class="form-control" id="t81"></td>
-					</tr>
-					<tr>
-						<td><input type="text" class="form-control" id="t81"></td>
-						<td><input type="text" class="form-control" id="t81"></td>
-						<td><input type="text" class="form-control" id="t81"></td>
-					</tr>
+					-->
 				</thead>
 			</table>
 		</div>
-		<div class = "row"style ="border:1px solid black">
-			<div class = "row" > <!-- Box 9 top half-->
-				<div class = "col-sm-2">
+		<div class="row"style="border:1px solid black">
+			<div class="row" > <!-- Box 9 top half-->
+				<div class="col-sm-2">
 					<b>Prepared By:</b>
 				</div>
-				<div class = "col-sm-3">
-					<label for="pName">Name:</label>
-					<input type="text" class="form-control" id="pName">
+				<div class="col-sm-3">
+					<label for="preparedBy[name">Name:</label>
+					<input type="text" class="form-control" name="preparedBy[name]" value="{{form.preparedBy.name}}">
 				</div>
-				<div class = "col-sm-3">
-					<label for="pTitle">Position/Title:</label>
-					<input type="text" class="form-control" id="pTitle">
+				<div class="col-sm-3">
+					<label for="preparedBy[positionTitle]">Position/Title:</label>
+					<input type="text" class="form-control" name="preparedBy[positionTitle]" value="{{form.preparedBy.positionTitle}}">
 				</div>
-				<div class = "col-sm-4">
-					<label for="pSig">Signature:</label>
-					<input type="text" class="form-control" id="pSig">
+				<div class="col-sm-4">
+					<label for="preparedBy[signature]">Signature:</label>
+					<input type="text" class="form-control" name="preparedBy[signature]" value="{{form.preparedBy.signature}}">
 				</div>
 			</div>
 			<div class="row" > <!-- Box 9 bottom half-->
-				<div class = "col-sm-2">
+				<div class="col-sm-2">
 					<b>ICS 204</b>
 				</div>
-				<div class = "col-sm-3">
+				<div class="col-sm-3">
 					<b>IAP Page</b>
 				</div>
-				<div class = "col-sm-7">
-					Date/Time: <input type="text" class="form-control" id="pDateTime">
+				<div class="col-sm-7">
+					Date/Time: <input type="text" class="form-control" name="preparedBy[dateTime]" value="{{form.preparedBy.dateTime.toISOString()}}">
 				</div>
 			</div>
 		</div>
-		<div class = "row" align = "right">
+		<div class="row" align = "right">
 			<button class="btn btn-primary" type="submit">Submit</button>
+			<!-- on click it needs to create a form with all these fields and submit it to the database, then redirect to the forms page. -->
 		</div>
 	</div>
-</div>
-
-	#}
+</form>
+	
 {% endblock %}

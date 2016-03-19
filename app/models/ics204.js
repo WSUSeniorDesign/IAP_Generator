@@ -15,17 +15,18 @@ const ICS204Schema = new Schema({
   },
   operationsPersonnel: { 
     operationsSectionChiefName: String, 
-    operationsSectionChiefContactNumber: Number,
+    operationsSectionChiefContactNumber: String,
     branchDirectorName: String,
-    branchDirectorContactNumber: Number,
+    branchDirectorContactNumber: String,
     divisionGroupSupervisorName: String,
-    divisionGroupSupervisorContactNumber: Number,
+    divisionGroupSupervisorContactNumber: String,
   },
   resourcesAssigned: [{
     resourceIdentifier: String, 
     leader: String, 
     numOfPersons: Number, 
-    contact: String
+    contact: String,
+	notes: String
   }],
   workAssignments: String,
   specialInstructions: String,
