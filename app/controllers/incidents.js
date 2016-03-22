@@ -30,6 +30,11 @@ const Ics204 = mongoose.model('ICS204');
  * accessed via req.incident (see the code in the show() function below).
  */
 exports.load = co(function* (req, res, next, id) {
+  if (req.query.period) {
+    req.period = yield Period.load(req.query.period);
+    if (!req.period) return next(new Error("Period not found"));
+    if (req.period.incident.id !== id) return next(new Error("Period did not belong to the current Incident"));
+  }
   req.incident = yield Incident.load(id);
   if (!req.incident) return next(new Error('Incident not found'));
   next();
