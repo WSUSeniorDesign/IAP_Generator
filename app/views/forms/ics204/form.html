@@ -176,13 +176,18 @@ action will be the update route.
           </tr>
         </thead>
         <tbody>
-          <tr>
-            {% for communication in form.communications %}
-            <td><input type="text" class="form-control" name="communications[loop.index0][name]" value="{{communication.name}}"></td>
-            <td><input type="text" class="form-control" name="communications[loop.index0][function]" value="{{communication.function}}"></td>
-            <td><input type="text" class="form-control" name="communications[loop.index0][primaryContact]" value="{{communication.primaryContact}}"></td>
-            {% endfor %}
-          </tr>
+          {% if form.isNew %}
+            {% set form.communications = [{}, {}, {}, {}] %}
+          {% endif %}
+
+          {% for communication in form.communications %}            
+            <tr>
+              <input type="hidden" name="comminucations[{{loop.index0}}][_id]" value="{{communication.id}}">
+              <td><input type="text" class="form-control" name="communications[{{loop.index0}}][name]" value="{{communication.name}}"></td>
+              <td><input type="text" class="form-control" name="communications[{{loop.index0}}][function]" value="{{communication.function}}"></td>
+              <td><input type="text" class="form-control" name="communications[{{loop.index0}}][primaryContact]" value="{{communication.primaryContact}}"></td>
+            </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
