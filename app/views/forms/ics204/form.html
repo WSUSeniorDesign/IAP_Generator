@@ -137,14 +137,19 @@ action will be the update route.
           </tr>
         </thead>
         <tbody>
+          {% if form.isNew %}
+            {% set form.resourcesAssigned = [{}, {}, {}, {}, {}] %}
+          {% endif %}
+
           {% for resource in form.resourcesAssigned %}
-          <tr>
-            <td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][resourceIdentifier]" value="{{resource.resourceIdentifier}}"></td>
-            <td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][leader]" value="{{resource.leader}}"></td>
-            <td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][numOfPersons]" value="{{resource.numOfPersons}}"></td>
-            <td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][contact]" value="{{resource.contact}}"></td>
-            <td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][notes]" value="{{resource.notes}}"></td>
-          </tr>
+            <tr>
+              <input type="hidden" name="resourcesAssigned[{{loop.index0}}][_id]" value="{{resource.id}}">
+              <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][resourceIdentifier]" value="{{resource.resourceIdentifier}}"></td>
+              <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][leader]" value="{{resource.leader}}"></td>
+              <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][numOfPersons]" value="{{resource.numOfPersons}}"></td>
+              <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][contact]" value="{{resource.contact}}"></td>
+              <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][notes]" value="{{resource.notes}}"></td>
+            </tr>
           {% endfor %}
         </tbody>
       </table>
