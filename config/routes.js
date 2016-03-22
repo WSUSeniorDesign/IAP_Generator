@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 var home = require('../app/controllers/home');
 
 const incidents = require('../app/controllers/incidents'); // require the incidents controller
+const periods = require("../app/controllers/periods");
 const ics204 = require('../app/controllers/ics204');
 
 /**
@@ -32,6 +33,13 @@ module.exports = function (app, passport) {
   app.post('/incidents',                  incidents.create);
   app.put('/incidents/:incidentId',       incidents.update);
   app.delete('/incidents/:incidentId',    incidents.destroy);
+
+  /**
+   * Operational Periods
+   */
+  // app.param('period_id', periods.load);
+  app.get("/incidents/:incidentId/new-period", periods.new);
+  app.post("/incidents/:incidentId/periods", periods.create);
 
   /**
    * ICS 204

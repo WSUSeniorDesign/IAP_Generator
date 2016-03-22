@@ -1,0 +1,57 @@
+<div class="row col-sm-12">
+  {% set action = "periods" %}
+  {% if !period.isNew %}
+    {% set action += "/" %}
+    {% set action += period.id %}
+  {% endif %}
+  <form action="/incidents/{{incident.id}}/{{action}}" method="POST" role="form">
+    <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+    {% if !period.isNew %}
+      <input type="hidden" name="_method" value="PUT">
+    {% endif %}
+
+    <div class="form-group">
+      <label class="control-label">Incident</label>
+      <div class="static-control"><a href="/incidents/{{incident.id}}">{{incident.name}}</a></div>
+    </div>
+
+    <div class="form-group">
+      <label for="start[date]" class="control-label">Start Date</label>
+      <input type="text" name="start[date]" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="start[time]" class="control-label">Start Time</label>
+      <input type="text" name="start[time]" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="end[date]" class="control-label">End Date</label>
+      <input type="text" name="end[date]" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="end[time]" class="control-label">End Time</label>
+      <input type="text" name="end[time]" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <div class="checkbox">
+        <label>
+          {% if period.isNew or period.active %}
+            {% set checked = "checked" %}
+          {% endif %}
+
+          <input type="checkbox" name="active" {{checked}}>
+
+          {% if period.isNew %}
+            Set as Current Period on Submit
+          {% else %}
+            Active
+          {% endif %}
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+        <button class="btn btn-primary" type="submit">Submit</button>
+      </div>
+  </form>
+</div>
