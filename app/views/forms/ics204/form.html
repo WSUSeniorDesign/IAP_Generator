@@ -6,316 +6,220 @@ action will be the update route.
 
 {% extends "../../layouts/default.html" %}
 
-{% block head %}
-<h2>ASSIGNMENT LIST (ICS 204) </h2>
-<head>
-  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-</head>
+{% block main %}
+  <h2>{{ title }}</h2>
 {% endblock %}
 
 {% block content %}
   {# set values based on whether the form is new or being edited #}
-  {% set action = "/incidents/" %}
+  {% set action="/incidents/" %}
   {% set action += incident.id %}
   {% set action += "/form/ics204" %}
   {% if !form.isNew %}
-	{% set action += "/" %}
-	{% set action += form.id %}
+    {% set action += "/" %}
+    {% set action += form.id %}
   {% endif %}
 
 <form class="form" id="form-ics-204" method="post" action="{{action}}" role="form">
-	<input type="hidden" name="_csrf" value="{{csrf_token}}">
-		{% if !form.isNew %}
-			<input type="hidden" name="_method" value="PUT">
-		{% endif %}
-	<div class="container">
-		<div class="Title">
-			<h3 align="center">ASSIGNMENT LIST (ICS 204)</h3>
-		</div>
-		<div class="row">
-			<!-- Boxes 1-4 -->
-			<div class = "col-sm-8">
-				<!-- Boxes 1, 2, and 4-->
-				<div class="row" style = "border:1px solid black">
-					<!-- Boxes 1 and 2-->
-					<div class="col-sm-5" >
-						<!-- Box 1 -->
-						<p class="text-left">
-							<label> <b>1. Incident Name:</b> </label>
-							<input type="text" class="form-control" value="{{incident.name}}">
-						</p>
-					</div>
-					<div class="col-sm-7" style="border:1px solid black">
-						<!-- Box 2 -->
-						<p class = "text-left">
-							<b>2. Operational Period: </b>
-						</p>
-						<div class="col-sm-6">
-							<label for="operationalPeriod[start]">Date From:</label>
-							<input type="text" class="form-control" name="operationalPeriod[start]" value="{{form.operationalPeriod.start.toISOString()}}">
-							<br><br>
-							<label for="operationalPeriod[end]">Time From:</label>
-							<input type="text" class="form-control" name="operationalPeriod[end]" value="{{form.operationalPeriod.end.toISOString()}}">
-							<br>
-						</div>
-						<!--
-						<div class="col-sm-6">
-							<label for="startTime">Date To:</label>
-							<input type="text" class="form-control" name="startTime">
-							<br><br>
-							<label for="endTime">Time To:</label>
-							<input type="text" class="form-control" name="endTime">
-							<br>
-						</div>
-						-->
-					</div>
-				</div>
-				<div class="row" style="border:1px solid black" >
-					<!-- Box 4 --> 
-					<div class="col-sm-4">
-						<p class="text-left">
-							<b>4. Operations Personnel </b>
-						</p>
-						<p class="text-right">
-							<label for="oSecChief">Operations Section Chief:</label>
-							<br><br>
-							<label for="bDirector">Branch Director:</label>
-							<br><br><br>
-							<label for="dSupervisor">Division/Group Supervisor:</label>
-						</p>
-					</div>
-					<div class="col-sm-4">
-						<label for="name"> <u> Name </u> </label>
-						<input type="text" class="form-control" name="operationsPersonnel[operationsSectionChiefName]" value="{{form.operationsPersonnel.operationsSectionChiefName}}">
-						<br>
-						<input type="text" class="form-control" name="operationsPersonnel[branchDirectorName]" value="{{form.operationsPersonnel.branchDirectorName}}">
-						<br>
-						<input type="text" class="form-control" name="operationsPersonnel[divisionGroupSupervisorName]" value="{{form.operationsPersonnel.divisionGroupSupervisorName}}">
+  <input type="hidden" name="_csrf" value="{{csrf_token}}">
+  {% if !form.isNew %}
+    <input type="hidden" name="_method" value="PUT">
+  {% endif %}
 
-					</div>
-					<div class="col-sm-4">
-						<label for="cNum"> <u> Contact Number(s) </u> </label>
-						<input type="text" class="form-control" name="operationsPersonnel[operationsSectionChiefContactNumber]" value="{{form.operationsPersonnel.operationsSectionChiefContactNumber}}">
-						<br>
-						<input type="text" class="form-control" name="operationsPersonnel[branchDirectorContactNumber]" value="{{form.operationsPersonnel.branchDirectorContactNumber}}">
-						<br>
-						<input type="text" class="form-control" name="operationsPersonnel[divisionGroupSupervisorContactNumber]" value="{{form.operationsPersonnel.divisionGroupSupervisorContactNumber}}">
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-4" style = "border:1px solid black">
-				<!-- Box 3 -->
-				<p class = "text-left">
-					<b>3.</b>
-					<br>
-					<label for="field3[branch]">Branch:</label>
-					<input type="text" class="form-control" name="field3[branch]" value="{{form.field3.branch}}">
-					<br>
-					<label for="field3[division]">Division:</label>
-					<input type="text" class="form-control" name="field3[division]" value="{{form.field3.division}}">
-					<br>
-					<label for="field3[group]">Group:</label>
-					<input type="text" class="form-control" name="field3[group]" value="{{form.field3.group}}">
-					<br>
-					<label for="field3[stagingArea]">Staging Area:</label>
-					<input type="text" class="form-control" name="field3[stagingArea]" value="{{form.field3.stagingArea}}">
-					<br><br><br>
-				</p>
-			</div>	
-		</div>
+  <div class="title">
+    <h3 class="text-center">ASSIGNMENT LIST (ICS 204)</h3>
+  </div>
 
-		<div class="row" style="border:1px solid black"> <!-- Box 5 -->
-			<div class="row"> <!-- Headers -->
-				<div class="col-sm-4"> <!-- Resources Assigned/Resource Identifier/Leader -->
-					<div class="row">
-						<div class="col-sm-12" >
-							<b>5. Resources Assigned:</b>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6" >
-							Resource Identifier:
-						</div>
-						<div class="col-sm-6" >
-							Leader:
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-1">
-					# of Persons
-				</div>
-				<div class="col-sm-3">
-					Contact, e.g., phone, pager, radio frequency, etc.
-				</div>
-				<div class="col-sm-4">
-					Reporting Location, Special Equipment and Supplies, Remarks, Notes, Information
-				</div>
-			</div>
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th class="col-sm-2"></th>
-						<th class="col-sm-2"></th>
-						<th class="col-sm-1"></th>
-						<th class="col-sm-3"></th>
-						<th class="col-sm-4"></th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for resource in form.resourcesAssigned %}
-					<tr>
-						<td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][resourceIdentifier]" value="{{resource.resourceIdentifier}}"></td>
-						<td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][loop.[leader]" value="{{resource.leader}}"></td>
-						<td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][numOfPersons]" value="{{resource.numOfPersons}}"></td>
-						<td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][contact]" value="{{resource.contact}}"></td>
-						<td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][notes]" value="{{resource.notes}}"></td>
-					</tr>
-					{% endfor %}
-					<!--
-					<tr>
-						<td><input type="text" class="form-control" id="t21"></td>
-						<td><input type="text" class="form-control" id="t22"></td>
-						<td><input type="text" class="form-control" id="t23"></td>
-						<td><input type="text" class="form-control" id="t24"></td>
-						<td><input type="text" class="form-control" id="t25"></td>
-					</tr>
-					<tr>
-						<td><input type="text" class="form-control" id="t31"></td>
-						<td><input type="text" class="form-control" id="t32"></td>
-						<td><input type="text" class="form-control" id="t33"></td>
-						<td><input type="text" class="form-control" id="t34"></td>
-						<td><input type="text" class="form-control" id="t35"></td>
-					</tr>
-					<tr>
-						<td><input type="text" class="form-control" id="t41"></td>
-						<td><input type="text" class="form-control" id="t42"></td>
-						<td><input type="text" class="form-control" id="t43"></td>
-						<td><input type="text" class="form-control" id="t44"></td>
-						<td><input type="text" class="form-control" id="t45"></td>
-					</tr>
-					<tr>
-						<td><input type="text" class="form-control" id="t51"></td>
-						<td><input type="text" class="form-control" id="t52"></td>
-						<td><input type="text" class="form-control" id="t53"></td>
-						<td><input type="text" class="form-control" id="t54"></td>
-						<td><input type="text" class="form-control" id="t55"></td>
-					</tr>
-					<tr>
-						<td><input type="text" class="form-control" id="t61"></td>
-						<td><input type="text" class="form-control" id="t62"></td>
-						<td><input type="text" class="form-control" id="t63"></td>
-						<td><input type="text" class="form-control" id="t64"></td>
-						<td><input type="text" class="form-control" id="t65"></td>
-					</tr>
-					<tr>
-						<td><input type="text" class="form-control" id="t71"></td>
-						<td><input type="text" class="form-control" id="t72"></td>
-						<td><input type="text" class="form-control" id="t73"></td>
-						<td><input type="text" class="form-control" id="t74"></td>
-						<td><input type="text" class="form-control" id="t75"></td>
-					</tr>
-					<tr>
-						<td><input type="text" class="form-control" id="t81"></td>
-						<td><input type="text" class="form-control" id="t82"></td>
-						<td><input type="text" class="form-control" id="t83"></td>
-						<td><input type="text" class="form-control" id="t84"></td>
-						<td><input type="text" class="form-control" id="t85"></td>
-					</tr>
-					<tr>
-						<td><input type="text" class="form-control" id="t91"></td>
-						<td><input type="text" class="form-control" id="t92"></td>
-						<td><input type="text" class="form-control" id="t93"></td>
-						<td><input type="text" class="form-control" id="t94"></td>
-						<td><input type="text" class="form-control" id="t95"></td>
-					</tr>
-					-->
-				</tbody>
-			</table>
-		</div> 
-		<div class="row" style="border:1px solid black"> <!-- Box 6 -->
-			<b>6. Work Assignments:</b><br>
-			<textarea rows="8" cols="180" name="workAssignments">{{form.workAssignments}}"</textarea>
-		</div>
-		<div class="row" style="border:1px solid black"> <!-- Box 7 -->
-			<b>7. Special Instructions:</b><br>
-			<textarea rows="8" cols="180" name="specialInstructions">{{form.specialInstructions}}</textarea>
-		</div>
-		<div class="row" style="border:1px solid black"> <!-- Box 8 -->
-			<b>8. Communications </b> (radio and/or phone contact numbers needed for this assignment):
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th class="col-sm-3">Name</th>
-						<th class="col-sm-1">Function</th>
-						<th class="col-sm-8">Primary Contact: indicate cell, pager, or radio (frequency/system/channel)</th>
-					</tr>
-					
-					<tr>
-						{% for communication in form.communications %}
-						<td><input type="text" class="form-control" name="communications[loop.index0][name]" value="{{communication.name}}"></td>
-						<td><input type="text" class="form-control" name="communications[loop.index0][function]" value="{{communication.function}}"></td>
-						<td><input type="text" class="form-control" name="communications[loop.index0][primaryContact]" value="{{communication.primaryContact}}"></td>
-						{% endfor %}
-					</tr>
-					<!--
-					<tr>
-						<td><input type="text" class="form-control" id="communications[name]"></td>
-						<td><input type="text" class="form-control" id="communications[function]"></td>
-						<td><input type="text" class="form-control" id="communications[primaryContact]"></td>
-					</tr>
-					<tr>
-						<td><input type="text" class="form-control" id="communications[name]"></td>
-						<td><input type="text" class="form-control" id="communications[function]"></td>
-						<td><input type="text" class="form-control" id="communications[primaryContact]"></td>
-					</tr>
-					<tr>
-						<td><input type="text" class="form-control" id="communications[name]"></td>
-						<td><input type="text" class="form-control" id="communications[function]"></td>
-						<td><input type="text" class="form-control" id="communications[primaryContact]"></td>
-					</tr>
-					-->
-				</thead>
-			</table>
-		</div>
-		<div class="row"style="border:1px solid black">
-			<div class="row" > <!-- Box 9 top half-->
-				<div class="col-sm-2">
-					<b>Prepared By:</b>
-				</div>
-				<div class="col-sm-3">
-					<label for="preparedBy[name">Name:</label>
-					<input type="text" class="form-control" name="preparedBy[name]" value="{{form.preparedBy.name}}">
-				</div>
-				<div class="col-sm-3">
-					<label for="preparedBy[positionTitle]">Position/Title:</label>
-					<input type="text" class="form-control" name="preparedBy[positionTitle]" value="{{form.preparedBy.positionTitle}}">
-				</div>
-				<div class="col-sm-4">
-					<label for="preparedBy[signature]">Signature:</label>
-					<input type="text" class="form-control" name="preparedBy[signature]" value="{{form.preparedBy.signature}}">
-				</div>
-			</div>
-			<div class="row" > <!-- Box 9 bottom half-->
-				<div class="col-sm-2">
-					<b>ICS 204</b>
-				</div>
-				<div class="col-sm-3">
-					<b>IAP Page</b>
-				</div>
-				<div class="col-sm-7">
-					Date/Time: <input type="text" class="form-control" name="preparedBy[dateTime]" value="{{form.preparedBy.dateTime.toISOString()}}">
-				</div>
-			</div>
-		</div>
-		<div class="row" align = "right">
-			<button class="btn btn-primary" type="submit">Submit</button>
-			<!-- on click it needs to create a form with all these fields and submit it to the database, then redirect to the forms page. -->
-		</div>
-	</div>
+  <div class="container" style="border: 1px solid black">
+
+    <div class="row" style="border-bottom: 1px solid black">
+      <!-- Boxes 1-4 -->
+      <div class="col-sm-8">
+        <!-- Boxes 1, 2, and 4-->
+        <div class="row" style="border-bottom: 1px solid black">
+          <!-- Boxes 1 and 2-->
+          <div class="col-sm-5">
+            <!-- Box 1 -->
+            <label> <strong>1. Incident Name:</strong> </label>
+            <input type="text" class="form-control" value="{{incident.name}}" readonly>
+          </div>
+          <div class="col-sm-7" style="border-left: 1px solid black">
+            <!-- Box 2 -->
+            <p class="text-left">
+              <strong>2. Operational Period: </strong>
+            </p>
+            <div class="col-sm-6">
+              <label for="operationalPeriod[start]">Date From:</label>
+              <input type="text" class="form-control" name="operationalPeriod[start]" value="{{form.operationalPeriod.start.toISOString()}}">
+              <br><br>
+              <label for="operationalPeriod[end]">Date To:</label>
+              <input type="text" class="form-control" name="operationalPeriod[end]" value="{{form.operationalPeriod.end.toISOString()}}">
+              <br>
+            </div>
+            {# <div class="col-sm-6">
+              <label for="startTime">Date To:</label>
+              <input type="text" class="form-control" name="startTime">
+              <br><br>
+              <label for="endTime">Time To:</label>
+              <input type="text" class="form-control" name="endTime">
+              <br>
+            </div> #}
+          </div>
+        </div>
+        <div class="row">
+          <!-- Box 4 --> 
+          <div class="col-sm-4">
+            <p class="text-left">
+              <strong>4. Operations Personnel </strong>
+            </p>
+            <p class="text-right">
+              <label for="oSecChief">Operations Section Chief:</label>
+              <br><br>
+              <label for="bDirector">Branch Director:</label>
+              <br><br><br>
+              <label for="dSupervisor">Division/Group Supervisor:</label>
+            </p>
+          </div>
+          <div class="col-sm-4">
+            <label for="name"> <u> Name </u> </label>
+            <input type="text" class="form-control" name="operationsPersonnel[operationsSectionChiefName]" value="{{form.operationsPersonnel.operationsSectionChiefName}}">
+            <br>
+            <input type="text" class="form-control" name="operationsPersonnel[branchDirectorName]" value="{{form.operationsPersonnel.branchDirectorName}}">
+            <br>
+            <input type="text" class="form-control" name="operationsPersonnel[divisionGroupSupervisorName]" value="{{form.operationsPersonnel.divisionGroupSupervisorName}}">
+
+          </div>
+          <div class="col-sm-4">
+            <label for="cNum"> <u> Contact Number(s) </u> </label>
+            <input type="text" class="form-control" name="operationsPersonnel[operationsSectionChiefContactNumber]" value="{{form.operationsPersonnel.operationsSectionChiefContactNumber}}">
+            <br>
+            <input type="text" class="form-control" name="operationsPersonnel[branchDirectorContactNumber]" value="{{form.operationsPersonnel.branchDirectorContactNumber}}">
+            <br>
+            <input type="text" class="form-control" name="operationsPersonnel[divisionGroupSupervisorContactNumber]" value="{{form.operationsPersonnel.divisionGroupSupervisorContactNumber}}">
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4" style="border-left: 1px solid black">
+        <!-- Box 3 -->
+        <p class="text-left">
+          <strong>3.</strong>
+          <br>
+          <label for="field3[branch]">Branch:</label>
+          <input type="text" class="form-control" name="field3[branch]" value="{{form.field3.branch}}">
+          <br>
+          <label for="field3[division]">Division:</label>
+          <input type="text" class="form-control" name="field3[division]" value="{{form.field3.division}}">
+          <br>
+          <label for="field3[group]">Group:</label>
+          <input type="text" class="form-control" name="field3[group]" value="{{form.field3.group}}">
+          <br>
+          <label for="field3[stagingArea]">Staging Area:</label>
+          <input type="text" class="form-control" name="field3[stagingArea]" value="{{form.field3.stagingArea}}">
+          <br><br><br>
+        </p>
+      </div>  
+    </div>
+
+    <div class="row" style="border-bottom: 1px solid black"> <!-- Box 5 -->
+      <div class="row"> <!-- Headers -->
+        <div class="col-sm-12"> <!-- Resources Assigned/Resource Identifier/Leader -->
+          <strong>5. Resources Assigned:</strong>
+        </div>
+      </div>
+      <table class="table" style="margin-bottom: 0">
+        <thead>
+          <tr>
+            <th class="col-sm-2">Resource Identifier:</th>
+            <th class="col-sm-2">Leader:</th>
+            <th class="col-sm-1"># of Persons</th>
+            <th class="col-sm-3">Contact, e.g., phone, pager, radio frequency, etc.</th>
+            <th class="col-sm-4">Reporting Location, Special Equipment and Supplies, Remarks, Notes, Information</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for resource in form.resourcesAssigned %}
+          <tr>
+            <td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][resourceIdentifier]" value="{{resource.resourceIdentifier}}"></td>
+            <td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][leader]" value="{{resource.leader}}"></td>
+            <td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][numOfPersons]" value="{{resource.numOfPersons}}"></td>
+            <td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][contact]" value="{{resource.contact}}"></td>
+            <td><input type="text" class="form-control" name="resourcesAssigned[loop.index0][notes]" value="{{resource.notes}}"></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div> 
+
+    <div class="row" style="border-bottom: 1px solid black"> <!-- Box 6 -->
+      <strong>6. Work Assignments:</strong><br>
+      <textarea class="form-control" rows="8" name="workAssignments">{{form.workAssignments}}</textarea>
+    </div>
+
+    <div class="row" style="border-bottom: 1px solid black"> <!-- Box 7 -->
+      <strong>7. Special Instructions:</strong><br>
+      <textarea class="form-control" rows="8" name="specialInstructions">{{form.specialInstructions}}</textarea>
+    </div>
+
+    <div class="row" style="border-bottom: 1px solid black"> <!-- Box 8 -->
+      <strong>8. Communications </strong> (radio and/or phone contact numbers needed for this assignment):
+      <table class="table" style="margin-bottom: 0">
+        <thead>
+          <tr>
+            <th class="col-sm-3">Name</th>
+            <th class="col-sm-1">Function</th>
+            <th class="col-sm-8">Primary Contact: indicate cell, pager, or radio (frequency/system/channel)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            {% for communication in form.communications %}
+            <td><input type="text" class="form-control" name="communications[loop.index0][name]" value="{{communication.name}}"></td>
+            <td><input type="text" class="form-control" name="communications[loop.index0][function]" value="{{communication.function}}"></td>
+            <td><input type="text" class="form-control" name="communications[loop.index0][primaryContact]" value="{{communication.primaryContact}}"></td>
+            {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="row">
+      <div class="row" > <!-- Box 9 top half-->
+        <div class="col-sm-2">
+          <strong>Prepared By:</strong>
+        </div>
+        <div class="col-sm-3">
+          <label for="preparedBy[name">Name:</label>
+          <input type="text" class="form-control" name="preparedBy[name]" value="{{form.preparedBy.name}}">
+        </div>
+        <div class="col-sm-3">
+          <label for="preparedBy[positionTitle]">Position/Title:</label>
+          <input type="text" class="form-control" name="preparedBy[positionTitle]" value="{{form.preparedBy.positionTitle}}">
+        </div>
+        <div class="col-sm-4">
+          <label for="preparedBy[signature]">Signature:</label>
+          <input type="text" class="form-control" name="preparedBy[signature]" value="{{form.preparedBy.signature}}">
+        </div>
+      </div>
+      <div class="row" > <!-- Box 9 bottom half-->
+        <div class="col-sm-2">
+          <strong>ICS 204</strong>
+        </div>
+        <div class="col-sm-3">
+          <strong>IAP Page</strong>
+        </div>
+        <div class="col-sm-7">
+          Date/Time: <input type="text" class="form-control" name="preparedBy[dateTime]" value="{{form.preparedBy.dateTime.toISOString()}}">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row text-right">
+      <div class="form-group">
+        <button class="btn btn-primary" type="submit">Submit</button>
+      </div>
+    </div>
+  </div>
 </form>
 {% endblock %}
