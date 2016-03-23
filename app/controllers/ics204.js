@@ -22,14 +22,14 @@ exports.load = co(function* (req, res, next){
 });
 
 exports.show = function (req, res) {
-  res.render('forms/ics204/show', {
+  res.render('forms/ics204/form.html', {
     incident: req.incident, // loaded via app.param('incidentId') in routes.js
     form: req.form
   });
 };
 
 exports.new = function (req, res) {
-  res.render('forms/ics204/form', {
+  res.render('forms/ics204/form.html', {
     title: 'Create New Assignment List (ICS 204)',
     incident: req.incident,
     form: new Ics204({})
@@ -45,6 +45,7 @@ exports.create = co(function* (req, res) {
   yield ics204.save(function (err, ics204) {
     if (err) {
       // TODO: redirect the user to a useful error message
+	  console.log(err);
     }
   });
 
@@ -53,7 +54,7 @@ exports.create = co(function* (req, res) {
 });
 
 exports.edit = function (req, res) {
-  res.render('forms/ics204/form', {
+  res.render('forms/ics204/form.html', {
     title: 'Edit Assignment List (ICS 204)',
     incident: req.incident,
     form: req.form
