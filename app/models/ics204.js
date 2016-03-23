@@ -21,7 +21,7 @@ const ICS204Schema = new Schema({
   resourcesAssigned: [{
     resourceIdentifier: String, 
     leader: String, 
-    numOfPersons: Number, 
+    numOfPersons: String, 
     contact: String,
 	notes: String
   }],
@@ -36,7 +36,7 @@ const ICS204Schema = new Schema({
     name: String,
     positionTitle: String,
     signature: String,
-    dateTime: Date
+    dateTime: String
   }
 });
 
@@ -44,6 +44,7 @@ ICS204Schema.statics = {
   // A helper function to execute a Mongoose query to fetch an Incident by ID.
   load: function(_id) {
     return this.findOne({_id})
+      .populate("period")
       .exec();
   },
 
