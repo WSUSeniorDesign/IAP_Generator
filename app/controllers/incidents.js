@@ -110,11 +110,16 @@ exports.new = function (req, res){
  * submitting the form given by the new() function above.
  */
 exports.create = co(function* (req, res) {
-  const incident = new Incident(only(req.body, 'name location active'));
+  const incident = new Incident(req.body.incident);
+  const period = new Period(req.body.period);
 
-  // incident.user = req.user;
-
+  incident.active = true;
+  incident.setCurrentPeriod(period);
   yield incident.save();
+
+  period.incident = incident;
+  period.open();
+  yield period.save();
 
   req.flash('success', 'Successfully created incident!');
   res.redirect('/incidents/' + incident._id);
@@ -147,7 +152,7 @@ exports.update = co(function* (req, res){
   //   incident.active = req.body.active
   //
   // retaining all its other values.
-  Object.assign(incident, only(req.body, 'name location active'));
+  Object.assign(incident, only(req.body.incident, 'name location active'));
 
   yield incident.save();
 

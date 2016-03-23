@@ -50,7 +50,7 @@
       <div class="row">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <a href="#" class="btn btn-default btn-sm pull-right">Edit</a>
+              <a href="/incidents/{{incident.id}}/edit" class="btn btn-default btn-sm pull-right">Edit</a>
               <h3 class="panel-title">Incident Details</h3>
               <div class="clearfix"></div>
             </div>
@@ -89,7 +89,7 @@
 
             <div class="list-group">
                 {% if period.active %}<a href="#" class="list-group-item">&times; Close Current Period</a>{% endif %}
-                <a href="#" class="list-group-item">&plus; Create New Period</a>
+                <a href="/incidents/{{incident.id}}/new-period" class="list-group-item">&plus; Create New Period</a>
             </div>
 
             <div class="panel-footer">

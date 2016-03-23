@@ -11,7 +11,7 @@ const Period = mongoose.model("Period");
 // });
 
 exports.new = function(req, res, next) {
-  res.render('periods/new', {
+  res.render('incidents/periods/new', {
     title: 'Create New Operational Period',
     incident: req.incident,
     period: new Period({})
@@ -19,7 +19,7 @@ exports.new = function(req, res, next) {
 }
 
 exports.create = function(req, res, next) {
-  const period = new Period(only(req.body, "start end active"));
+  const period = new Period(only(req.body.period, "start end active"));
   period.incident = req.incident;
 
   period.save(function(err) {
