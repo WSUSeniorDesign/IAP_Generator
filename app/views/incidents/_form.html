@@ -2,9 +2,10 @@
   <div class="col-xs-12">
     {% set action = "/incidents" %}
     {% if !incident.isNew %}
-      {% set action += "/" + incident.id %}
+      {% set action += "/" %}
+      {% set action += incident.id %}
     {% endif %}
-    <form action="/incidents" method="POST" role="form">
+    <form action="{{action}}" method="POST" role="form">
       <input type="hidden" name="_csrf" value="{{ csrf_token }}">
       {% if !incident.isNew %}
         <input type="hidden" name="_method" value="PUT">

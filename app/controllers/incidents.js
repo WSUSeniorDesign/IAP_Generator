@@ -15,6 +15,7 @@ const only = require('only');
 const mongoose = require('mongoose');
 const Incident = mongoose.model('Incident');
 const Ics204 = mongoose.model('ICS204');
+const Period = mongoose.model("Period");
 
 /**
  * This is a helper function, which attempts to load an Incident
@@ -30,13 +31,17 @@ const Ics204 = mongoose.model('ICS204');
  * accessed via req.incident (see the code in the show() function below).
  */
 exports.load = co(function* (req, res, next, id) {
-  if (req.query.period) {
-    req.period = yield Period.load(req.query.period);
-    if (!req.period) return next(new Error("Period not found"));
-    if (req.period.incident.id !== id) return next(new Error("Period did not belong to the current Incident"));
-  }
   req.incident = yield Incident.load(id);
   if (!req.incident) return next(new Error('Incident not found'));
+
+  if (req.query.period && mongoose.Types.ObjectId.isValid(req.query.period)) {
+    req.period = yield Period.load(req.query.period);
+    if (!req.period) return next(new Error("Period not found"));
+    if (req.period.incident.toString() !== req.incident.id) return next(new Error("Period did not belong to the current Incident"));
+  } else {
+    req.period = req.incident.currentPeriod;
+  }
+
   next();
 });
 
@@ -78,11 +83,12 @@ exports.index = co(function* (req, res) {
  */
 exports.show = co(function* (req, res){
   req.incident.forms = {
-    ics204: yield Ics204.loadByIncidentId(req.incident._id)
+    ics204: yield Ics204.loadByPeriodId(req.period._id)
   };
 
   res.render('incidents/show', {
-    incident: req.incident
+    incident: req.incident,
+    period: req.period
   });
 });
 

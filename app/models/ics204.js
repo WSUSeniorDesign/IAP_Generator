@@ -2,11 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ICS204Schema = new Schema({
-  incidentId: { type: Schema.Types.ObjectId, required: true },
-  operationalPeriod: { 
-    start: Date, 
-    end: Date 
-  },
+  incident: { type: Schema.Types.ObjectId, ref: "Incident", required: true },
+  period: { type: Schema.Types.ObjectId, ref: "Period", required: true },
   field3: { 
     branch: String, 
     division: String, 
@@ -50,7 +47,13 @@ ICS204Schema.statics = {
   },
 
   loadByIncidentId: function(incidentId) {
-    return this.find({incidentId: incidentId})
+    return this.find({incident: incidentId})
+      .select('_id')
+      .exec();
+  },
+
+  loadByPeriodId: function(periodId) {
+    return this.find({period: periodId})
       .select('_id')
       .exec();
   }
