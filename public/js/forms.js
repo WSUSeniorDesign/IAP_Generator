@@ -30,14 +30,6 @@ $(document).ready(function(){
     errorPlacement: customErrorPlacement,
     errorElement: "span",
     rules: {
-      'operationalPeriod[start]': {
-        required: true,
-        dateISO: true
-      },
-      'operationalPeriod[end]': {
-        required: true,
-        dateISO: true
-      },
       'resourcesAssigned[numOfPersons]': {
         digits: true
       },
@@ -46,14 +38,6 @@ $(document).ready(function(){
       }
     },
     messages: {
-      'operationalPeriod[start]': {
-        required: 'Operational Period is required.',
-        dateISO: "Operational Period: Date From must be an ISO date."
-      },
-      'operationalPeriod[end]': {
-        required: 'Operational Period is required.',
-        dateISO: "Operational Period: Date To must be an ISO date."
-      },
       'resourcesAssigned[numOfPersons]': {
         digits: "Resources Assigned: Number of Persons must be a number."
       },

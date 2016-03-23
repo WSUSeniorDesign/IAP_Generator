@@ -1,0 +1,209 @@
+{# NOTE: {{show}} is a variable which is only passed in for the "show" action, with the value "readonly" #}
+
+<input type="hidden" name="incident" value="{{incident.id}}">
+<input type="hidden" name="period" value="{{form.period.id}}">
+
+<div class="title">
+  <h3 class="text-center">ASSIGNMENT LIST (ICS 204)</h3>
+</div>
+
+<div class="container" style="border: 1px solid black">
+
+  <div class="row" style="border-bottom: 1px solid black">
+    <!-- Boxes 1-4 -->
+    <div class="col-sm-8">
+      <!-- Boxes 1, 2, and 4-->
+      <div class="row" style="border-bottom: 1px solid black">
+        <!-- Boxes 1 and 2-->
+        <div class="col-sm-5" style="padding: 10px">
+          <!-- Box 1 -->
+          <label> <strong>1. Incident Name:</strong> </label>
+          <div><a href="/incidents/{{incident.id}}">{{incident.name}}</a></div>
+        </div>
+        <div class="col-sm-7" style="border-left: 1px solid black; padding: 10px">
+          <!-- Box 2 -->
+          <p class="text-left">
+            <strong>2. Operational Period: </strong>
+          </p>
+          <div class="col-sm-6">
+            <div>
+              <label>Date From:</label>
+              <input type="text" class="form-control" value="{{form.period.start.date}}" readonly>
+            </div>
+            <div style="margin-top:5px">
+              <label>Time From:</label>
+              <input type="text" class="form-control" value="{{form.period.start.time}}" readonly>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div>
+              <label>Date To:</label>
+              <input type="text" class="form-control" value="{{form.period.end.date}}" readonly>
+            </div>
+            <div style="margin-top:5px">
+              <label>Time To:</label>
+              <input type="text" class="form-control" value="{{form.period.end.time}}" readonly>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Box 4 --> 
+        <div class="col-sm-4">
+          <p class="text-left">
+            <strong>4. Operations Personnel </strong>
+          </p>
+          <p class="text-right">
+            <label for="oSecChief">Operations Section Chief:</label>
+            <br><br>
+            <label for="bDirector">Branch Director:</label>
+            <br><br><br>
+            <label for="dSupervisor">Division/Group Supervisor:</label>
+          </p>
+        </div>
+        <div class="col-sm-4">
+          <label for="name"> <u> Name </u> </label>
+          <input type="text" class="form-control" name="operationsPersonnel[operationsSectionChiefName]" value="{{form.operationsPersonnel.operationsSectionChiefName}}" {{show}}>
+          <br>
+          <input type="text" class="form-control" name="operationsPersonnel[branchDirectorName]" value="{{form.operationsPersonnel.branchDirectorName}}" {{show}}>
+          <br>
+          <input type="text" class="form-control" name="operationsPersonnel[divisionGroupSupervisorName]" value="{{form.operationsPersonnel.divisionGroupSupervisorName}}" {{show}}>
+
+        </div>
+        <div class="col-sm-4">
+          <label for="cNum"> <u> Contact Number(s) </u> </label>
+          <input type="text" class="form-control" name="operationsPersonnel[operationsSectionChiefContactNumber]" value="{{form.operationsPersonnel.operationsSectionChiefContactNumber}}" {{show}}>
+          <br>
+          <input type="text" class="form-control" name="operationsPersonnel[branchDirectorContactNumber]" value="{{form.operationsPersonnel.branchDirectorContactNumber}}" {{show}}>
+          <br>
+          <input type="text" class="form-control" name="operationsPersonnel[divisionGroupSupervisorContactNumber]" value="{{form.operationsPersonnel.divisionGroupSupervisorContactNumber}}" {{show}}>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4" style="border-left: 1px solid black;padding: 10px">
+      <!-- Box 3 -->
+      <p class="text-left">
+        <strong>3.</strong>
+        <div class="form-group">
+          <label for="field3[branch]">Branch:</label>
+          <input type="text" class="form-control" name="field3[branch]" value="{{form.field3.branch}}" {{show}}>
+        </div>
+        <div class="form-group">
+          <label for="field3[division]">Division:</label>
+          <input type="text" class="form-control" name="field3[division]" value="{{form.field3.division}}" {{show}}>
+        </div>
+        <div class="form-group">
+          <label for="field3[group]">Group:</label>
+          <input type="text" class="form-control" name="field3[group]" value="{{form.field3.group}}" {{show}}>
+        </div>
+        <div class="form-group">
+          <label for="field3[stagingArea]">Staging Area:</label>
+          <input type="text" class="form-control" name="field3[stagingArea]" value="{{form.field3.stagingArea}}" {{show}}>
+        </div>
+      </p>
+    </div>  
+  </div>
+
+  <div class="row" style="border-bottom: 1px solid black"> <!-- Box 5 -->
+    <div style="padding: 10px"> <!-- Resources Assigned/Resource Identifier/Leader -->
+      <strong>5. Resources Assigned:</strong>
+    </div>
+    <table class="table table-condensed" style="margin-bottom: 0">
+      <thead>
+        <tr>
+          <th class="col-sm-2">Resource Identifier:</th>
+          <th class="col-sm-2">Leader:</th>
+          <th class="col-sm-1"># of Persons</th>
+          <th class="col-sm-3">Contact, e.g., phone, pager, radio frequency, etc.</th>
+          <th class="col-sm-4">Reporting Location, Special Equipment and Supplies, Remarks, Notes, Information</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if form.isNew %}
+          {# the original FEMA form has 10 rows, so to make life easy we just start with 10 #}
+          {% set form.resourcesAssigned = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}] %}
+        {% endif %}
+
+        {% for resource in form.resourcesAssigned %}
+          <tr>
+            <input type="hidden" name="resourcesAssigned[{{loop.index0}}][_id]" value="{{resource.id}}">
+            <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][resourceIdentifier]" value="{{resource.resourceIdentifier}}" {{show}}></td>
+            <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][leader]" value="{{resource.leader}}" {{show}}></td>
+            <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][numOfPersons]" value="{{resource.numOfPersons}}" {{show}}></td>
+            <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][contact]" value="{{resource.contact}}" {{show}}></td>
+            <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][notes]" value="{{resource.notes}}" {{show}}></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div> 
+
+  <div class="row" style="border-bottom: 1px solid black; padding: 10px"> <!-- Box 6 -->
+    <div>
+      <strong>6. Work Assignments:</strong>
+    </div>
+    <textarea class="form-control" rows="8" name="workAssignments" {{show}}>{{form.workAssignments}}</textarea>
+  </div>
+
+  <div class="row" style="border-bottom: 1px solid black; padding: 10px"> <!-- Box 7 -->
+    <div>
+      <strong>7. Special Instructions:</strong>
+    </div>
+    <textarea class="form-control" rows="8" name="specialInstructions" {{show}}>{{form.specialInstructions}}</textarea>
+  </div>
+
+  <div class="row" style="border-bottom: 1px solid black"> <!-- Box 8 -->
+    <div style="padding: 10px">
+      <strong>8. Communications </strong> (radio and/or phone contact numbers needed for this assignment):
+    </div>
+    <table class="table table-condensed" style="margin-bottom: 0">
+      <thead>
+        <tr>
+          <th class="col-sm-3">Name</th>
+          <th class="col-sm-1">Function</th>
+          <th class="col-sm-8">Primary Contact: indicate cell, pager, or radio (frequency/system/channel)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if form.isNew %}
+          {# the original FEMA form has 4 rows #}
+          {% set form.communications = [{}, {}, {}, {}] %}
+        {% endif %}
+
+        {% for communication in form.communications %}            
+          <tr>
+            <input type="hidden" name="comminucations[{{loop.index0}}][_id]" value="{{communication.id}}" {{show}}>
+            <td><input type="text" class="form-control" name="communications[{{loop.index0}}][name]" value="{{communication.name}}" {{show}}></td>
+            <td><input type="text" class="form-control" name="communications[{{loop.index0}}][function]" value="{{communication.function}}" {{show}}></td>
+            <td><input type="text" class="form-control" name="communications[{{loop.index0}}][primaryContact]" value="{{communication.primaryContact}}" {{show}}></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="row" style="padding: 10px">
+    <div class="row" > <!-- Box 9 top half-->
+      <div class="col-sm-2">
+        <strong>Prepared By:</strong>
+      </div>
+      <div class="col-sm-3">
+        <label for="preparedBy[name">Name:</label>
+        <input type="text" class="form-control" name="preparedBy[name]" value="{{form.preparedBy.name}}" {{show}}>
+      </div>
+      <div class="col-sm-3">
+        <label for="preparedBy[positionTitle]">Position/Title:</label>
+        <input type="text" class="form-control" name="preparedBy[positionTitle]" value="{{form.preparedBy.positionTitle}}" {{show}}>
+      </div>
+      <div class="col-sm-4">
+        <label for="preparedBy[signature]">Signature:</label>
+        <input type="text" class="form-control" name="preparedBy[signature]" value="{{form.preparedBy.signature}}" {{show}}>
+      </div>
+    </div>
+    <div class="row" > <!-- Box 9 bottom half-->
+      <div class="col-sm-7 col-sm-offset-5">
+        Date/Time: <input type="text" class="form-control" name="preparedBy[dateTime]" value="{{form.preparedBy.dateTime.toISOString()}}" {{show}}>
+      </div>
+    </div>
+  </div>
+</div>

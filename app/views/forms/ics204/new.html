@@ -1,0 +1,21 @@
+{% extends "../../layouts/default.html" %}
+
+{% block main %}
+  <h2>{{ title }}</h2>
+{% endblock %}
+
+{% block content %}
+  <form class="form" id="form-ics-204" method="post" action="/incidents/{{incident.id}}/form/ics204" role="form">
+    <input type="hidden" name="_csrf" value="{{csrf_token}}">
+
+    {% include "_form.html" %}
+
+    <div class="container">
+      <div class="row text-right">
+        <div class="form-group">
+          <button class="btn btn-primary" type="submit">Submit</button>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock %}
