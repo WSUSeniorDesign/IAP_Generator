@@ -24,6 +24,54 @@ $(document).ready(function(){
   }
 
   //
+  // New Operational Period
+  //
+  $("#period-new").validate({
+    errorPlacement: function(error, $element) {
+      $element.parent(".form-group").addClass("has-error");
+      $(error).addClass("help-block").insertAfter($element);
+    },
+    errorElement: "span",
+    success: function($label) {
+      $label.parent(".form-group").removeClass("has-error");
+    },
+    rules: {
+      'period[commander]': {
+        required: true
+      },
+      'period[start][date]': {
+        required: true
+      },
+      'period[start][time]': {
+        required: true
+      },
+      'period[end][date]': {
+        required: true
+      },
+      'period[end][time]': {
+        required: true
+      }
+    },
+    messages: {
+      'period[commander]': {
+        required: "Commander is required."
+      },
+      'period[start][date]': {
+        required: "Start Date is required."
+      },
+      'period[start][time]': {
+        required: "Start Time is required."
+      },
+      'period[end][date]': {
+        required: "End Date is required."
+      },
+      'period[end][time]': {
+        required: "End Time is required."
+      }
+    }
+  });
+
+  //
   // ICS 204
   //
   $("#form-ics-204").validate({

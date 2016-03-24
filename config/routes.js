@@ -19,13 +19,14 @@ module.exports = function (app, passport) {
   // app.get('/', home.index);
   app.get('/', function (req, res) {
     res.redirect('/incidents');
-  })
+  });
+
+  app.param('incidentId', incidents.load);
+  app.param('periodId', periods.load);
 
   /**
    * Incident routes
    */
-  app.param('incidentId',                 incidents.load);
-
   app.get('/incidents',                   incidents.index); // a list of all incidents
   app.get('/incidents/new',               incidents.new); // a form to add a new incident
   app.get('/incidents/:incidentId',       incidents.show); 
@@ -37,9 +38,11 @@ module.exports = function (app, passport) {
   /**
    * Operational Periods
    */
-  // app.param('period_id', periods.load);
-  app.get("/incidents/:incidentId/new-period", periods.new);
-  app.post("/incidents/:incidentId/periods", periods.create);
+  app.get("/incidents/:incidentId/period/new",             periods.new);
+  app.post("/incidents/:incidentId/periods",               periods.create);
+  app.get("/incidents/:incidentId/period/:periodId/edit",  periods.edit);
+  app.put("/incidents/:incidentId/period/:periodId",       periods.update);
+  // app.delete("/periods/:periodId",                         periods.destroy);       
 
   /**
    * ICS 204
