@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 var home = require('../app/controllers/home');
 
 const incidents = require('../app/controllers/incidents'); // require the incidents controller
+const periods = require("../app/controllers/periods");
 const ics204 = require('../app/controllers/ics204');
 
 /**
@@ -18,13 +19,14 @@ module.exports = function (app, passport) {
   // app.get('/', home.index);
   app.get('/', function (req, res) {
     res.redirect('/incidents');
-  })
+  });
+
+  app.param('incidentId', incidents.load);
+  app.param('periodId', periods.load);
 
   /**
    * Incident routes
    */
-  app.param('incidentId',                 incidents.load);
-
   app.get('/incidents',                   incidents.index); // a list of all incidents
   app.get('/incidents/new',               incidents.new); // a form to add a new incident
   app.get('/incidents/:incidentId',       incidents.show); 
@@ -32,6 +34,15 @@ module.exports = function (app, passport) {
   app.post('/incidents',                  incidents.create);
   app.put('/incidents/:incidentId',       incidents.update);
   app.delete('/incidents/:incidentId',    incidents.destroy);
+
+  /**
+   * Operational Periods
+   */
+  app.get("/incidents/:incidentId/period/new",             periods.new);
+  app.post("/incidents/:incidentId/periods",               periods.create);
+  app.get("/incidents/:incidentId/period/:periodId/edit",  periods.edit);
+  app.put("/incidents/:incidentId/period/:periodId",       periods.update);
+  // app.delete("/periods/:periodId",                         periods.destroy);       
 
   /**
    * ICS 204

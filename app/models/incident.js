@@ -1,12 +1,16 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+const per = require("./period"); // ensure Period is registered before Incident
+const Period = mongoose.model("Period");
+
 // Mongoose schema guide: http://mongoosejs.com/docs/guide.html 
 
 const IncidentSchema = new Schema({
   name: {type: String, required: true},
   location: String,
   // commander: {type: Schema.Types.ObjectId, ref: 'User'},
+  currentPeriod: { type: Schema.Types.ObjectId, ref: "Period" },
   active: {
     type: Boolean,
     // default to false because checkboxes are only sent by the browser if they're checked,
@@ -17,11 +21,47 @@ const IncidentSchema = new Schema({
   createdAt: { type : Date, default : Date.now }
 });
 
+IncidentSchema.methods = {
+  setCurrentPeriod: function (newPeriod) {
+    if (!this.currentPeriod) {
+      // there must not have been any period set before at all
+      this.currentPeriod = newPeriod.id;
+    } else {
+      const period = this.populated("currentPeriod");
+      if (!period) {
+        period = this.currentPeriod.id;
+      }
+
+      // set the new period as current
+      this.currentPeriod = newPeriod.id;
+      const incident = this; // cache the incident for later return from another function context
+
+      // close the old period, open the new period
+      Period.findById(period, function(err, oldPeriod) {
+        if (err) throw new Error(err);
+
+        oldPeriod.close(newPeriod);
+        oldPeriod.save(function (err) {
+          if (err) throw new Error("Failed to close previous operational period.");
+
+          newPeriod.open(oldPeriod);
+          newPeriod.save(function (err) {
+            if (err) throw new Error("Failed to open new operational period.");
+
+            return incident;
+          });
+        });
+      });
+    }
+  }
+};
+
 // Static methods
 IncidentSchema.statics = {
   // A helper function to execute a Mongoose query to fetch an Incident by ID.
   load: function(_id) {
     return this.findOne({_id})
+      .populate("currentPeriod")
       // .populate('commander', 'name') // we want to de-reference the commander and include its name field
       .exec();
   },

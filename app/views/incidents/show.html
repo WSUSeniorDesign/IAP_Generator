@@ -1,43 +1,17 @@
 {% extends "../layouts/default.html" %}
 
-mixin formGroup(labelText, value)
-  .form-group
-    label.control-label= labelText
-    div: p.form-static-control= value
-
 {% block main %}
-  <h2>{{ title }}</h2>
+  <h2>{{ incident.name }} <small>{{incident.location}}</small></h2>
 {% endblock %}
 
 {% block content %}
   <div class="row">
-    <div class="col-xs-12">
-      <div class="form">
-
-        <div class="form-group">
-          <label class="control-label">Incident Name</label>
-          <div>
-            <p class="form-static-control">{{ incident.name }}</p>
+    <div class="col-xs-8">
+        <div class="panel panel-default">
+          <div class="panel-heading"><h3 class="panel-title">Inicident Action Plan</h3></div>
+          <div class="panel-body">
+            <a href="/incidents/{{ incident.id }}/form/ics204/new">+ Create new ICS 204</a>
           </div>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label">Location</label>
-          <div>
-            <p class="form-static-control">{{ incident.location }}</p>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label">Active</label>
-          <div>
-            <p class="form-static-control">{{ incident.active }}</p>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <h3>Forms</h3>
-          <p><a href="/incidents/{{ incident.id }}/form/ics204/new">+ Create new ICS 204</a></p>
           {% if incident.forms.ics204.length %}
             <table class="table table-striped">
               <thead>
@@ -70,8 +44,76 @@ mixin formGroup(labelText, value)
               </tbody>
             </table>
           {% endif %}
+        </div>       
+    </div>
+    <div class="col-xs-4">
+      <div class="row">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <a href="/incidents/{{incident.id}}/edit" class="btn btn-default btn-sm pull-right">Edit</a>
+              <h3 class="panel-title">Incident Details</h3>
+              <div class="clearfix"></div>
+            </div>
+            <div class="panel-body">
+              <dl class="dl-horizontal">
+                <dt>Incident Name</dt>
+                <dd>{{incident.name}}</dd>
+                <dt>Location</dt>
+                <dd>{{incident.location}}</dd>
+                <dt>Status</dt>
+                <dd>{% if incident.active %}Active{% else %}Inactive{% endif %}</dd>
+              </dl>
+            </div>
         </div>
+      </div>
+      <div class="row">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <a href="/incidents/{{incident.id}}/period/{{period.id}}/edit" class="btn btn-default btn-sm pull-right">Edit</a>
+              <h3 class="panel-title pull-left">Operational Period</h3>
+              <div class="clearfix"></div>
+            </div>
 
+            <dl class="panel-body dl-horizontal">
+              <dt>Commander</dt>
+              <dd>{{period.commander}}</dd>
+              <dt>Start Date</dt>
+              <dd>{{period.start.date}}</dd>
+              <dt>Start Time</dt>
+              <dd>{{period.start.time}}</dd>
+              <dt>End Date</dt>
+              <dd>{{period.end.date}}</dd>
+              <dt>End Time</dt>
+              <dd>{{period.end.time}}</dd>
+            </dl>
+
+            <div class="list-group">
+                {% if period.active %}<a href="#" class="list-group-item">&times; Close Current Period</a>{% endif %}
+                <a href="/incidents/{{incident.id}}/period/new" class="list-group-item">&plus; Create New Period</a>
+            </div>
+
+            <div class="panel-footer">
+              <nav>
+                <ul class="pager">
+                  {% if period.prevPeriod %}
+                    <li class="previous">
+                      <a href="/incidents/{{incident.id}}?period={{period.prevPeriod.toString()}}">&larr; Previous Period</a>
+                    </li>
+                  {% else %}
+                    <li class="previous disabled"><a href="#">&larr; Previous Period</a></li>
+                  {% endif %}
+
+                  {% if period.nextPeriod %}
+                    <li class="next">
+                      <a href="/incidents/{{incident.id}}?period={{period.nextPeriod.toString()}}">Next Period &rarr;</a>
+                    </li>
+                  {% else %}
+                    <li class="next disabled"><a href="#">Next Period &rarr;</a></li>
+                  {% endif %}
+                </ul>
+              </nav>
+            </div>
+          </div>
       </div>
     </div>
   </div>

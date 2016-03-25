@@ -2,11 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ICS204Schema = new Schema({
-  incidentId: { type: Schema.Types.ObjectId, required: true },
-  operationalPeriod: { 
-    start: Date, 
-    end: Date 
-  },
+  incident: { type: Schema.Types.ObjectId, ref: "Incident", required: true },
+  period: { type: Schema.Types.ObjectId, ref: "Period", required: true },
   field3: { 
     branch: String, 
     division: String, 
@@ -15,17 +12,18 @@ const ICS204Schema = new Schema({
   },
   operationsPersonnel: { 
     operationsSectionChiefName: String, 
-    operationsSectionChiefContactNumber: Number,
+    operationsSectionChiefContactNumber: String,
     branchDirectorName: String,
-    branchDirectorContactNumber: Number,
+    branchDirectorContactNumber: String,
     divisionGroupSupervisorName: String,
-    divisionGroupSupervisorContactNumber: Number,
+    divisionGroupSupervisorContactNumber: String,
   },
   resourcesAssigned: [{
     resourceIdentifier: String, 
     leader: String, 
-    numOfPersons: Number, 
-    contact: String
+    numOfPersons: String, 
+    contact: String,
+	notes: String
   }],
   workAssignments: String,
   specialInstructions: String,
@@ -38,7 +36,7 @@ const ICS204Schema = new Schema({
     name: String,
     positionTitle: String,
     signature: String,
-    dateTime: Date
+    dateTime: String
   }
 });
 
@@ -46,11 +44,18 @@ ICS204Schema.statics = {
   // A helper function to execute a Mongoose query to fetch an Incident by ID.
   load: function(_id) {
     return this.findOne({_id})
+      .populate("period")
       .exec();
   },
 
   loadByIncidentId: function(incidentId) {
-    return this.find({incidentId: incidentId})
+    return this.find({incident: incidentId})
+      .select('_id')
+      .exec();
+  },
+
+  loadByPeriodId: function(periodId) {
+    return this.find({period: periodId})
       .select('_id')
       .exec();
   }
