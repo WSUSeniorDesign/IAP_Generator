@@ -1,0 +1,57 @@
+{# NOTE: {{show}} is a variable which is only passed in for the "show" action, with the value "readonly" #}
+
+<input type="hidden" name="incident" value="{{incident.id}}">
+<input type="hidden" name="period" value="{{form.period.id}}">
+
+<div class="title">
+  <h3 class="text-center">MEDICAL PLAN (ICS 206)</h3>
+</div>
+
+<div class="container" style="border: 1px solid black">
+	<div class="row" style="border: 1px solid black"> <!-- Boxes 1 and 2-->
+		<div class="col-sm-5" style="border: 1px solid black"> <!-- Box 1 -->
+			<label> <strong>1. Incident Name:</strong> </label>
+			<div><a href="/incidents/{{incident.id}}">{{incident.name}}</a></div>
+		</div>
+		<div class="col-sm-7" style="border: 1px solid black"> <!-- Box 2-->
+			<p class="text-left">
+            <strong>2. Operational Period: </strong>
+			</p>
+			<div class="col-sm-6">
+				<div>
+					<label>Date From:</label>
+					<input type="text" class="form-control" value="{{form.period.start.date}}" readonly>
+				</div>
+				<div style="margin-top:5px">
+					<label>Time From:</label>
+					<input type="text" class="form-control" value="{{form.period.start.time}}" readonly>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div>
+					<label>Date To:</label>
+					<input type="text" class="form-control" value="{{form.period.end.date}}" readonly>
+				</div>
+				<div style="margin-top:5px">
+					<label>Time To:</label>
+					<input type="text" class="form-control" value="{{form.period.end.time}}" readonly>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row" style="border: 1px solid black"> <!-- Box 3 -->
+	</div>
+	<div class="row" style="border: 1px solid black"> <!-- Box 4-->
+	</div>
+	<div class="row" style="border: 1px solid black"> <!-- Box 5-->
+	</div>
+	<div class="row" style="border: 1px solid black"> <!-- Box 6-->
+	</div>
+	<div class="row" style="border: 1px solid black"> <!-- Box 7-->
+	</div>
+	<div class="row" style="border: 1px solid black"> <!-- Box 8 top half-->
+	</div>
+	<div class="row" style="border: 1px solid black"> <!-- Box 8 bottom half-->
+	</div>
+  
+</div>
