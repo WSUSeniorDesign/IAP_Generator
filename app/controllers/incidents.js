@@ -15,6 +15,7 @@ const only = require('only');
 const mongoose = require('mongoose');
 const Incident = mongoose.model('Incident');
 const Ics204 = mongoose.model('ICS204');
+const Period = mongoose.model("Period");
 
 /**
  * This is a helper function, which attempts to load an Incident
@@ -32,6 +33,15 @@ const Ics204 = mongoose.model('ICS204');
 exports.load = co(function* (req, res, next, id) {
   req.incident = yield Incident.load(id);
   if (!req.incident) return next(new Error('Incident not found'));
+
+  if (req.query.period && mongoose.Types.ObjectId.isValid(req.query.period)) {
+    req.period = yield Period.load(req.query.period);
+    if (!req.period) return next(new Error("Period not found"));
+    if (req.period.incident.toString() !== req.incident.id) return next(new Error("Period did not belong to the current Incident"));
+  } else {
+    req.period = req.incident.currentPeriod;
+  }
+
   next();
 });
 
@@ -73,11 +83,12 @@ exports.index = co(function* (req, res) {
  */
 exports.show = co(function* (req, res){
   req.incident.forms = {
-    ics204: yield Ics204.loadByIncidentId(req.incident._id)
+    ics204: yield Ics204.loadByPeriodId(req.period._id)
   };
 
   res.render('incidents/show', {
-    incident: req.incident
+    incident: req.incident,
+    period: req.period
   });
 });
 
@@ -99,11 +110,16 @@ exports.new = function (req, res){
  * submitting the form given by the new() function above.
  */
 exports.create = co(function* (req, res) {
-  const incident = new Incident(only(req.body, 'name location active'));
+  const incident = new Incident(req.body.incident);
+  const period = new Period(req.body.period);
 
-  // incident.user = req.user;
-
+  incident.active = true;
+  incident.setCurrentPeriod(period);
   yield incident.save();
+
+  period.incident = incident;
+  period.open();
+  yield period.save();
 
   req.flash('success', 'Successfully created incident!');
   res.redirect('/incidents/' + incident._id);
@@ -136,7 +152,7 @@ exports.update = co(function* (req, res){
   //   incident.active = req.body.active
   //
   // retaining all its other values.
-  Object.assign(incident, only(req.body, 'name location active'));
+  Object.assign(incident, only(req.body.incident, 'name location active'));
 
   yield incident.save();
 

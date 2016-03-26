@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const Ics204 = mongoose.model("ICS204");
 
 const ics204Fields = [
-  'operationalPeriod',
   'field3',
   'operationsPersonnel',
   'resourcesAssigned',
@@ -22,38 +21,34 @@ exports.load = co(function* (req, res, next){
 });
 
 exports.show = function (req, res) {
-  res.render('forms/ics204/show', {
+  res.render('forms/ics204/show.html', {
     incident: req.incident, // loaded via app.param('incidentId') in routes.js
     form: req.form
   });
 };
 
 exports.new = function (req, res) {
-  res.render('forms/ics204/form', {
+  res.render('forms/ics204/new.html', {
     title: 'Create New Assignment List (ICS 204)',
     incident: req.incident,
-    form: new Ics204({})
+    form: new Ics204({period: req.incident.currentPeriod})
   });
 };
 
 exports.create = co(function* (req, res) {
-  const values = only(req.body, ics204Fields);
-  values.incidentId = req.incident._id;
+  const form = new Ics204(only(req.body, ics204Fields));
 
-  const ics204 = new Ics204(values);
+  form.incident = req.incident;
+  form.period = mongoose.Types.ObjectId(req.body.period);
 
-  yield ics204.save(function (err, ics204) {
-    if (err) {
-      // TODO: redirect the user to a useful error message
-    }
-  });
+  yield form.save(console.log);
 
   req.flash('success', 'Successfully created ICS 204!');
-  res.redirect(`/incidents/${req.incident._id}/form/ics204/${ics204._id}`);
+  res.redirect(`/incidents/${req.incident.id}/form/ics204/${form.id}`);
 });
 
 exports.edit = function (req, res) {
-  res.render('forms/ics204/form', {
+  res.render('forms/ics204/edit.html', {
     title: 'Edit Assignment List (ICS 204)',
     incident: req.incident,
     form: req.form
@@ -65,7 +60,7 @@ exports.update = co(function* (req, res){
 
   Object.assign(form, only(req.body, ics204Fields));
 
-  yield form.save();
+  yield form.save(console.log);
 
   res.redirect(`/incidents/${req.incident.id}/form/ics204/${form.id}`);
 });
