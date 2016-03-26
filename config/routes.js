@@ -13,7 +13,7 @@ const ics204 = require('../app/controllers/ics204');
  * Expose
  */
 
-module.exports = function (app, passport) {
+module.exports = function (app, passport, roles) {
 
   // app.get('/', home.index);
   app.get('/', function (req, res) {
@@ -21,7 +21,7 @@ module.exports = function (app, passport) {
   })
 
   
-/**
+  /**
    * User routes
    */
   app.get('/login', users.login);
@@ -42,7 +42,7 @@ module.exports = function (app, passport) {
   app.param('incidentId',                 incidents.load);
 
   app.get('/incidents',                   incidents.index); // a list of all incidents
-  app.get('/incidents/new',               incidents.new); // a form to add a new incident
+  app.get('/incidents/new',               roles.can("create an incident"), incidents.new); // a form to add a new incident
   app.get('/incidents/:incidentId',       incidents.show); 
   app.get('/incidents/:incidentId/edit',  incidents.edit);
   app.post('/incidents',                  incidents.create);
