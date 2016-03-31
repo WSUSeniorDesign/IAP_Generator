@@ -8,13 +8,13 @@ const ICS206Schema = new Schema({
 	name: String,
 	location: String,
 	contact: String,
-	paramedics: boolean
+	paramedics: Boolean
   }],
   transportation: [{
 	ambulance: String,
 	location: String,
 	contact: String,
-	isLevelALS: boolean
+	isLevelALS: Boolean
   }],
   hospitals: [{
 	name: String,
@@ -22,16 +22,16 @@ const ICS206Schema = new Schema({
 	contact: String,
 	airTravelTime: String,
 	groundTravelTime: String,
-	traumaCenterbool: boolean,
+	traumaCenterbool: Boolean,
 	traumaCenterLevel: Number,
-	burnCenter: boolean,
-	helipad: boolean
+	burnCenter: Boolean,
+	helipad: Boolean
   }],
   specMedEmerProc: String,
   preparedBy: {
     name: String,
     signature: String
-  }
+  },
   approvedBy: {
 	name: String,
 	signature: String,

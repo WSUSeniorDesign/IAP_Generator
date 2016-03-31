@@ -9,6 +9,7 @@ var home = require('../app/controllers/home');
 const incidents = require('../app/controllers/incidents'); // require the incidents controller
 const periods = require("../app/controllers/periods");
 const ics204 = require('../app/controllers/ics204');
+const ics206 = require('../app/controllers/ics206');
 
 /**
  * Expose
@@ -60,6 +61,19 @@ module.exports = function (app, passport) {
   app.get('/incidents/:incidentId/form/ics204/:ics204formId/edit', ics204.edit);
   app.put('/incidents/:incidentId/form/ics204/:ics204formId',      ics204.update);
   app.post('/incidents/:incidentId/form/ics204',                   ics204.create);
+  
+  /**
+   * ICS 206
+   */
+
+  app.param('ics206formId',                                        ics206.load);
+
+  app.get('/incidents/:incidentId/form/ics206/new',                ics206.new); // a form to create a new ICS204 document
+  app.get('/incidents/:incidentId/form/ics206/:ics206formId',      ics206.show);
+  app.delete('/incidents/:incidentId/form/ics206/:ics206formId',   ics206.destroy);
+  app.get('/incidents/:incidentId/form/ics206/:ics206formId/edit', ics206.edit);
+  app.put('/incidents/:incidentId/form/ics206/:ics206formId',      ics206.update);
+  app.post('/incidents/:incidentId/form/ics206',                   ics206.create);
 
   /**
    * Error handling
