@@ -172,7 +172,7 @@
 
         {% for communication in form.communications %}            
           <tr>
-            <input type="hidden" name="comminucations[{{loop.index0}}][_id]" value="{{communication.id}}" {{show}}>
+            <input type="hidden" name="communications[{{loop.index0}}][_id]" value="{{communication.id}}" {{show}}>
             <td><input type="text" class="form-control" name="communications[{{loop.index0}}][name]" value="{{communication.name}}" {{show}}></td>
             <td><input type="text" class="form-control" name="communications[{{loop.index0}}][function]" value="{{communication.function}}" {{show}}></td>
             <td><input type="text" class="form-control" name="communications[{{loop.index0}}][primaryContact]" value="{{communication.primaryContact}}" {{show}}></td>
