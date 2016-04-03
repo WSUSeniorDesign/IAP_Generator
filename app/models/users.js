@@ -17,6 +17,7 @@ const UserSchema = new Schema({
   email: { type: String, default: '' },
   phoneNumber: { type: String, default: ''},
   username: { type: String, default: '' },
+  role: { type: String, default: 'basic' },
   provider: { type: String, default: '' },
   hashed_password: { type: String, default: '' },
   salt: { type: String, default: '' }
@@ -94,6 +95,11 @@ UserSchema.path('hashed_password').validate(function (hashed_password) {
   if (this.skipValidation()) return true;
   return hashed_password.length && this._password.length;
 }, 'Password cannot be blank');
+
+UserSchema.path('role').validate(function (name) {
+  if (this.skipValidation()) return true;
+  return name.length;
+}, 'Role cannot be blank');
 
 
 /**

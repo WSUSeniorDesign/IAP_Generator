@@ -32,6 +32,7 @@ module.exports = function (app, passport, roles) {
   app.get('/signup', users.signup);
   app.get('/logout', users.logout);
   app.post('/users', users.create);
+  // app.post('/users', roles.can("access non user pages"), users.create);
   app.post('/users/session',
     passport.authenticate('local', {
       failureRedirect: '/login',
@@ -43,21 +44,21 @@ module.exports = function (app, passport, roles) {
   /**
    * Incident routes
    */
-  app.get('/incidents',                   incidents.index); // a list of all incidents
+  app.get('/incidents',                   roles.can("view all incidents"), incidents.index); // a list of all incidents
   app.get('/incidents/new',               roles.can("create an incident"), incidents.new); // a form to add a new incident
-  app.get('/incidents/:incidentId',       incidents.show); 
-  app.get('/incidents/:incidentId/edit',  incidents.edit);
-  app.post('/incidents',                  incidents.create);
-  app.put('/incidents/:incidentId',       incidents.update);
+  app.get('/incidents/:incidentId',       roles.can("view an incident"), incidents.show); 
+  app.get('/incidents/:incidentId/edit',  roles.can("edit an incident"), incidents.edit);
+  app.post('/incidents',                  roles.can("create an incident"), incidents.create);
+  app.put('/incidents/:incidentId',       roles.can("edit an incident"), incidents.update);
   app.delete('/incidents/:incidentId',    incidents.destroy);
 
   /**
    * Operational Periods
    */
-  app.get("/incidents/:incidentId/period/new",             periods.new);
-  app.post("/incidents/:incidentId/periods",               periods.create);
-  app.get("/incidents/:incidentId/period/:periodId/edit",  periods.edit);
-  app.put("/incidents/:incidentId/period/:periodId",       periods.update);
+  app.get("/incidents/:incidentId/period/new",             periods.new); // commander + admin
+  app.post("/incidents/:incidentId/periods",               periods.create); // commander + admin
+  app.get("/incidents/:incidentId/period/:periodId/edit",  periods.edit); // commander + admin
+  app.put("/incidents/:incidentId/period/:periodId",       periods.update); // commander + admin
   // app.delete("/periods/:periodId",                         periods.destroy);       
 
   /**
@@ -68,14 +69,14 @@ module.exports = function (app, passport, roles) {
   // :incidentId, :operationalPeriodId, :formNumber, and :formId.
   // Ex: /incidents/:incidentId/:operationalPeriodId/:formNumber/:formId
 
-  app.param('ics204formId',                                        ics204.load);
+  app.param('ics204formId',                                        ics204.load); 
 
-  app.get('/incidents/:incidentId/form/ics204/new',                ics204.new); // a form to create a new ICS204 document
-  app.get('/incidents/:incidentId/form/ics204/:ics204formId',      ics204.show);
-  app.delete('/incidents/:incidentId/form/ics204/:ics204formId',   ics204.destroy);
-  app.get('/incidents/:incidentId/form/ics204/:ics204formId/edit', ics204.edit);
-  app.put('/incidents/:incidentId/form/ics204/:ics204formId',      ics204.update);
-  app.post('/incidents/:incidentId/form/ics204',                   ics204.create);
+  app.get('/incidents/:incidentId/form/ics204/new',                ics204.new); //commander, modifier, admin // a form to create a new ICS204 document
+  app.get('/incidents/:incidentId/form/ics204/:ics204formId',      ics204.show); // all users (not anon)
+  app.delete('/incidents/:incidentId/form/ics204/:ics204formId',   ics204.destroy); //commander + admin
+  app.get('/incidents/:incidentId/form/ics204/:ics204formId/edit', ics204.edit); //commander, modifier, admin
+  app.put('/incidents/:incidentId/form/ics204/:ics204formId',      ics204.update); //commander, modifier, admin
+  app.post('/incidents/:incidentId/form/ics204',                   ics204.create); //commander, modifier, admin
 
   /**
    * Error handling
