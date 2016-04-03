@@ -15,6 +15,7 @@ const only = require('only');
 const mongoose = require('mongoose');
 const Incident = mongoose.model('Incident');
 const Ics204 = mongoose.model('ICS204');
+const Ics206 = mongoose.model('ICS206');
 const Period = mongoose.model("Period");
 
 /**
@@ -83,8 +84,10 @@ exports.index = co(function* (req, res) {
  */
 exports.show = co(function* (req, res){
   req.incident.forms = {
-    ics204: yield Ics204.loadByPeriodId(req.period._id)
+    ics204: yield Ics204.loadByPeriodId(req.period._id),
+	ics206: yield Ics206.loadByPeriodId(req.period._id)
   };
+  
 
   res.render('incidents/show', {
     incident: req.incident,

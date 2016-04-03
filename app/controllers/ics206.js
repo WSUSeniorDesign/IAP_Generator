@@ -4,7 +4,7 @@ const only = require('only');
 const mongoose = require('mongoose');
 const Ics206 = mongoose.model("ICS206");
 
-const ics204Fields = [
+const ics206Fields = [
   'medicalAidStations',
   'transportation',
   'hospitals',

@@ -64,27 +64,14 @@
 						<td><input type="text" class="form-control" name="medicalAidStations[{{loop.index0}}][name]" value="{{station.name}}" {{show}}></td>
 						<td><input type="text" class="form-control" name="medicalAidStations[{{loop.index0}}][location]" value="{{station.location}}" {{show}}></td>
 						<td><input type="text" class="form-control" name="medicalAidStations[{{loop.index0}}][contact]" value="{{station.contact}}" {{show}}></td>
-						<!--
 						<td>
-							{% if form.isNew %}
-								<label> Yes </label>
-								<input type="radio" name="medicalAidStations[{{loop.index0}}][paramedics]" value="{{station.paramedics}}">
-								<label> No </label>
-								<input type="radio" name="medicalAidStations[{{loop.index0}}][paramedics]" value="{{!station.paramedics}}">
-							{% elif station.paramedics %}
-								<label> Yes </label>
-								<input type="radio" name="medicalAidStations[{{loop.index0}}][paramedics]" value="{{station.paramedics}}" checked>
-								<label> No </label>
-								<input type="radio" name="medicalAidStations[{{loop.index0}}][paramedics]" value="{{!station.paramedics}}">
-							{% else %}	
-								<label> Yes </label>
-								<input type="radio" name="medicalAidStations[{{loop.index0}}][paramedics]" value="{{station.paramedics}}">
-								<label> No </label>
-								<input type="radio" name="medicalAidStations[{{loop.index0}}][paramedics]" value="{{!station.paramedics}}" checked>
-							{% endif %)
-							
+							<label class="radio-inline">
+								<input type="radio" name="medicalAidStations[{{loop.index0}}][paramedics]" id="inlineRadio1" value="{{station.paramedics}}"> Yes
+							</label>
+							<label class="radio-inline">
+								<input type="radio" name="medicalAidStations[{{loop.index0}}][paramedics]" id="inlineRadio2" value="{{!station.paramedics}}"> No
+							</label>
 						</td>
-						-->
 					</tr>
 				{% endfor %}
 			</tbody>
@@ -115,32 +102,23 @@
 						<td><input type="text" class="form-control" name="transportation[{{loop.index0}}][ambulance]" value="{{t.ambulance}}" {{show}}></td>
 						<td><input type="text" class="form-control" name="transportation[{{loop.index0}}][location]" value="{{t.location}}" {{show}}></td>
 						<td><input type="text" class="form-control" name="transportation[{{loop.index0}}][contact]" value="{{t.contact}}" {{show}}></td>
-						<!--
 						<td>
-							{% if form.isNew %}
-								<label> Yes </label>
-								<input type="radio" name="transportation[{{loop.index0}}][paramedics]" value="{{station.paramedics}}">
-								<label> No </label>
-								<input type="radio" name="transportation[{{loop.index0}}][paramedics]" value="{{!station.paramedics}}">
-							{% elif t.isLevelALS %}
-								<label> Yes </label>
-								<input type="radio" name="transportation[{{loop.index0}}][paramedics]" value="{{station.paramedics}}" checked>
-								<label> No </label>
-								<input type="radio" name="transportation[{{loop.index0}}][paramedics]" value="{{!station.paramedics}}">
-							{% else %}	
-								<label> Yes </label>
-								<input type="radio" name="transportation[{{loop.index0}}][paramedics]" value="{{station.paramedics}}">
-								<label> No </label>
-								<input type="radio" name="transportation[{{loop.index0}}][paramedics]" value="{{!station.paramedics}}" checked>
-							{% endif %)
+							<label class="radio-inline">
+								<input type="radio" name="transportation[{{loop.index0}}][isLevelALS]" id="inlineRadio1" value="{{t.isLevelALS}}"> ALS
+							</label>
+							<label class="radio-inline">
+								<input type="radio" name="transportation[{{loop.index0}}][isLevelALS]" id="inlineRadio2" value="{{!t.isLevelALS}}"> BLS
+							</label>
 						</td>
-						-->
 					</tr>
 				{% endfor %}
 			</tbody>
 		</table>
 	</div>
 	<div class="row" style="border: 1px solid black"> <!-- Box 5-->
+		<div style="padding: 10px"> 
+			<strong>5. Hospitals:</strong>
+		</div>
 		<table class="table table-condensed" style="margin-bottom: 0">
 			<thead>
 				<tr>
@@ -167,10 +145,43 @@
 						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][contact]" value="{{hospital.contact}}" {{show}}></td>
 						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][airTravelTime]" value="{{hospital.airTravelTime}}" {{show}}></td>
 						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][groundTravelTime]" value="{{hospital.groundTravelTime}}" {{show}}></td>
-						<!-- reserved for boolean traumaCenter bool-->
-						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][traumaCenterLevel]" value="{{hospital.traumaCenterLevel}}" {{show}}></td>
-						<!-- reserved for boolean burnCenter -->
-						<!-- reserved for boolean helipad -->	
+						<td>
+							<div class="radio">
+								<label>
+									<input type="radio" name="hospitals[{{loop.index0}}][traumaCenterBool]" id="inlineRadio1" value="{{hospital.traumaCenterBool}}"> Yes
+								</label>
+							</div>
+							<div>
+								<label class="pull-left">Level:</label>
+								<div class="col-sm-1 pull-left">
+									<input type="text" class="form-control" name="hospitals[{{loop.index0}}][traumaCenterLevel]" value="{{hospital.groundTravelTime}}" {{show}}>
+								</div>
+							</div>
+						</td>
+						<td>
+							<div class="radio">
+								<label>
+									<input type="radio" name="hospitals[{{loop.index0}}][burnCenter]" id="inlineRadio1" value="{{hospital.burnCenter}}"> Yes
+								</label>
+							</div>
+							<div class="radio">
+								<label>
+									<input type="radio" name="hospitals[{{loop.index0}}][burnCenter]" id="inlineRadio2" value="{{hospital.burnCenter}}"> No
+								</label>
+							</div>
+						</td>
+						<td>
+							<div class="radio">
+								<label>
+									<input type="radio" name="hospitals[{{loop.index0}}][helipad]" id="inlineRadio1" value="{{hospital.helipad}}"> Yes
+								</label>
+							</div>
+							<div class="radio">
+								<label class="radio">
+									<input type="radio" name="hospitals[{{loop.index0}}][helipad]" id="inlineRadio2" value="{{hospital.helipad}}"> No
+								</label>
+							</div>
+						</td>
 					</tr>
 				{% endfor %}
 			</tbody>
