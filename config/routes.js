@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 const users = require('../app/controllers/users');
 const incidents = require('../app/controllers/incidents'); // require the incidents controller
 const periods = require("../app/controllers/periods");
-const ics204 = require('../app/controllers/ics204');
+const forms = require("../app/controllers/forms");
 
 /**
  * Expose
@@ -16,7 +16,6 @@ const ics204 = require('../app/controllers/ics204');
 
 module.exports = function (app, passport, roles) {
 
-  // app.get('/', home.index);
   app.get('/', function (req, res) {
     res.redirect('/incidents');
   });
@@ -62,21 +61,18 @@ module.exports = function (app, passport, roles) {
   // app.delete("/periods/:periodId",                         periods.destroy);       
 
   /**
-   * ICS 204
+   * Forms
    */
 
-  // There should probably be one controller for all forms, with params 
-  // :incidentId, :operationalPeriodId, :formNumber, and :formId.
-  // Ex: /incidents/:incidentId/:operationalPeriodId/:formNumber/:formId
+  app.param("formNum", forms.setFormModel);
+  app.param("formId",  forms.load);
 
-  app.param('ics204formId',                                        ics204.load); 
-
-  app.get('/incidents/:incidentId/form/ics204/new',                ics204.new); //commander, modifier, admin // a form to create a new ICS204 document
-  app.get('/incidents/:incidentId/form/ics204/:ics204formId',      ics204.show); // all users (not anon)
-  app.delete('/incidents/:incidentId/form/ics204/:ics204formId',   ics204.destroy); //commander + admin
-  app.get('/incidents/:incidentId/form/ics204/:ics204formId/edit', ics204.edit); //commander, modifier, admin
-  app.put('/incidents/:incidentId/form/ics204/:ics204formId',      ics204.update); //commander, modifier, admin
-  app.post('/incidents/:incidentId/form/ics204',                   ics204.create); //commander, modifier, admin
+  app.get('/incidents/:incidentId/form/:formNum/new',          forms.new);
+  app.get('/incidents/:incidentId/form/:formNum/:formId',      forms.show);
+  app.delete('/incidents/:incidentId/form/:formNum/:formId',   forms.destroy);
+  app.get('/incidents/:incidentId/form/:formNum/:formId/edit', forms.edit);
+  app.put('/incidents/:incidentId/form/:formNum/:formId',      forms.update);
+  app.post('/incidents/:incidentId/form/:formNum',             forms.create);
 
   /**
    * Error handling

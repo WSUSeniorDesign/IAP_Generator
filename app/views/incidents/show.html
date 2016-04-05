@@ -7,44 +7,47 @@
 {% block content %}
   <div class="row">
     <div class="col-xs-8">
-        <div class="panel panel-default">
-          <div class="panel-heading"><h3 class="panel-title">Inicident Action Plan</h3></div>
-          <div class="panel-body">
-            <a href="/incidents/{{ incident.id }}/form/ics204/new">+ Create new ICS 204</a>
-          </div>
-          {% if incident.forms.ics204.length %}
-            <table class="table table-striped">
-              <thead>
+      <div class="panel panel-default">
+        <div class="panel-heading"><h3 class="panel-title">Incident Action Plan</h3></div>
+        <div class="panel-body">
+          <div><a href="/incidents/{{ incident.id }}/form/ics204/new">+ Create new ICS 204</a></div>
+          <div><a href="/incidents/{{ incident.id }}/form/ics206/new">+ Create new ICS 206</a></div>
+        </div>
+        {% if forms.length %}
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Form</th>
+                <th>ID</th>
+                <th class="text-right">Options</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for form in forms %}
+                {% set url = "/incidents/" %}
+                {% set url += incident.id %}
+                {% set url += "/form/" %}
+                {% set url += form.constructor.modelName.toLowerCase() %}
+                {% set url += "/" %}
+                {% set url += form.id %}
                 <tr>
-                  <th>Form</th>
-                  <th>ID</th>
-                  <th class="text-right">Options</th>
+                  <td>{{ form.constructor.modelName }}</td>
+                  <td><a href="{{ url }}">{{ form.id }}</a></td>
+                  <td class="text-right">
+                    <form action="{{ url }}" method="POST" onsubmit="return confirm('Are you sure?')">
+                      <a href="{{ url }}/edit" class="btn btn-default btn-xs">Edit</a>
+                      &nbsp;
+                      <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+                      <input type="hidden" name="_method" value="DELETE">
+                      <button class="btn btn-danger btn-xs" type="submit">Delete</button>
+                    </form>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {% for form in incident.forms.ics204 %}
-                  {% set url = "/incidents/" %}
-                  {% set url += incident.id %}
-                  {% set url += "/form/ics204/" %}
-                  {% set url += form.id %}
-                  <tr>
-                    <td>{{ form.constructor.modelName }}</td>
-                    <td><a href="{{ url }}">{{ form.id }}</a></td>
-                    <td class="text-right">
-                      <form action="{{ url }}" method="POST" onsubmit="return confirm('Are you sure?')">
-                        <a href="{{ url }}/edit" class="btn btn-default btn-xs">Edit</a>
-                        &nbsp;
-                        <input type="hidden" name="_csrf" value="{{ csrf_token }}">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button class="btn btn-danger btn-xs" type="submit">Delete</button>
-                      </form>
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          {% endif %}
-        </div>       
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endif %}
+      </div>
     </div>
     <div class="col-xs-4">
       <div class="row">
