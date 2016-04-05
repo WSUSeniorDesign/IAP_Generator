@@ -1,4 +1,4 @@
-{# NOTE: {{show}} is a variable which is only passed in for the "show" action, with the value "readonly" #}
+{# NOTE: {{readonly}} is a variable which is only passed in for the "show" action, with the value "readonly" #}
 
 <input type="hidden" name="incident" value="{{incident.id}}">
 <input type="hidden" name="period" value="{{form.period.id}}">
@@ -63,20 +63,20 @@
         </div>
         <div class="col-sm-4">
           <label for="name"> <u> Name </u> </label>
-          <input type="text" class="form-control" name="operationsPersonnel[operationsSectionChiefName]" value="{{form.operationsPersonnel.operationsSectionChiefName}}" {{show}}>
+          <input type="text" class="form-control" name="operationsPersonnel[operationsSectionChiefName]" value="{{form.operationsPersonnel.operationsSectionChiefName}}" {{readonly}}>
           <br>
-          <input type="text" class="form-control" name="operationsPersonnel[branchDirectorName]" value="{{form.operationsPersonnel.branchDirectorName}}" {{show}}>
+          <input type="text" class="form-control" name="operationsPersonnel[branchDirectorName]" value="{{form.operationsPersonnel.branchDirectorName}}" {{readonly}}>
           <br>
-          <input type="text" class="form-control" name="operationsPersonnel[divisionGroupSupervisorName]" value="{{form.operationsPersonnel.divisionGroupSupervisorName}}" {{show}}>
+          <input type="text" class="form-control" name="operationsPersonnel[divisionGroupSupervisorName]" value="{{form.operationsPersonnel.divisionGroupSupervisorName}}" {{readonly}}>
 
         </div>
         <div class="col-sm-4">
           <label for="cNum"> <u> Contact Number(s) </u> </label>
-          <input type="text" class="form-control" name="operationsPersonnel[operationsSectionChiefContactNumber]" value="{{form.operationsPersonnel.operationsSectionChiefContactNumber}}" {{show}}>
+          <input type="text" class="form-control" name="operationsPersonnel[operationsSectionChiefContactNumber]" value="{{form.operationsPersonnel.operationsSectionChiefContactNumber}}" {{readonly}}>
           <br>
-          <input type="text" class="form-control" name="operationsPersonnel[branchDirectorContactNumber]" value="{{form.operationsPersonnel.branchDirectorContactNumber}}" {{show}}>
+          <input type="text" class="form-control" name="operationsPersonnel[branchDirectorContactNumber]" value="{{form.operationsPersonnel.branchDirectorContactNumber}}" {{readonly}}>
           <br>
-          <input type="text" class="form-control" name="operationsPersonnel[divisionGroupSupervisorContactNumber]" value="{{form.operationsPersonnel.divisionGroupSupervisorContactNumber}}" {{show}}>
+          <input type="text" class="form-control" name="operationsPersonnel[divisionGroupSupervisorContactNumber]" value="{{form.operationsPersonnel.divisionGroupSupervisorContactNumber}}" {{readonly}}>
         </div>
       </div>
     </div>
@@ -86,19 +86,19 @@
         <strong>3.</strong>
         <div class="form-group">
           <label for="field3[branch]">Branch:</label>
-          <input type="text" class="form-control" name="field3[branch]" value="{{form.field3.branch}}" {{show}}>
+          <input type="text" class="form-control" name="field3[branch]" value="{{form.field3.branch}}" {{readonly}}>
         </div>
         <div class="form-group">
           <label for="field3[division]">Division:</label>
-          <input type="text" class="form-control" name="field3[division]" value="{{form.field3.division}}" {{show}}>
+          <input type="text" class="form-control" name="field3[division]" value="{{form.field3.division}}" {{readonly}}>
         </div>
         <div class="form-group">
           <label for="field3[group]">Group:</label>
-          <input type="text" class="form-control" name="field3[group]" value="{{form.field3.group}}" {{show}}>
+          <input type="text" class="form-control" name="field3[group]" value="{{form.field3.group}}" {{readonly}}>
         </div>
         <div class="form-group">
           <label for="field3[stagingArea]">Staging Area:</label>
-          <input type="text" class="form-control" name="field3[stagingArea]" value="{{form.field3.stagingArea}}" {{show}}>
+          <input type="text" class="form-control" name="field3[stagingArea]" value="{{form.field3.stagingArea}}" {{readonly}}>
         </div>
       </p>
     </div>  
@@ -127,11 +127,11 @@
         {% for resource in form.resourcesAssigned %}
           <tr>
             <input type="hidden" name="resourcesAssigned[{{loop.index0}}][_id]" value="{{resource.id}}">
-            <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][resourceIdentifier]" value="{{resource.resourceIdentifier}}" {{show}}></td>
-            <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][leader]" value="{{resource.leader}}" {{show}}></td>
-            <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][numOfPersons]" value="{{resource.numOfPersons}}" {{show}}></td>
-            <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][contact]" value="{{resource.contact}}" {{show}}></td>
-            <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][notes]" value="{{resource.notes}}" {{show}}></td>
+            <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][resourceIdentifier]" value="{{resource.resourceIdentifier}}" {{readonly}}></td>
+            <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][leader]" value="{{resource.leader}}" {{readonly}}></td>
+            <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][numOfPersons]" value="{{resource.numOfPersons}}" {{readonly}}></td>
+            <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][contact]" value="{{resource.contact}}" {{readonly}}></td>
+            <td><input type="text" class="form-control" name="resourcesAssigned[{{loop.index0}}][notes]" value="{{resource.notes}}" {{readonly}}></td>
           </tr>
         {% endfor %}
       </tbody>
@@ -142,14 +142,14 @@
     <div>
       <strong>6. Work Assignments:</strong>
     </div>
-    <textarea class="form-control" rows="8" name="workAssignments" {{show}}>{{form.workAssignments}}</textarea>
+    <textarea class="form-control" rows="8" name="workAssignments" {{readonly}}>{{form.workAssignments}}</textarea>
   </div>
 
   <div class="row" style="border-bottom: 1px solid black; padding: 10px"> <!-- Box 7 -->
     <div>
       <strong>7. Special Instructions:</strong>
     </div>
-    <textarea class="form-control" rows="8" name="specialInstructions" {{show}}>{{form.specialInstructions}}</textarea>
+    <textarea class="form-control" rows="8" name="specialInstructions" {{readonly}}>{{form.specialInstructions}}</textarea>
   </div>
 
   <div class="row" style="border-bottom: 1px solid black"> <!-- Box 8 -->
@@ -172,10 +172,10 @@
 
         {% for communication in form.communications %}            
           <tr>
-            <input type="hidden" name="communications[{{loop.index0}}][_id]" value="{{communication.id}}" {{show}}>
-            <td><input type="text" class="form-control" name="communications[{{loop.index0}}][name]" value="{{communication.name}}" {{show}}></td>
-            <td><input type="text" class="form-control" name="communications[{{loop.index0}}][function]" value="{{communication.function}}" {{show}}></td>
-            <td><input type="text" class="form-control" name="communications[{{loop.index0}}][primaryContact]" value="{{communication.primaryContact}}" {{show}}></td>
+            <input type="hidden" name="communications[{{loop.index0}}][_id]" value="{{communication.id}}" {{readonly}}>
+            <td><input type="text" class="form-control" name="communications[{{loop.index0}}][name]" value="{{communication.name}}" {{readonly}}></td>
+            <td><input type="text" class="form-control" name="communications[{{loop.index0}}][function]" value="{{communication.function}}" {{readonly}}></td>
+            <td><input type="text" class="form-control" name="communications[{{loop.index0}}][primaryContact]" value="{{communication.primaryContact}}" {{readonly}}></td>
           </tr>
         {% endfor %}
       </tbody>
@@ -189,20 +189,20 @@
       </div>
       <div class="col-sm-3">
         <label for="preparedBy[name">Name:</label>
-        <input type="text" class="form-control" name="preparedBy[name]" value="{{form.preparedBy.name}}" {{show}}>
+        <input type="text" class="form-control" name="preparedBy[name]" value="{{form.preparedBy.name}}" {{readonly}}>
       </div>
       <div class="col-sm-3">
         <label for="preparedBy[positionTitle]">Position/Title:</label>
-        <input type="text" class="form-control" name="preparedBy[positionTitle]" value="{{form.preparedBy.positionTitle}}" {{show}}>
+        <input type="text" class="form-control" name="preparedBy[positionTitle]" value="{{form.preparedBy.positionTitle}}" {{readonly}}>
       </div>
       <div class="col-sm-4">
         <label for="preparedBy[signature]">Signature:</label>
-        <input type="text" class="form-control" name="preparedBy[signature]" value="{{form.preparedBy.signature}}" {{show}}>
+        <input type="text" class="form-control" name="preparedBy[signature]" value="{{form.preparedBy.signature}}" {{readonly}}>
       </div>
     </div>
     <div class="row" > <!-- Box 9 bottom half-->
       <div class="col-sm-7 col-sm-offset-5">
-        Date/Time: <input type="text" class="form-control" name="preparedBy[dateTime]" value="{{form.preparedBy.dateTime.toISOString()}}" {{show}}>
+        Date/Time: <input type="text" class="form-control" name="preparedBy[dateTime]" value="{{form.preparedBy.dateTime.toISOString()}}" {{readonly}}>
       </div>
     </div>
   </div>

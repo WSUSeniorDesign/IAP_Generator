@@ -83,15 +83,16 @@ exports.index = co(function* (req, res) {
  * req object as req.incident by the load() function defined above.
  */
 exports.show = co(function* (req, res){
-  req.incident.forms = {
-    ics204: yield Ics204.loadByPeriodId(req.period._id),
-	ics206: yield Ics206.loadByPeriodId(req.period._id)
-  };
-  
+  var forms = [];
+
+  // load Ics204 and Ics206 forms and append them onto forms
+  Array.prototype.push.apply(forms, yield Ics204.loadByPeriodId(req.period._id));
+  Array.prototype.push.apply(forms, yield Ics206.loadByPeriodId(req.period._id));
 
   res.render('incidents/show', {
     incident: req.incident,
-    period: req.period
+    period: req.period,
+    forms: forms
   });
 });
 

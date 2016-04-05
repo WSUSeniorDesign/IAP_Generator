@@ -1,3 +1,4 @@
+const only = require("only");
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -41,6 +42,24 @@ const ICS204Schema = new Schema({
 });
 
 ICS204Schema.statics = {
+  title: function() { return "Assignment List (ICS 204)"; },
+
+  fieldMask: function() {
+    return [
+      'field3',
+      'operationsPersonnel',
+      'resourcesAssigned',
+      'workAssignments',
+      'specialInstructions',
+      'communications',
+      'preparedBy'
+    ];
+  },
+
+  new: function(values) {
+    return new this(values);
+  },
+
   // A helper function to execute a Mongoose query to fetch an Incident by ID.
   load: function(_id) {
     return this.findOne({_id})

@@ -4,12 +4,10 @@
  */
 
 var mongoose = require('mongoose');
-var home = require('../app/controllers/home');
 
-const incidents = require('../app/controllers/incidents'); // require the incidents controller
+const incidents = require('../app/controllers/incidents');
 const periods = require("../app/controllers/periods");
-const ics204 = require('../app/controllers/ics204');
-const ics206 = require('../app/controllers/ics206');
+const forms = require("../app/controllers/forms");
 
 /**
  * Expose
@@ -17,17 +15,16 @@ const ics206 = require('../app/controllers/ics206');
 
 module.exports = function (app, passport) {
 
-  // app.get('/', home.index);
   app.get('/', function (req, res) {
     res.redirect('/incidents');
   });
 
-  app.param('incidentId', incidents.load);
-  app.param('periodId', periods.load);
-
   /**
-   * Incident routes
+   * Incidents
    */
+
+  app.param("incidentId", incidents.load);
+
   app.get('/incidents',                   incidents.index); // a list of all incidents
   app.get('/incidents/new',               incidents.new); // a form to add a new incident
   app.get('/incidents/:incidentId',       incidents.show); 
@@ -39,41 +36,27 @@ module.exports = function (app, passport) {
   /**
    * Operational Periods
    */
+
+  app.param("periodId", periods.load);
+
   app.get("/incidents/:incidentId/period/new",             periods.new);
   app.post("/incidents/:incidentId/periods",               periods.create);
   app.get("/incidents/:incidentId/period/:periodId/edit",  periods.edit);
   app.put("/incidents/:incidentId/period/:periodId",       periods.update);
-  // app.delete("/periods/:periodId",                         periods.destroy);       
 
   /**
-   * ICS 204
+   * Forms
    */
 
-  // There should probably be one controller for all forms, with params 
-  // :incidentId, :operationalPeriodId, :formNumber, and :formId.
-  // Ex: /incidents/:incidentId/:operationalPeriodId/:formNumber/:formId
+  app.param("formNum", forms.setFormModel);
+  app.param("formId",  forms.load);
 
-  app.param('ics204formId',                                        ics204.load);
-
-  app.get('/incidents/:incidentId/form/ics204/new',                ics204.new); // a form to create a new ICS204 document
-  app.get('/incidents/:incidentId/form/ics204/:ics204formId',      ics204.show);
-  app.delete('/incidents/:incidentId/form/ics204/:ics204formId',   ics204.destroy);
-  app.get('/incidents/:incidentId/form/ics204/:ics204formId/edit', ics204.edit);
-  app.put('/incidents/:incidentId/form/ics204/:ics204formId',      ics204.update);
-  app.post('/incidents/:incidentId/form/ics204',                   ics204.create);
-  
-  /**
-   * ICS 206
-   */
-
-  app.param('ics206formId',                                        ics206.load);
-
-  app.get('/incidents/:incidentId/form/ics206/new',                ics206.new); // a form to create a new ICS204 document
-  app.get('/incidents/:incidentId/form/ics206/:ics206formId',      ics206.show);
-  app.delete('/incidents/:incidentId/form/ics206/:ics206formId',   ics206.destroy);
-  app.get('/incidents/:incidentId/form/ics206/:ics206formId/edit', ics206.edit);
-  app.put('/incidents/:incidentId/form/ics206/:ics206formId',      ics206.update);
-  app.post('/incidents/:incidentId/form/ics206',                   ics206.create);
+  app.get('/incidents/:incidentId/form/:formNum/new',          forms.new);
+  app.get('/incidents/:incidentId/form/:formNum/:formId',      forms.show);
+  app.delete('/incidents/:incidentId/form/:formNum/:formId',   forms.destroy);
+  app.get('/incidents/:incidentId/form/:formNum/:formId/edit', forms.edit);
+  app.put('/incidents/:incidentId/form/:formNum/:formId',      forms.update);
+  app.post('/incidents/:incidentId/form/:formNum',             forms.create);
 
   /**
    * Error handling

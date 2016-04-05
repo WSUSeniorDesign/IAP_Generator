@@ -1,10 +1,10 @@
-{# NOTE: {{show}} is a variable which is only passed in for the "show" action, with the value "readonly" #}
+{# NOTE: {{readonly}} is a variable which is only passed in for the "show" action, with the value "readonly" #}
 
 <input type="hidden" name="incident" value="{{incident.id}}">
 <input type="hidden" name="period" value="{{form.period.id}}">
 
 <div class="title">
-  <h3 class="text-center">MEDICAL PLAN (ICS 206)</h3>
+  <h3 class="text-center">Medical Plan (ICS 206)</h3>
 </div>
 
 <div class="container" style="border:1px solid black">
@@ -61,15 +61,15 @@
 				{% for station in form.medicalAidStations %}
 					<tr>
 						<input type="hidden" name="medicalAidStations[{{loop.index0}}][_id]" value="{{station.id}}">
-						<td><input type="text" class="form-control" name="medicalAidStations[{{loop.index0}}][name]" value="{{station.name}}" {{show}}></td>
-						<td><input type="text" class="form-control" name="medicalAidStations[{{loop.index0}}][location]" value="{{station.location}}" {{show}}></td>
-						<td><input type="text" class="form-control" name="medicalAidStations[{{loop.index0}}][contact]" value="{{station.contact}}" {{show}}></td>
+						<td><input type="text" class="form-control" name="medicalAidStations[{{loop.index0}}][name]" value="{{station.name}}" {{readonly}}></td>
+						<td><input type="text" class="form-control" name="medicalAidStations[{{loop.index0}}][location]" value="{{station.location}}" {{readonly}}></td>
+						<td><input type="text" class="form-control" name="medicalAidStations[{{loop.index0}}][contact]" value="{{station.contact}}" {{readonly}}></td>
 						<td>
 							<label class="radio-inline">
-								<input type="radio" name="medicalAidStations[{{loop.index0}}][paramedics]" value="yes" {% if station.paramedics === "yes" %}checked{% endif %}> Yes
+								<input type="radio" name="medicalAidStations[{{loop.index0}}][paramedics]" value="yes" {% if station.paramedics === true %}checked{% endif %}> Yes
 							</label>
 							<label class="radio-inline">
-								<input type="radio" name="medicalAidStations[{{loop.index0}}][paramedics]" value="no" {% if station.paramedics === "no" %}checked{% endif %}> No
+								<input type="radio" name="medicalAidStations[{{loop.index0}}][paramedics]" value="no" {% if station.paramedics === false %}checked{% endif %}> No
 							</label>
 						</td>
 					</tr>
@@ -99,15 +99,15 @@
 				{% for t in form.transportation %}
 					<tr>
 						<input type="hidden" name="transportation[{{loop.index0}}][_id]" value="{{t.id}}">
-						<td><input type="text" class="form-control" name="transportation[{{loop.index0}}][ambulance]" value="{{t.ambulance}}" {{show}}></td>
-						<td><input type="text" class="form-control" name="transportation[{{loop.index0}}][location]" value="{{t.location}}" {{show}}></td>
-						<td><input type="text" class="form-control" name="transportation[{{loop.index0}}][contact]" value="{{t.contact}}" {{show}}></td>
+						<td><input type="text" class="form-control" name="transportation[{{loop.index0}}][ambulance]" value="{{t.ambulance}}" {{readonly}}></td>
+						<td><input type="text" class="form-control" name="transportation[{{loop.index0}}][location]" value="{{t.location}}" {{readonly}}></td>
+						<td><input type="text" class="form-control" name="transportation[{{loop.index0}}][contact]" value="{{t.contact}}" {{readonly}}></td>
 						<td>
 							<label class="radio-inline">
-								<input type="radio" name="transportation[{{loop.index0}}][isLevelALS]" value="als" {% if t.level === "als" %}checked{% endif %}> ALS
+								<input type="radio" name="transportation[{{loop.index0}}][level]" value="als" {% if t.level === "als" %}checked{% endif %}> ALS
 							</label>
 							<label class="radio-inline">
-								<input type="radio" name="transportation[{{loop.index0}}][isLevelALS]" value="bls" {% if t.level === "bls" %}checked{% endif %}> BLS
+								<input type="radio" name="transportation[{{loop.index0}}][level]" value="bls" {% if t.level === "bls" %}checked{% endif %}> BLS
 							</label>
 						</td>
 					</tr>
@@ -140,11 +140,11 @@
 				{% for hospital in form.hospitals %}
 					<tr>
 						<input type="hidden" name="hospitals[{{loop.index0}}][_id]" value="{{hospital.id}}">
-						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][name]" value="{{hospital.name}}" {{show}}></td>
-						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][addressLatLong]" value="{{hospital.addressLatLong}}" {{show}}></td>
-						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][contact]" value="{{hospital.contact}}" {{show}}></td>
-						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][airTravelTime]" value="{{hospital.airTravelTime}}" {{show}}></td>
-						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][groundTravelTime]" value="{{hospital.groundTravelTime}}" {{show}}></td>
+						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][name]" value="{{hospital.name}}" {{readonly}}></td>
+						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][addressLatLong]" value="{{hospital.addressLatLong}}" {{readonly}}></td>
+						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][contact]" value="{{hospital.contact}}" {{readonly}}></td>
+						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][airTravelTime]" value="{{hospital.airTravelTime}}" {{readonly}}></td>
+						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][groundTravelTime]" value="{{hospital.groundTravelTime}}" {{readonly}}></td>
 						<td style="padding-top: 0; padding-bottom: 0;">
 							<div class="form-group" style="margin-bottom: 2px;">
 								<div class="checkbox" style="margin-bottom: 5px; margin-top: 5px">
@@ -156,31 +156,31 @@
 							<div class="form-group" style="margin-bottom: 2px">
 								<div class="form-inline">
 									<label class="control-label" for="hospitals[{{loop.index0}}][traumaCenterLevel]">Level:</label>
-									<input type="text" class="form-control input-sm" style="width:50%" name="hospitals[{{loop.index0}}][traumaCenterLevel]" value="{{hospital.groundTravelTime}}" {{show}}>
+									<input type="text" class="form-control input-sm" style="width:50%" name="hospitals[{{loop.index0}}][traumaCenterLevel]" value="{{hospital.traumaCenterLevel}}" {{readonly}}>
 								</div>
 							</div>
 						</td>
 						<td>
 							<div class="radio">
 								<label>
-									<input type="radio" name="hospitals[{{loop.index0}}][burnCenter]" {% if hospital.burnCenter === "yes" %}checked{% endif %}> Yes
+									<input type="radio" name="hospitals[{{loop.index0}}][burnCenter]" value="yes" {% if hospital.burnCenter === true %}checked{% endif %}> Yes
 								</label>
 							</div>
 							<div class="radio">
 								<label>
-									<input type="radio" name="hospitals[{{loop.index0}}][burnCenter]" {% if hospital.burnCenter === "no" %}checked{% endif %}> No
+									<input type="radio" name="hospitals[{{loop.index0}}][burnCenter]" value="no" {% if hospital.burnCenter === false %}checked{% endif %}> No
 								</label>
 							</div>
 						</td>
 						<td>
 							<div class="radio">
 								<label>
-									<input type="radio" name="hospitals[{{loop.index0}}][helipad]" {% if hospital.helipad === "yes" %}checked{% endif %}> Yes
+									<input type="radio" name="hospitals[{{loop.index0}}][helipad]" value="yes" {% if hospital.helipad === true %}checked{% endif %}> Yes
 								</label>
 							</div>
 							<div class="radio">
 								<label>
-									<input type="radio" name="hospitals[{{loop.index0}}][helipad]" {% if hospital.helipad === "no" %}checked{% endif %}> No
+									<input type="radio" name="hospitals[{{loop.index0}}][helipad]" value="no" {% if hospital.helipad === false %}checked{% endif %}> No
 								</label>
 							</div>
 						</td>
@@ -193,7 +193,7 @@
 		<div>
 			<strong>6. Special Medical Emergency Procedures:</strong>
 		</div>
-		<textarea class="form-control" rows="8" name="specMedEmerProc" {{show}}>{{form.specMedEmerProc}}</textarea>
+		<textarea class="form-control" rows="8" name="specMedEmerProc" {{readonly}}>{{form.specMedEmerProc}}</textarea>
 	</div>
 	<div class="row" style="border-bottom:1px solid black"> <!-- Box 7-->
       <div class="col-sm-4">
@@ -201,11 +201,11 @@
       </div>
       <div class="col-sm-4">
         <label for="preparedBy[name]">Name:</label>
-        <input type="text" class="form-control" name="preparedBy[name]" value="{{form.preparedBy.name}}" {{show}}>
+        <input type="text" class="form-control" name="preparedBy[name]" value="{{form.preparedBy.name}}" {{readonly}}>
       </div>
       <div class="col-sm-4">
         <label for="preparedBy[signature]">Signature:</label>
-        <input type="text" class="form-control" name="preparedBy[signature]" value="{{form.preparedBy.signature}}" {{show}}>
+        <input type="text" class="form-control" name="preparedBy[signature]" value="{{form.preparedBy.signature}}" {{readonly}}>
       </div>
     </div>
 	<div class="row"> <!-- Box 8 top half-->
@@ -214,11 +214,11 @@
 		</div>
 		<div class="col-sm-4">
 			<label for="preparedBy[name]">Name:</label>
-			<input type="text" class="form-control" name="preparedBy[name]" value="{{form.preparedBy.name}}" {{show}}>
+			<input type="text" class="form-control" name="preparedBy[name]" value="{{form.preparedBy.name}}" {{readonly}}>
 		</div>
 		<div class="col-sm-4">
 			<label for="preparedBy[signature]">Signature:</label>
-			<input type="text" class="form-control" name="preparedBy[signature]" value="{{form.preparedBy.signature}}" {{show}}>
+			<input type="text" class="form-control" name="preparedBy[signature]" value="{{form.preparedBy.signature}}" {{readonly}}>
 		</div>
 	</div>
 	<div class="row"> <!-- Box 8 bottom half-->

@@ -8,7 +8,7 @@ const ICS206Schema = new Schema({
     name: String,
     location: String,
     contact: String,
-    paramedics: Boolean
+    paramedics: { type: Boolean, default: false }
   }],
   transportation: [{
     ambulance: String,
@@ -22,10 +22,10 @@ const ICS206Schema = new Schema({
     contact: String,
     airTravelTime: String,
     groundTravelTime: String,
-    traumaCenter: Boolean,
-    traumaCenterLevel: Number,
-    burnCenter: Boolean,
-    helipad: Boolean
+    traumaCenter: { type: Boolean, default: false },
+    traumaCenterLevel: String,
+    burnCenter: { type: Boolean, default: false },
+    helipad: { type: Boolean, default: false }
   }],
   specMedEmerProc: String,
   preparedBy: {
@@ -40,6 +40,31 @@ const ICS206Schema = new Schema({
 });
 
 ICS206Schema.statics = {
+  title: function() { return "Medical Plan (ICS 206)"; },
+  
+  fieldMask: function() {
+    return [
+      "medicalAidStations",
+      "transportation",
+      "hospitals",
+      "specMedEmerProc",
+      "preparedBy",
+    ];
+  },
+
+  new: function(values) {
+    values.medicalAidStations.forEach(function (station) {
+      station.paramedics = (station.paramedics === "yes") ? true : false;
+    });
+
+    values.hospitals.forEach(function (hospital) {
+      hospital.burnCenter = (hospital.burnCenter === "yes") ? true : false;
+      hospital.helipad = (hospital.helipad === "yes") ? true : false;
+    });
+
+    return new this(values);
+  },
+
   // A helper function to execute a Mongoose query to fetch an Incident by ID.
   load: function(_id) {
     return this.findOne({_id})
