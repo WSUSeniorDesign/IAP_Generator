@@ -5,27 +5,27 @@ const ICS206Schema = new Schema({
   incident: { type: Schema.Types.ObjectId, ref: "Incident", required: true },
   period: { type: Schema.Types.ObjectId, ref: "Period", required: true },
   medicalAidStations: [{
-	name: String,
-	location: String,
-	contact: String,
-	paramedics: Boolean
+    name: String,
+    location: String,
+    contact: String,
+    paramedics: Boolean
   }],
   transportation: [{
-	ambulance: String,
-	location: String,
-	contact: String,
-	isLevelALS: Boolean
+    ambulance: String,
+    location: String,
+    contact: String,
+    level: String
   }],
   hospitals: [{
-	name: String,
-	addressLatLong: String,
-	contact: String,
-	airTravelTime: String,
-	groundTravelTime: String,
-	traumaCenterbool: Boolean,
-	traumaCenterLevel: Number,
-	burnCenter: Boolean,
-	helipad: Boolean
+    name: String,
+    addressLatLong: String,
+    contact: String,
+    airTravelTime: String,
+    groundTravelTime: String,
+    traumaCenter: Boolean,
+    traumaCenterLevel: Number,
+    burnCenter: Boolean,
+    helipad: Boolean
   }],
   specMedEmerProc: String,
   preparedBy: {
@@ -33,9 +33,9 @@ const ICS206Schema = new Schema({
     signature: String
   },
   approvedBy: {
-	name: String,
-	signature: String,
-	dateTime: String
+  name: String,
+  signature: String,
+  dateTime: String
   }
 });
 

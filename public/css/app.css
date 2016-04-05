@@ -28,3 +28,12 @@ dl.panel-body,
 .panel-body > dl {
   margin-bottom: 0;
 }
+
+#form-ics-206 td {
+  vertical-align: middle;
+}
+
+#form-ics-206 #hospitals .radio {
+  margin-bottom: 5px;
+  margin-top: 5px;
+}

@@ -7,13 +7,13 @@
   <h3 class="text-center">MEDICAL PLAN (ICS 206)</h3>
 </div>
 
-<div class="container" style="border: 1px solid black">
-	<div class="row" style="border: 1px solid black"> <!-- Boxes 1 and 2-->
+<div class="container" style="border:1px solid black">
+	<div class="row" style="border-bottom:1px solid black"> <!-- Boxes 1 and 2-->
 		<div class="col-sm-5"> <!-- Box 1 -->
 			<label> <strong>1. Incident Name:</strong> </label>
 			<div><a href="/incidents/{{incident.id}}">{{incident.name}}</a></div>
 		</div>
-		<div class="col-sm-7" style="border: 1px solid black"> <!-- Box 2-->
+		<div class="col-sm-7" style="border-left:1px solid black"> <!-- Box 2-->
 			<p class="text-left">
 				<strong>2. Operational Period: </strong>
 			</p>
@@ -39,7 +39,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row" style="border: 1px solid black"> <!-- Box 3 -->
+	<div class="row" style="border-bottom:1px solid black"> <!-- Box 3 -->
 		<div style="padding: 10px"> 
 			<strong>3. Medical Aid Stations:</strong>
 		</div>
@@ -66,10 +66,10 @@
 						<td><input type="text" class="form-control" name="medicalAidStations[{{loop.index0}}][contact]" value="{{station.contact}}" {{show}}></td>
 						<td>
 							<label class="radio-inline">
-								<input type="radio" name="medicalAidStations[{{loop.index0}}][paramedics]" id="inlineRadio1" value="{{station.paramedics}}"> Yes
+								<input type="radio" name="medicalAidStations[{{loop.index0}}][paramedics]" value="yes" {% if station.paramedics === "yes" %}checked{% endif %}> Yes
 							</label>
 							<label class="radio-inline">
-								<input type="radio" name="medicalAidStations[{{loop.index0}}][paramedics]" id="inlineRadio2" value="{{!station.paramedics}}"> No
+								<input type="radio" name="medicalAidStations[{{loop.index0}}][paramedics]" value="no" {% if station.paramedics === "no" %}checked{% endif %}> No
 							</label>
 						</td>
 					</tr>
@@ -77,7 +77,7 @@
 			</tbody>
 		</table>
 	</div> 
-	<div class="row" style="border: 1px solid black"> <!-- Box 4-->
+	<div class="row" style="border-bottom:1px solid black"> <!-- Box 4-->
 		<div style="padding: 10px"> 
 			<strong>4. Transportation:</strong>
 		</div>
@@ -104,10 +104,10 @@
 						<td><input type="text" class="form-control" name="transportation[{{loop.index0}}][contact]" value="{{t.contact}}" {{show}}></td>
 						<td>
 							<label class="radio-inline">
-								<input type="radio" name="transportation[{{loop.index0}}][isLevelALS]" id="inlineRadio1" value="{{t.isLevelALS}}"> ALS
+								<input type="radio" name="transportation[{{loop.index0}}][isLevelALS]" value="als" {% if t.level === "als" %}checked{% endif %}> ALS
 							</label>
 							<label class="radio-inline">
-								<input type="radio" name="transportation[{{loop.index0}}][isLevelALS]" id="inlineRadio2" value="{{!t.isLevelALS}}"> BLS
+								<input type="radio" name="transportation[{{loop.index0}}][isLevelALS]" value="bls" {% if t.level === "bls" %}checked{% endif %}> BLS
 							</label>
 						</td>
 					</tr>
@@ -115,7 +115,7 @@
 			</tbody>
 		</table>
 	</div>
-	<div class="row" style="border: 1px solid black"> <!-- Box 5-->
+	<div id="hospitals" class="row" style="border-bottom:1px solid black"> <!-- Box 5-->
 		<div style="padding: 10px"> 
 			<strong>5. Hospitals:</strong>
 		</div>
@@ -123,18 +123,18 @@
 			<thead>
 				<tr>
 					<th class="col-sm-2">Hospital Name</th>
-					<th class="col-sm-2">Address, Latitude & Longitude if Helipad</th>
+					<th class="col-sm-3">Address, Latitude &amp; Longitude if Helipad</th>
 					<th class="col-sm-2">Contact Number(s)/Frequency</th>
 					<th class="col-sm-1">Air Travel Time</th>
 					<th class="col-sm-1">Ground Travel Time</th>
-					<th class="col-sm-2">Trauma Center</th>
+					<th class="col-sm-1">Trauma Center</th>
 					<th class="col-sm-1">Burn Center</th>
 					<th class="col-sm-1">Helipad</th>
 				</tr>
 			</thead>
 			<tbody>
 				{% if form.isNew %}
-					{# the original FEMA form has 5 rows, so to make life easy we just start with 6 #}
+					{# the original FEMA form has 5 rows, so to make life easy we just start with 5 #}
 					{% set form.hospitals = [{}, {}, {}, {}, {}] %}
 				{% endif %}
 				{% for hospital in form.hospitals %}
@@ -145,40 +145,42 @@
 						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][contact]" value="{{hospital.contact}}" {{show}}></td>
 						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][airTravelTime]" value="{{hospital.airTravelTime}}" {{show}}></td>
 						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][groundTravelTime]" value="{{hospital.groundTravelTime}}" {{show}}></td>
-						<td>
-							<div class="radio">
-								<label>
-									<input type="radio" name="hospitals[{{loop.index0}}][traumaCenterBool]" id="inlineRadio1" value="{{hospital.traumaCenterBool}}"> Yes
-								</label>
+						<td style="padding-top: 0; padding-bottom: 0;">
+							<div class="form-group" style="margin-bottom: 2px;">
+								<div class="checkbox" style="margin-bottom: 5px; margin-top: 5px">
+									<label>
+										<input type="checkbox" name="hospitals[{{loop.index0}}][traumaCenter]" {% if hospital.traumaCenter %}checked{% endif %}> Yes
+									</label>
+								</div>
 							</div>
-							<div>
-								<label class="pull-left">Level:</label>
-								<div class="col-sm-1 pull-left">
-									<input type="text" class="form-control" name="hospitals[{{loop.index0}}][traumaCenterLevel]" value="{{hospital.groundTravelTime}}" {{show}}>
+							<div class="form-group" style="margin-bottom: 2px">
+								<div class="form-inline">
+									<label class="control-label" for="hospitals[{{loop.index0}}][traumaCenterLevel]">Level:</label>
+									<input type="text" class="form-control input-sm" style="width:50%" name="hospitals[{{loop.index0}}][traumaCenterLevel]" value="{{hospital.groundTravelTime}}" {{show}}>
 								</div>
 							</div>
 						</td>
 						<td>
 							<div class="radio">
 								<label>
-									<input type="radio" name="hospitals[{{loop.index0}}][burnCenter]" id="inlineRadio1" value="{{hospital.burnCenter}}"> Yes
+									<input type="radio" name="hospitals[{{loop.index0}}][burnCenter]" {% if hospital.burnCenter === "yes" %}checked{% endif %}> Yes
 								</label>
 							</div>
 							<div class="radio">
 								<label>
-									<input type="radio" name="hospitals[{{loop.index0}}][burnCenter]" id="inlineRadio2" value="{{hospital.burnCenter}}"> No
+									<input type="radio" name="hospitals[{{loop.index0}}][burnCenter]" {% if hospital.burnCenter === "no" %}checked{% endif %}> No
 								</label>
 							</div>
 						</td>
 						<td>
 							<div class="radio">
 								<label>
-									<input type="radio" name="hospitals[{{loop.index0}}][helipad]" id="inlineRadio1" value="{{hospital.helipad}}"> Yes
+									<input type="radio" name="hospitals[{{loop.index0}}][helipad]" {% if hospital.helipad === "yes" %}checked{% endif %}> Yes
 								</label>
 							</div>
 							<div class="radio">
-								<label class="radio">
-									<input type="radio" name="hospitals[{{loop.index0}}][helipad]" id="inlineRadio2" value="{{hospital.helipad}}"> No
+								<label>
+									<input type="radio" name="hospitals[{{loop.index0}}][helipad]" {% if hospital.helipad === "no" %}checked{% endif %}> No
 								</label>
 							</div>
 						</td>
@@ -193,7 +195,7 @@
 		</div>
 		<textarea class="form-control" rows="8" name="specMedEmerProc" {{show}}>{{form.specMedEmerProc}}</textarea>
 	</div>
-	<div class="row" style="border: 1px solid black"> <!-- Box 7-->
+	<div class="row" style="border-bottom:1px solid black"> <!-- Box 7-->
       <div class="col-sm-4">
         <strong>7. Prepared by (Medical Unit Leader:</strong>
       </div>
@@ -206,7 +208,7 @@
         <input type="text" class="form-control" name="preparedBy[signature]" value="{{form.preparedBy.signature}}" {{show}}>
       </div>
     </div>
-	<div class="row" style="border: 1px solid black"> <!-- Box 8 top half-->
+	<div class="row"> <!-- Box 8 top half-->
 		<div class="col-sm-4">
 			<strong>8. Approved by (Safety Officer):</strong>
 		</div>
@@ -219,7 +221,7 @@
 			<input type="text" class="form-control" name="preparedBy[signature]" value="{{form.preparedBy.signature}}" {{show}}>
 		</div>
 	</div>
-	<div class="row" style="border: 1px solid black"> <!-- Box 8 bottom half-->
+	<div class="row"> <!-- Box 8 bottom half-->
 		<div class="col-sm-2">
 			<strong>ICS 206</strong>
 		</div>
