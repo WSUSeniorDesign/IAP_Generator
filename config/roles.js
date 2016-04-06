@@ -24,6 +24,8 @@ module.exports = function(ConnectRoles, config) {
   roles.use('create an incident', isCommander);
   roles.use('view an incident', isCommander);
   roles.use('edit an incident', isCommander);
+  roles.use('create an operational period', isCommander);
+  roles.use('edit an operational period', isCommander);
 
 
   // modifier user

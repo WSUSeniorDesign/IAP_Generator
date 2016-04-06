@@ -54,25 +54,24 @@ module.exports = function (app, passport, roles) {
   /**
    * Operational Periods
    */
-  app.get("/incidents/:incidentId/period/new",             periods.new); // commander + admin
-  app.post("/incidents/:incidentId/periods",               periods.create); // commander + admin
-  app.get("/incidents/:incidentId/period/:periodId/edit",  periods.edit); // commander + admin
+  app.get("/incidents/:incidentId/period/new",             roles.can("create an operational period"), periods.new); // commander + admin
+  app.post("/incidents/:incidentId/periods",               roles.can("create an operational period"), periods.create); // commander + admin
+  app.get("/incidents/:incidentId/period/:periodId/edit",  roles.can("edit an operational period"), periods.edit); // commander + admin
   app.put("/incidents/:incidentId/period/:periodId",       periods.update); // commander + admin
   // app.delete("/periods/:periodId",                         periods.destroy);       
 
   /**
    * Forms
    */
-
   app.param("formNum", forms.setFormModel);
   app.param("formId",  forms.load);
 
-  app.get('/incidents/:incidentId/form/:formNum/new',          forms.new);
-  app.get('/incidents/:incidentId/form/:formNum/:formId',      forms.show);
-  app.delete('/incidents/:incidentId/form/:formNum/:formId',   forms.destroy);
-  app.get('/incidents/:incidentId/form/:formNum/:formId/edit', forms.edit);
-  app.put('/incidents/:incidentId/form/:formNum/:formId',      forms.update);
-  app.post('/incidents/:incidentId/form/:formNum',             forms.create);
+  app.get('/incidents/:incidentId/form/:formNum/new',          forms.new); //commander, modifier, admin
+  app.get('/incidents/:incidentId/form/:formNum/:formId',      forms.show); // all users (not anon)
+  app.delete('/incidents/:incidentId/form/:formNum/:formId',   forms.destroy); // commander + admin
+  app.get('/incidents/:incidentId/form/:formNum/:formId/edit', forms.edit);  //commander, modifier, admin
+  app.put('/incidents/:incidentId/form/:formNum/:formId',      forms.update);  //commander, modifier, admin
+  app.post('/incidents/:incidentId/form/:formNum',             forms.create); //commander, modifier, admin
 
   /**
    * Error handling
