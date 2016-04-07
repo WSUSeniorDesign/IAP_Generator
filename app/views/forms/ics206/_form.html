@@ -1,0 +1,236 @@
+{# NOTE: {{readonly}} is a variable which is only passed in for the "show" action, with the value "readonly" #}
+
+<input type="hidden" name="incident" value="{{incident.id}}">
+<input type="hidden" name="period" value="{{form.period.id}}">
+
+<div class="title">
+  <h3 class="text-center">Medical Plan (ICS 206)</h3>
+</div>
+
+<div class="container" style="border:1px solid black">
+	<div class="row" style="border-bottom:1px solid black"> <!-- Boxes 1 and 2-->
+		<div class="col-sm-5"> <!-- Box 1 -->
+			<label> <strong>1. Incident Name:</strong> </label>
+			<div><a href="/incidents/{{incident.id}}">{{incident.name}}</a></div>
+		</div>
+		<div class="col-sm-7" style="border-left:1px solid black"> <!-- Box 2-->
+			<p class="text-left">
+				<strong>2. Operational Period: </strong>
+			</p>
+			<div class="col-sm-6">
+				<div>
+					<label>Date From:</label>
+					<input type="text" class="form-control" value="{{form.period.start.date}}" readonly>
+				</div>
+				<div style="margin-top:5px">
+					<label>Time From:</label>
+					<input type="text" class="form-control" value="{{form.period.start.time}}" readonly>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div>
+					<label>Date To:</label>
+					<input type="text" class="form-control" value="{{form.period.end.date}}" readonly>
+				</div>
+				<div style="margin-top:5px">
+					<label>Time To:</label>
+					<input type="text" class="form-control" value="{{form.period.end.time}}" readonly>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row" style="border-bottom:1px solid black"> <!-- Box 3 -->
+		<div style="padding: 10px"> 
+			<strong>3. Medical Aid Stations:</strong>
+		</div>
+		<table class="table table-condensed" style="margin-bottom: 0">
+			<thead>
+				<tr>
+					<th class="col-sm-3">Name</th>
+					<th class="col-sm-4">Location</th>
+					<th class="col-sm-3">Contact Number(s)/Frequency</th>
+					<th class="col-sm-2">Paramedics on Site?</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% if form.isNew %}
+					{# the original FEMA form has 6 rows, so to make life easy we just start with 6 #}
+					{% set form.medicalAidStations = [{}, {}, {}, {}, {}, {}] %}
+				{% endif %}
+
+				{% for station in form.medicalAidStations %}
+					<tr>
+						<input type="hidden" name="medicalAidStations[{{loop.index0}}][_id]" value="{{station.id}}">
+						<td><input type="text" class="form-control" name="medicalAidStations[{{loop.index0}}][name]" value="{{station.name}}" {{readonly}}></td>
+						<td><input type="text" class="form-control" name="medicalAidStations[{{loop.index0}}][location]" value="{{station.location}}" {{readonly}}></td>
+						<td><input type="text" class="form-control" name="medicalAidStations[{{loop.index0}}][contact]" value="{{station.contact}}" {{readonly}}></td>
+						<td>
+							<label class="radio-inline">
+								<input type="radio" name="medicalAidStations[{{loop.index0}}][paramedics]" value="yes" {% if station.paramedics === true %}checked{% endif %}> Yes
+							</label>
+							<label class="radio-inline">
+								<input type="radio" name="medicalAidStations[{{loop.index0}}][paramedics]" value="no" {% if station.paramedics === false %}checked{% endif %}> No
+							</label>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div> 
+	<div class="row" style="border-bottom:1px solid black"> <!-- Box 4-->
+		<div style="padding: 10px"> 
+			<strong>4. Transportation:</strong>
+		</div>
+		<table class="table table-condensed" style="margin-bottom: 0">
+			<thead>
+				<tr>
+					<th class="col-sm-3">Ambulance Service</th>
+					<th class="col-sm-4">Location</th>
+					<th class="col-sm-3">Contact Number(s)/Frequency</th>
+					<th class="col-sm-2">Level of Service</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% if form.isNew %}
+					{# the original FEMA form has 4 rows, so to make life easy we just start with 4 #}
+					{% set form.transportation = [{}, {}, {}, {}] %}
+				{% endif %}
+
+				{% for t in form.transportation %}
+					<tr>
+						<input type="hidden" name="transportation[{{loop.index0}}][_id]" value="{{t.id}}">
+						<td><input type="text" class="form-control" name="transportation[{{loop.index0}}][ambulance]" value="{{t.ambulance}}" {{readonly}}></td>
+						<td><input type="text" class="form-control" name="transportation[{{loop.index0}}][location]" value="{{t.location}}" {{readonly}}></td>
+						<td><input type="text" class="form-control" name="transportation[{{loop.index0}}][contact]" value="{{t.contact}}" {{readonly}}></td>
+						<td>
+							<label class="radio-inline">
+								<input type="radio" name="transportation[{{loop.index0}}][level]" value="als" {% if t.level === "als" %}checked{% endif %}> ALS
+							</label>
+							<label class="radio-inline">
+								<input type="radio" name="transportation[{{loop.index0}}][level]" value="bls" {% if t.level === "bls" %}checked{% endif %}> BLS
+							</label>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div id="hospitals" class="row" style="border-bottom:1px solid black"> <!-- Box 5-->
+		<div style="padding: 10px"> 
+			<strong>5. Hospitals:</strong>
+		</div>
+		<table class="table table-condensed" style="margin-bottom: 0">
+			<thead>
+				<tr>
+					<th class="col-sm-2">Hospital Name</th>
+					<th class="col-sm-3">Address, Latitude &amp; Longitude if Helipad</th>
+					<th class="col-sm-2">Contact Number(s)/Frequency</th>
+					<th class="col-sm-1">Air Travel Time</th>
+					<th class="col-sm-1">Ground Travel Time</th>
+					<th class="col-sm-1">Trauma Center</th>
+					<th class="col-sm-1">Burn Center</th>
+					<th class="col-sm-1">Helipad</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% if form.isNew %}
+					{# the original FEMA form has 5 rows, so to make life easy we just start with 5 #}
+					{% set form.hospitals = [{}, {}, {}, {}, {}] %}
+				{% endif %}
+				{% for hospital in form.hospitals %}
+					<tr>
+						<input type="hidden" name="hospitals[{{loop.index0}}][_id]" value="{{hospital.id}}">
+						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][name]" value="{{hospital.name}}" {{readonly}}></td>
+						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][addressLatLong]" value="{{hospital.addressLatLong}}" {{readonly}}></td>
+						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][contact]" value="{{hospital.contact}}" {{readonly}}></td>
+						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][airTravelTime]" value="{{hospital.airTravelTime}}" {{readonly}}></td>
+						<td><input type="text" class="form-control" name="hospitals[{{loop.index0}}][groundTravelTime]" value="{{hospital.groundTravelTime}}" {{readonly}}></td>
+						<td style="padding-top: 0; padding-bottom: 0;">
+							<div class="form-group" style="margin-bottom: 2px;">
+								<div class="checkbox" style="margin-bottom: 5px; margin-top: 5px">
+									<label>
+										<input type="checkbox" name="hospitals[{{loop.index0}}][traumaCenter]" {% if hospital.traumaCenter %}checked{% endif %}> Yes
+									</label>
+								</div>
+							</div>
+							<div class="form-group" style="margin-bottom: 2px">
+								<div class="form-inline">
+									<label class="control-label" for="hospitals[{{loop.index0}}][traumaCenterLevel]">Level:</label>
+									<input type="text" class="form-control input-sm" style="width:50%" name="hospitals[{{loop.index0}}][traumaCenterLevel]" value="{{hospital.traumaCenterLevel}}" {{readonly}}>
+								</div>
+							</div>
+						</td>
+						<td>
+							<div class="radio">
+								<label>
+									<input type="radio" name="hospitals[{{loop.index0}}][burnCenter]" value="yes" {% if hospital.burnCenter === true %}checked{% endif %}> Yes
+								</label>
+							</div>
+							<div class="radio">
+								<label>
+									<input type="radio" name="hospitals[{{loop.index0}}][burnCenter]" value="no" {% if hospital.burnCenter === false %}checked{% endif %}> No
+								</label>
+							</div>
+						</td>
+						<td>
+							<div class="radio">
+								<label>
+									<input type="radio" name="hospitals[{{loop.index0}}][helipad]" value="yes" {% if hospital.helipad === true %}checked{% endif %}> Yes
+								</label>
+							</div>
+							<div class="radio">
+								<label>
+									<input type="radio" name="hospitals[{{loop.index0}}][helipad]" value="no" {% if hospital.helipad === false %}checked{% endif %}> No
+								</label>
+							</div>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div class="row" style="border-bottom: 1px solid black; padding: 10px"> <!-- Box 6 -->
+		<div>
+			<strong>6. Special Medical Emergency Procedures:</strong>
+		</div>
+		<textarea class="form-control" rows="8" name="specMedEmerProc" {{readonly}}>{{form.specMedEmerProc}}</textarea>
+	</div>
+	<div class="row" style="border-bottom:1px solid black"> <!-- Box 7-->
+      <div class="col-sm-4">
+        <strong>7. Prepared by (Medical Unit Leader:</strong>
+      </div>
+      <div class="col-sm-4">
+        <label for="preparedBy[name]">Name:</label>
+        <input type="text" class="form-control" name="preparedBy[name]" value="{{form.preparedBy.name}}" {{readonly}}>
+      </div>
+      <div class="col-sm-4">
+        <label for="preparedBy[signature]">Signature:</label>
+        <input type="text" class="form-control" name="preparedBy[signature]" value="{{form.preparedBy.signature}}" {{readonly}}>
+      </div>
+    </div>
+	<div class="row"> <!-- Box 8 top half-->
+		<div class="col-sm-4">
+			<strong>8. Approved by (Safety Officer):</strong>
+		</div>
+		<div class="col-sm-4">
+			<label for="preparedBy[name]">Name:</label>
+			<input type="text" class="form-control" name="preparedBy[name]" value="{{form.preparedBy.name}}" {{readonly}}>
+		</div>
+		<div class="col-sm-4">
+			<label for="preparedBy[signature]">Signature:</label>
+			<input type="text" class="form-control" name="preparedBy[signature]" value="{{form.preparedBy.signature}}" {{readonly}}>
+		</div>
+	</div>
+	<div class="row"> <!-- Box 8 bottom half-->
+		<div class="col-sm-2">
+			<strong>ICS 206</strong>
+		</div>
+		<div class="col-sm-2">
+			<strong>IAP Page</strong>
+		</div>
+		<div class="col-sm-4">
+			<label>Date From:</label>
+            <input type="text" class="form-control" value="{{form.period.start.date}}" readonly>
+		</div>
+	</div>
+</div>
