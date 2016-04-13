@@ -107,30 +107,47 @@ exports.create = co(function* (req, res, next) {
   const incident = new Incident(req.body.incident);
   const period = new Period(req.body.period);
 
-  // NOTE: change this to use validate() or validateSync()
+  // link incident and period together
+  incident.active = true;
+  incident.setCurrentPeriod(period);
+  period.incident = incident;
+  period.open();
 
-  try {
-    incident.active = true;
-    incident.setCurrentPeriod(period);
-    yield incident.save();
-    
-    period.incident = incident;
-    period.open();
-    yield period.save();
-  } catch (err) {
-    if (err.name === "ValidationError") {
-      for (field in err.errors) {
-        req.flash("errors", err.errors[field].message);
+  // validate both to expose errors
+  // NOTE: we must validateSync() before saving instead of just doing try/catch like in other
+  // controllers because we want to display error messages for both incident and period simultaneously
+  const incidentErr = incident.validateSync();
+  const periodErr = period.validateSync();
+
+  // deal with errors
+  if (incidentErr || periodErr) {
+    if (incidentErr && incidentErr.name === "ValidationError") {
+      for (field in incidentErr.errors) {
+        req.flash("error", incidentErr.errors[field].message);
       }
-      return res.render('incidents/new', {
-        title: 'Create New Incident',
-        incident: incident,
-        period: period
-      });
     } else {
       return next(new Error(err));
     }
+    if (periodErr && periodErr.name === "ValidationError") {
+      for (field in periodErr.errors) {
+        req.flash("error", periodErr.errors[field].message);
+      }
+    } else {
+      return next(new Error(err));
+    }
+
+    // send the user back to the New page to fix the errors
+    return res.render('incidents/new', {
+      title: 'Create New Incident',
+      incident: incident,
+      period: period,
+      errors: req.flash("error")
+    });
   }
+
+  // save things
+  yield incident.save();
+  yield period.save();
 
   // all went well
   req.flash('success', 'Successfully created incident!');
@@ -163,11 +180,12 @@ exports.update = co(function* (req, res){
   } catch (err) {
     if (err.name === "ValidationError") {
       for (field in err.errors) {
-        req.flash("errors", err.errors[field].message);
+        req.flash("error", err.errors[field].message);
       }
       return res.render('incidents/edit', {
         title: 'Edit Incident: ' + req.incident.title,
-        incident: incident
+        incident: incident,
+        errors: req.flash("error")
       });
     } else {
       return next(new Error(err));

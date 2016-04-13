@@ -20,12 +20,25 @@ exports.new = function(req, res, next) {
 }
 
 exports.create = function(req, res, next) {
-  console.log(req.body);
   const period = new Period(req.body.period);
   period.incident = req.incident;
 
   period.save(function(err) {
-    if (err) return next(new Error(err));
+    if (err) {
+      if (err.name !== "ValidationError") {
+        return next(new Error(err));
+      }
+
+      for (field in err.errors) {
+        req.flash("error", err.errors[field].message);
+      }
+      return res.render('periods/new', {
+        title: 'Create New Operational Period',
+        incident: req.incident,
+        period: period,
+        errors: req.flash("error")
+      });
+    } 
 
     if (req.body.period.active) {
       req.incident.setCurrentPeriod(period);
@@ -44,7 +57,7 @@ exports.edit = function(req, res, next) {
     title: "Edit Operational Period",
     incident: req.incident,
     period: req.period
-  })
+  });
 }
 
 exports.update = co(function* (req, res){
@@ -52,7 +65,23 @@ exports.update = co(function* (req, res){
 
   Object.assign(period, req.body.period);
 
-  yield period.save();
+  try {
+    yield period.save();
+  } catch (err) {
+    if (err.name === "ValidationError") {
+      for (field in err.errors) {
+        req.flash("error", err.errors[field].message);
+      }
+      return res.render("periods/edit", {
+        title: "Edit Operational Period",
+        incident: req.incident,
+        period: period,
+        errors: req.flash("error")
+      });
+    } else {
+      return next(new Error(err));
+    }
+  }
 
   if (period.id === req.incident.currentPeriod.id) {
     res.redirect(`/incidents/${req.incident.id}`);  
