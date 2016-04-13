@@ -33,8 +33,14 @@ const Period = mongoose.model("Period");
  */
 exports.load = co(function* (req, res, next, id) {
   // load the incident
-  req.incident = yield Incident.load(id);
-  if (!req.incident) return next(new Error('Incident not found'));
+  try {
+    req.incident = yield Incident.load(id);
+  } catch (e) {
+    return next(new Error('Incident not found'));
+  }
+  if (!req.incident) {
+    return next(new Error('Incident not found'));
+  }
 
   // if there's a period param, load the period
   if (req.query.period && mongoose.Types.ObjectId.isValid(req.query.period)) {
