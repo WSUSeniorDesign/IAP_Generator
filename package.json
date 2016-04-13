@@ -40,9 +40,14 @@
     "winston": "1.0.1"
   },
   "devDependencies": {
-    "nodemon": "latest",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.2.0",
+    "chai-http": "^2.0.1",
     "mocha": "latest",
+    "nodemon": "latest",
     "should": "latest",
+    "sinon": "^1.17.3",
+    "sinon-chai": "^2.8.0",
     "supertest": "latest"
   },
   "repository": {
