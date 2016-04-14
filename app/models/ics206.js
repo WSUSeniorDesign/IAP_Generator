@@ -53,6 +53,8 @@ ICS206Schema.statics = {
   },
 
   new: function(values) {
+    values = Object.assign({medicalAidStations: [], hospitals: []}, values)
+
     values.medicalAidStations.forEach(function (station) {
       station.paramedics = (station.paramedics === "yes") ? true : false;
     });
