@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 const Incident = mongoose.model("Incident");
 const Period = mongoose.model("Period");
 
-describe("Incident controller", function(done) {
+describe("Incidents controller", function(done) {
 
   // set up the test database for Incidents
   helpers.setupDb(Incident);
@@ -21,7 +21,6 @@ describe("Incident controller", function(done) {
     incident.setCurrentPeriod(period);
     incident.save(function(err) {
       if (err) return done(err);
-      incidentId = incident.id;
       period.save(done);
     })
   });

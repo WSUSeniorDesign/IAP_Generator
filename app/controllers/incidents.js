@@ -43,8 +43,12 @@ exports.load = co(function* (req, res, next, id) {
   }
 
   // if there's a period param, load the period
-  if (req.query.period && mongoose.Types.ObjectId.isValid(req.query.period)) {
-    req.period = yield Period.load(req.query.period);
+  if (req.query.period) {
+    try {
+      req.period = yield Period.load(req.query.period);
+    } catch (e) {
+      return next(new Error("Period not found"));
+    }
     if (!req.period) return next(new Error("Period not found"));
     if (req.period.incident.toString() !== req.incident.id) return next(new Error("Period did not belong to the current Incident"));
   } else {
