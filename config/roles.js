@@ -27,7 +27,7 @@ module.exports = function(ConnectRoles, config) {
   };
   roles.use('view all incidents', isCommander);
   roles.use('create an incident', isCommander);
-  roles.use('view an incident', isCommander);
+  roles.use('view an incident', isBasic);
   roles.use('edit an incident', isCommander);
   roles.use('create an operational period', isCommander);
   roles.use('edit an operational period', isCommander);
@@ -42,9 +42,9 @@ module.exports = function(ConnectRoles, config) {
       return true;
     }
   };
-  roles.use('view all incidents', isModifier);
-  roles.use('view an incident', isModifier);
-  roles.use('edit an incident', isModifier);
+  // roles.use('view all incidents', isModifier);
+  // roles.use('view an incident', isModifier);
+  // roles.use('edit an incident', isModifier);
 
 
   // basic user
@@ -54,13 +54,11 @@ module.exports = function(ConnectRoles, config) {
     }
   };
   
-  roles.use('view an incident', isBasic);
+  // roles.use('view an incident', isBasic);
   roles.use('view a form', isBasic);
   roles.use('create a form', isCommander);
   roles.use('edit a form', isCommander);
   roles.use('delete a form', isCommander);
-
-  
 
   //anonymous
   roles.use(function (req, action) {

@@ -8,7 +8,7 @@ const Period = mongoose.model("Period");
 // Mongoose schema guide: http://mongoosejs.com/docs/guide.html 
 
 const IncidentSchema = new Schema({
-  user: {type: Schema.Types.ObjectId, ref: 'User', required: true },
+  user: {type: Schema.Types.ObjectId, ref: 'User' },
   name: {type: String, required: [true, "Incident Name is required."] },
   location: String,
   currentPeriod: { type: Schema.Types.ObjectId, ref: "Period" },

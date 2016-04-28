@@ -28,7 +28,7 @@ formModels.forEach(function(FormModel) {
       incident.save(function(err) {
         if (err) return done(err);
         period.save(done);
-      })
+      });
     });
 
     describe("GET /incidents/:incidentId/form/:formNum/new", function(done) {

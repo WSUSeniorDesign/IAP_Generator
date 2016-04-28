@@ -18,7 +18,7 @@ const UserSchema = new Schema({
   phoneNumber: { type: String, default: ''},
   username: { type: String, default: '' },
   role: { type: String, default: 'basic' },
-  provider: { type: String, default: '' },
+  provider: { type: String, default: 'local' },
   hashed_password: { type: String, default: '' },
   salt: { type: String, default: '' }
 });
@@ -163,7 +163,6 @@ UserSchema.methods = {
         .createHmac('sha1', this.salt)
         .update(password)
         .digest('hex');
-      console.log("In encryptPassword(): " + hash);
       return hash;
     } catch (err) {
       return '';

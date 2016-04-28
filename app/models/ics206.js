@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const ICS206Schema = new Schema({
   incident: { type: Schema.Types.ObjectId, ref: "Incident", required: true },
   period: { type: Schema.Types.ObjectId, ref: "Period", required: true },
-  user: {type: Schema.Types.ObjectId, ref: 'User', required: true },
+  user: {type: Schema.Types.ObjectId, ref: 'User' },
   medicalAidStations: [{
     name: String,
     location: String,
