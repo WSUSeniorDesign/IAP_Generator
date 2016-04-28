@@ -117,6 +117,9 @@ exports.create = co(function* (req, res, next) {
   const incident = new Incident(req.body.incident);
   const period = new Period(req.body.period);
 
+  incident.user = req.user;
+  period.user = req.user;
+
   // link incident and period together
   incident.active = true;
   incident.setCurrentPeriod(period);
@@ -171,7 +174,7 @@ exports.create = co(function* (req, res, next) {
  */
 exports.edit = function (req, res) {
   res.render('incidents/edit', {
-    title: 'Edit Incident: ' + req.incident.title,
+    title: 'Edit Incident: ' + req.incident.name,
     incident: req.incident
   });
 };

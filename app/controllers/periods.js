@@ -23,6 +23,8 @@ exports.create = function(req, res, next) {
   const period = new Period(req.body.period);
   period.incident = req.incident;
 
+  period.user = req.user;
+
   period.save(function(err) {
     if (err) {
       if (err.name !== "ValidationError") {

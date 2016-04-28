@@ -19,6 +19,7 @@
               <tr>
                 <th>Form</th>
                 <th>ID</th>
+                <th>Submitted By</th>
                 <th class="text-right">Options</th>
               </tr>
             </thead>
@@ -33,6 +34,7 @@
                 <tr>
                   <td>{{ form.constructor.modelName }}</td>
                   <td><a href="{{ url }}">{{ form.id }}</a></td>
+                  <td><a href="/users/{{ form.user.id }}">{{ form.user.name }}</a></td>
                   <td class="text-right">
                     <form action="{{ url }}" method="POST" onsubmit="return confirm('Are you sure?')">
                       <a href="{{ url }}/edit" class="btn btn-default btn-xs">Edit</a>
@@ -91,31 +93,33 @@
             </dl>
 
             <div class="list-group">
-                {% if period.active %}<a href="#" class="list-group-item">&times; Close Current Period</a>{% endif %}
+                {# {% if period.active %}<a href="#" class="list-group-item">&times; Close Current Period</a>{% endif %} #}
                 <a href="/incidents/{{incident.id}}/period/new" class="list-group-item">&plus; Create New Period</a>
             </div>
 
-            <div class="panel-footer">
-              <nav>
-                <ul class="pager">
-                  {% if period.prevPeriod %}
-                    <li class="previous">
-                      <a href="/incidents/{{incident.id}}?period={{period.prevPeriod.toString()}}">&larr; Previous Period</a>
-                    </li>
-                  {% else %}
-                    <li class="previous disabled"><a href="#">&larr; Previous Period</a></li>
-                  {% endif %}
+            {% if period.prevPeriod or period.nextPeriod %}
+              <div class="panel-footer">
+                <nav>
+                  <ul class="pager">
+                    {% if period.prevPeriod %}
+                      <li class="previous">
+                        <a href="/incidents/{{incident.id}}?period={{period.prevPeriod.toString()}}">&larr; Previous Period</a>
+                      </li>
+                    {% else %}
+                      <li class="previous disabled"><a href="#">&larr; Previous Period</a></li>
+                    {% endif %}
 
-                  {% if period.nextPeriod %}
-                    <li class="next">
-                      <a href="/incidents/{{incident.id}}?period={{period.nextPeriod.toString()}}">Next Period &rarr;</a>
-                    </li>
-                  {% else %}
-                    <li class="next disabled"><a href="#">Next Period &rarr;</a></li>
-                  {% endif %}
-                </ul>
-              </nav>
-            </div>
+                    {% if period.nextPeriod %}
+                      <li class="next">
+                        <a href="/incidents/{{incident.id}}?period={{period.nextPeriod.toString()}}">Next Period &rarr;</a>
+                      </li>
+                    {% else %}
+                      <li class="next disabled"><a href="#">Next Period &rarr;</a></li>
+                    {% endif %}
+                  </ul>
+                </nav>
+              </div>
+            {% endif %}
           </div>
       </div>
     </div>

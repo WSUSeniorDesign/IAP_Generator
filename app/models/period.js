@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 //
 const PeriodSchema = new Schema({
   incident: { type: Schema.Types.ObjectId, ref: "Incident", required: true },
-  // commander: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  user: {type: Schema.Types.ObjectId, ref: 'User', required: true },
   commander: { type: String, required: true },
   prevPeriod: { type: Schema.Types.ObjectId, ref: "Period" },
   nextPeriod: { type: Schema.Types.ObjectId, ref: "Period" },

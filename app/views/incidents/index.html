@@ -17,6 +17,7 @@
           <tr>
             <th>Name</th>
             <th>Location</th>
+            <th>Commander</th>
             <th>Active</th>
             <th class="text-right">Options</th>
           </tr>
@@ -26,6 +27,7 @@
             <tr>
               <td><a href="/incidents/{{ incident.id }}">{{ incident.name }}</a></td>
               <td>{{ incident.location }}</td>
+              <td>{{ incident.currentPeriod.commander }}</td>
               <td>{{ incident.active }}</td>
               <td class="text-right">
                 <form action="/incidents/{{ incident.id }}" method="post" onsubmit="return confirm('Are you sure?')">

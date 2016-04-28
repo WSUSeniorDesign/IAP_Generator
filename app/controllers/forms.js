@@ -60,6 +60,7 @@ exports.create = co(function* (req, res) {
 
   form.incident = req.incident;
   form.period = mongoose.Types.ObjectId(req.body.period);
+  form.user = req.user;
 
   try {
     yield form.save();

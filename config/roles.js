@@ -3,7 +3,12 @@ module.exports = function(ConnectRoles, config) {
   var roles = new ConnectRoles({
     failureHandler: function (req, res, action) {
       res.status(403);
-      res.render('403', {action: action});
+      if (req.isAuthenticated()) {
+        res.render('403', {action: action});        
+      } else {
+        req.flash("error", `You must be logged in and have permission to ${action}.`);
+        res.redirect(`/login?redirectTo=${encodeURIComponent(req.originalUrl)}`);
+      }
     }
   });
 

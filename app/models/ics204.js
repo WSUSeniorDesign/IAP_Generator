@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const ICS204Schema = new Schema({
   incident: { type: Schema.Types.ObjectId, ref: "Incident", required: true },
   period: { type: Schema.Types.ObjectId, ref: "Period", required: true },
+  user: {type: Schema.Types.ObjectId, ref: 'User', required: true },
   field3: { 
     branch: String, 
     division: String, 
@@ -64,18 +65,23 @@ ICS204Schema.statics = {
   load: function(_id) {
     return this.findOne({_id})
       .populate("period")
+      .populate("user")
       .exec();
   },
 
   loadByIncidentId: function(incidentId) {
     return this.find({incident: incidentId})
+      .populate("user")
       .select('_id')
+      .select("user")
       .exec();
   },
 
   loadByPeriodId: function(periodId) {
     return this.find({period: periodId})
+      .populate("user")
       .select('_id')
+      .select("user")
       .exec();
   }
 };

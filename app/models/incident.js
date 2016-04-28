@@ -8,9 +8,9 @@ const Period = mongoose.model("Period");
 // Mongoose schema guide: http://mongoosejs.com/docs/guide.html 
 
 const IncidentSchema = new Schema({
+  user: {type: Schema.Types.ObjectId, ref: 'User', required: true },
   name: {type: String, required: [true, "Incident Name is required."] },
   location: String,
-  // commander: {type: Schema.Types.ObjectId, ref: 'User'},
   currentPeriod: { type: Schema.Types.ObjectId, ref: "Period" },
   active: {
     type: Boolean,
@@ -63,7 +63,7 @@ IncidentSchema.statics = {
   load: function(_id) {
     return this.findOne({_id})
       .populate("currentPeriod")
-      // .populate('commander', 'name') // we want to de-reference the commander and include its name field
+      .populate("user")
       .exec();
   },
 
@@ -73,7 +73,7 @@ IncidentSchema.statics = {
     const page = options.page || 0;
     const limit = options.limit || 30;
     return this.find(criteria)
-      .populate('commander', 'name') // we want to de-reference the commander and include its name field
+      .populate('currentPeriod', 'commander') // we want to de-reference the commander and include its name field
       .sort({ createdAt: -1 })
       .limit(limit)
       .skip(limit * page)
