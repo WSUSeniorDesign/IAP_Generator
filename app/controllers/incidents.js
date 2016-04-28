@@ -32,9 +32,11 @@ const Period = mongoose.model("Period");
  * accessed via req.incident (see the code in the show() function below).
  */
 exports.load = co(function* (req, res, next, id) {
+  // load the incident
   req.incident = yield Incident.load(id);
   if (!req.incident) return next(new Error('Incident not found'));
 
+  // if there's a period param, load the period
   if (req.query.period && mongoose.Types.ObjectId.isValid(req.query.period)) {
     req.period = yield Period.load(req.query.period);
     if (!req.period) return next(new Error("Period not found"));
@@ -53,25 +55,12 @@ exports.load = co(function* (req, res, next, id) {
  * showing a paged list of Incidents.
  */
 exports.index = co(function* (req, res) {
-  const page = (req.query.page > 0 ? req.query.page : 1) - 1;
-  const limit = 30;
-  const options = {
-    limit: limit,
-    page: page
-  };
-
   // load the list of Incidents
-  const incidents = yield Incident.list(options);
-
-  // get a count of the total number of Incidents
-  const count = yield Incident.count({});
+  const incidents = yield Incident.list({});
 
   res.render('incidents/index', {
     title: 'Incidents',
-    incidents: incidents,
-    count: count,
-    page: page + 1,
-    pages: Math.ceil(count / limit)
+    incidents: incidents
   });
 });
 
@@ -104,7 +93,8 @@ exports.show = co(function* (req, res){
 exports.new = function (req, res){
   res.render('incidents/new', {
     title: 'Create New Incident',
-    incident: new Incident({})
+    incident: new Incident({}),
+    period: new Period({})
   });
 };
 
@@ -113,20 +103,55 @@ exports.new = function (req, res){
  * create() adds a new Incident to the database in response to a user
  * submitting the form given by the new() function above.
  */
-exports.create = co(function* (req, res) {
+exports.create = co(function* (req, res, next) {
   const incident = new Incident(req.body.incident);
   const period = new Period(req.body.period);
 
+  // link incident and period together
   incident.active = true;
   incident.setCurrentPeriod(period);
-  yield incident.save();
-
   period.incident = incident;
   period.open();
+
+  // validate both to expose errors
+  // NOTE: we must validateSync() before saving instead of just doing try/catch like in other
+  // controllers because we want to display error messages for both incident and period simultaneously
+  const incidentErr = incident.validateSync();
+  const periodErr = period.validateSync();
+
+  // deal with errors
+  if (incidentErr || periodErr) {
+    if (incidentErr && incidentErr.name === "ValidationError") {
+      for (field in incidentErr.errors) {
+        req.flash("error", incidentErr.errors[field].message);
+      }
+    } else {
+      return next(new Error(err));
+    }
+    if (periodErr && periodErr.name === "ValidationError") {
+      for (field in periodErr.errors) {
+        req.flash("error", periodErr.errors[field].message);
+      }
+    } else {
+      return next(new Error(err));
+    }
+
+    // send the user back to the New page to fix the errors
+    return res.render('incidents/new', {
+      title: 'Create New Incident',
+      incident: incident,
+      period: period,
+      errors: req.flash("error")
+    });
+  }
+
+  // save things
+  yield incident.save();
   yield period.save();
 
+  // all went well
   req.flash('success', 'Successfully created incident!');
-  res.redirect('/incidents/' + incident._id);
+  res.redirect('/incidents/' + incident.id);
 });
 
 /**
@@ -148,17 +173,24 @@ exports.edit = function (req, res) {
 exports.update = co(function* (req, res){
   const incident = req.incident;
 
-  // Object.assign() merges objects from right to left. Here, the
-  // incident object will be assigned the values:
-  //
-  //   incident.name = req.body.name
-  //   incident.location = req.body.location
-  //   incident.active = req.body.active
-  //
-  // retaining all its other values.
   Object.assign(incident, only(req.body.incident, 'name location active'));
 
-  yield incident.save();
+  try {
+    yield incident.save();
+  } catch (err) {
+    if (err.name === "ValidationError") {
+      for (field in err.errors) {
+        req.flash("error", err.errors[field].message);
+      }
+      return res.render('incidents/edit', {
+        title: 'Edit Incident: ' + req.incident.title,
+        incident: incident,
+        errors: req.flash("error")
+      });
+    } else {
+      return next(new Error(err));
+    }
+  }
 
   res.redirect('/incidents/' + incident._id);
 });

@@ -1,5 +1,6 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const validate = require("mongoose-validator");
 
 const per = require("./period"); // ensure Period is registered before Incident
 const Period = mongoose.model("Period");
@@ -7,7 +8,7 @@ const Period = mongoose.model("Period");
 // Mongoose schema guide: http://mongoosejs.com/docs/guide.html 
 
 const IncidentSchema = new Schema({
-  name: {type: String, required: true},
+  name: {type: String, required: [true, "Incident Name is required."] },
   location: String,
   // commander: {type: Schema.Types.ObjectId, ref: 'User'},
   currentPeriod: { type: Schema.Types.ObjectId, ref: "Period" },
@@ -18,7 +19,7 @@ const IncidentSchema = new Schema({
     // it will take the default value of false.
     default: false
   },
-  createdAt: { type : Date, default : Date.now }
+  createdAt: { type: Date, default : Date.now }
 });
 
 IncidentSchema.methods = {

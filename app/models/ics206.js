@@ -35,7 +35,7 @@ const ICS206Schema = new Schema({
   approvedBy: {
   name: String,
   signature: String,
-  dateTime: String
+  dateTime: { type: [String, "Section 8: Date must be a valid date."] }
   }
 });
 

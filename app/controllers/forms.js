@@ -61,10 +61,26 @@ exports.create = co(function* (req, res) {
   form.incident = req.incident;
   form.period = mongoose.Types.ObjectId(req.body.period);
 
-  yield form.save();
+  try {
+    yield form.save();
+  } catch (err) {
+    if (err.name === "ValidationError") {
+      for (field in err.errors) {
+        req.flash("error", err.errors[field].message);
+      }
+      return res.render(`forms/${req.formModel.modelName.toLowerCase()}/new.html`, {
+        title: `Create New ${req.formModel.title()}`,
+        incident: req.incident,
+        form: form,
+        errors: req.flash("error")
+      });
+    } else {
+      return next(new Error(err));
+    }
+  }
 
   req.flash('success', `Created ${req.formModel.modelName} successfully.`);
-  res.redirect(`/incidents/${req.incident.id}/form/${form.modelName.toLowerCase()}/${form.id}`);
+  res.redirect(`/incidents/${req.incident.id}/form/${req.formModel.modelName.toLowerCase()}/${form.id}`);
 });
 
 /**
@@ -86,8 +102,23 @@ exports.update = co(function* (req, res){
 
   Object.assign(form, only(req.body, req.formModel.fieldMask()));
 
-  yield form.save();
-
+  try {
+    yield form.save();
+  } catch (err) {
+    if (err.name === "ValidationError") {
+      for (field in err.errors) {
+        req.flash("error", err.errors[field].message);
+      }
+      return res.render(`forms/${req.formModel.modelName.toLowerCase()}/edit.html`, {
+        title: `Edit ${req.formModel.title()}`,
+        incident: req.incident,
+        form: form,
+        errors: req.flash("error")
+      });
+    } else {
+      return next(new Error(err));
+    }
+  }
   req.flash("success", `Updated ${req.formModel.modelName} successfully.`);
   res.redirect(`/incidents/${req.incident.id}/form/${req.formModel.modelName.toLowerCase()}/${form.id}`);
 });

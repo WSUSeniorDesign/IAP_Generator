@@ -28,6 +28,7 @@
     "method-override": "2.3.3",
     "mongoose": "4.0.6",
     "mongoose-user": "latest",
+    "mongoose-validator": "^1.2.4",
     "morgan": "1.6.1",
     "only": "0.0.2",
     "passport": "0.2.2",
