@@ -41,7 +41,9 @@ const rolesToTest = {
   }
 };
 
+// run tests
 describe("Access Control", function () {
+  // dummy request to send to roles.test()
   var request = {
     isAuthenticated: function() { return true; }
   };

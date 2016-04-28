@@ -7,7 +7,7 @@ module.exports = function(ConnectRoles, config) {
         res.render('403', {action: action});        
       } else {
         req.flash("error", `You must be logged in and have permission to ${action}.`);
-        res.redirect(`/login?redirectTo=${encodeURIComponent(req.originalUrl)}`);
+        res.redirect(`/login?returnTo=${encodeURIComponent(req.originalUrl)}`);
       }
     }
   });
@@ -27,7 +27,6 @@ module.exports = function(ConnectRoles, config) {
   };
   roles.use('view all incidents', isCommander);
   roles.use('create an incident', isCommander);
-  roles.use('view an incident', isBasic);
   roles.use('edit an incident', isCommander);
   roles.use('create an operational period', isCommander);
   roles.use('edit an operational period', isCommander);
@@ -42,10 +41,6 @@ module.exports = function(ConnectRoles, config) {
       return true;
     }
   };
-  // roles.use('view all incidents', isModifier);
-  // roles.use('view an incident', isModifier);
-  // roles.use('edit an incident', isModifier);
-
 
   // basic user
   function isBasic(req) {
@@ -54,11 +49,11 @@ module.exports = function(ConnectRoles, config) {
     }
   };
   
-  // roles.use('view an incident', isBasic);
   roles.use('view a form', isBasic);
   roles.use('create a form', isCommander);
   roles.use('edit a form', isCommander);
   roles.use('delete a form', isCommander);
+  roles.use('view an incident', isBasic);
 
   //anonymous
   roles.use(function (req, action) {
