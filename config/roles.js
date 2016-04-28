@@ -26,11 +26,14 @@ module.exports = function(ConnectRoles, config) {
   roles.use('edit an incident', isCommander);
   roles.use('create an operational period', isCommander);
   roles.use('edit an operational period', isCommander);
+  roles.use('update an operational period', isCommander);
+  roles.use('delete an incident', isCommander);
+  roles.use('delete an operational period', isCommander);
 
 
   // modifier user
   function isModifier(req) {
-    if (req.isAuthenticated() && req.user.role === 'modifier') {
+    if (req.isAuthenticated() && (req.user.role === 'modifier' || req.user.role === 'commander')) {
       return true;
     }
   };
@@ -41,11 +44,17 @@ module.exports = function(ConnectRoles, config) {
 
   // basic user
   function isBasic(req) {
-    if (req.isAuthenticated() && req.user.role === 'basic') {
+    if (req.isAuthenticated() && (req.user.role === 'basic' || req.user.role === 'modifier' || req.user.role === 'commander')) {
       return true;
     }
   };
+  
   roles.use('view an incident', isBasic);
+  roles.use('view a form', isBasic);
+  roles.use('create a form', isCommander);
+  roles.use('edit a form', isCommander);
+  roles.use('delete a form', isCommander);
+
   
 
   //anonymous
@@ -54,7 +63,7 @@ module.exports = function(ConnectRoles, config) {
     if (process.env.NODE_ENV === 'test') {
       return true;
     }
-    
+
     if (!req.isAuthenticated()) return action === 'access non user pages';
   });
 

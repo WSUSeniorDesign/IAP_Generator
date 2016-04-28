@@ -49,7 +49,7 @@ module.exports = function (app, passport, roles) {
   app.get('/incidents/:incidentId/edit',  roles.can("edit an incident"), incidents.edit);
   app.post('/incidents',                  roles.can("create an incident"), incidents.create);
   app.put('/incidents/:incidentId',       roles.can("edit an incident"), incidents.update);
-  app.delete('/incidents/:incidentId',    incidents.destroy);
+  app.delete('/incidents/:incidentId',    roles.can("delete an incident"), incidents.destroy);
 
   /**
    * Operational Periods
@@ -57,8 +57,8 @@ module.exports = function (app, passport, roles) {
   app.get("/incidents/:incidentId/period/new",             roles.can("create an operational period"), periods.new); // commander + admin
   app.post("/incidents/:incidentId/periods",               roles.can("create an operational period"), periods.create); // commander + admin
   app.get("/incidents/:incidentId/period/:periodId/edit",  roles.can("edit an operational period"), periods.edit); // commander + admin
-  app.put("/incidents/:incidentId/period/:periodId",       periods.update); // commander + admin
-  // app.delete("/periods/:periodId",                         periods.destroy);       
+  app.put("/incidents/:incidentId/period/:periodId",       roles.can("update an operational period"), periods.update); // commander + admin
+  // app.delete("/periods/:periodId",                         roles.can("delete an operational period"), periods.destroy);       
 
   /**
    * Forms
@@ -66,12 +66,12 @@ module.exports = function (app, passport, roles) {
   app.param("formNum", forms.setFormModel);
   app.param("formId",  forms.load);
 
-  app.get('/incidents/:incidentId/form/:formNum/new',          forms.new); //commander, modifier, admin
-  app.get('/incidents/:incidentId/form/:formNum/:formId',      forms.show); // all users (not anon)
-  app.delete('/incidents/:incidentId/form/:formNum/:formId',   forms.destroy); // commander + admin
-  app.get('/incidents/:incidentId/form/:formNum/:formId/edit', forms.edit);  //commander, modifier, admin
-  app.put('/incidents/:incidentId/form/:formNum/:formId',      forms.update);  //commander, modifier, admin
-  app.post('/incidents/:incidentId/form/:formNum',             forms.create); //commander, modifier, admin
+  app.get('/incidents/:incidentId/form/:formNum/new',          roles.can("create a form"), forms.new); //commander, modifier, admin
+  app.get('/incidents/:incidentId/form/:formNum/:formId',      roles.can("view a form"), forms.show); // all users (not anon)
+  app.delete('/incidents/:incidentId/form/:formNum/:formId',   roles.can("delete a form"), forms.destroy); // commander + admin
+  app.get('/incidents/:incidentId/form/:formNum/:formId/edit', roles.can("edit a form"), forms.edit);  //commander, modifier, admin
+  app.put('/incidents/:incidentId/form/:formNum/:formId',      roles.can("edit a form"), forms.update);  //commander, modifier, admin
+  app.post('/incidents/:incidentId/form/:formNum',             roles.can("create a form"), forms.create); //commander, modifier, admin
 
   /**
    * Error handling
