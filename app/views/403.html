@@ -1,0 +1,12 @@
+{% extends "layouts/default.html" %}
+
+{% block main %}
+  <h2>403 - Forbidden</h2>
+{% endblock %}
+
+{% block content %}
+  <p>You don't have permission to do that.</p>
+  {% if env == 'development' %}
+    <pre>{{ action }}</pre>
+  {% endif %}
+{% endblock %}

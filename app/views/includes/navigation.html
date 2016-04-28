@@ -11,9 +11,23 @@
     </div>
     <div id="navigationbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li><a href="/incidents">Incidents</a></li>
-        <li><a href="/incidents/new">New Incident</a></li>
       </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        {% if (req.isAuthenticated()) %}
+          <li class="{% if (isActive('/users/' + req.user.id )) %}active{% endif %}">
+            <a href="{{ '/users/' + req.user.id }}" title="View Your Profile">Profile</a>
+          </li>
+          <li>
+            <a href="/logout" title="Logout of Your Account">Logout</a>
+          </li>
+        {% else %}
+          <li class="{% if (isActive('/login')) %}active{% endif %}">
+            <a href="/login" title="Login">Login</a>
+          </li>
+        {% endif %}
+      </ul>
+
     </div>
   </div>
 </nav>

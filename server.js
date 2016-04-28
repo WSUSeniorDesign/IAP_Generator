@@ -7,6 +7,7 @@ var fs = require('fs');
 var express = require('express');
 var mongoose = require('mongoose');
 var passport = require('passport');
+var ConnectRoles = require('connect-roles');
 var config = require('./config/config');
 
 var app = express();
@@ -30,11 +31,14 @@ fs.readdirSync(__dirname + '/app/models').forEach(function (file) {
 // Bootstrap passport config
 require('./config/passport')(passport, config);
 
+// Bootstrap connect-roles
+var roles = require('./config/roles')(ConnectRoles, config);
+
 // Bootstrap application settings
-require('./config/express')(app, passport);
+require('./config/express')(app, passport, roles);
 
 // Bootstrap routes
-require('./config/routes')(app, passport);
+require('./config/routes')(app, passport, roles);
 
 app.listen(port);
 console.log('Express app started on port ' + port);
