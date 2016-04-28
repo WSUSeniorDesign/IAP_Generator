@@ -27,11 +27,24 @@ exports.create = wrap(function* (req, res) {
   console.log(req.body);
   const user = new User(req.body);
   user.provider = 'local';
-  yield user.save(function (error){
-    if (error){
-      console.log(error)
+
+  try {
+    yield user.save();
+  } catch (err) {
+    if (err.name === "ValidationError") {
+      console.log(err)
+      for (var field in err.errors) {
+        req.flash("error", err.errors[field].message);
+      }
+      return   res.render('users/signup', {
+        title: 'Sign up',
+        user: user
+      });
+    } else {
+      return next(new Error(err));
     }
-  });
+  }
+
   req.logIn(user, err => {
     if (err) req.flash('info', 'Sorry! We are not able to log you in!');
     return res.redirect('/');
