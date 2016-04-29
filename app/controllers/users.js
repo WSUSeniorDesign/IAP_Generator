@@ -14,7 +14,11 @@ const User = mongoose.model('User');
 
 exports.load = wrap(function* (req, res, next, _id) {
   const criteria = { _id };
-  req.profile = yield User.load({ criteria });
+  try {
+    req.profile = yield User.load({ criteria });
+  } catch (err) {
+    return next(new Error('User not found'));
+  }
   if (!req.profile) return next(new Error('User not found'));
   next();
 });
@@ -24,19 +28,17 @@ exports.load = wrap(function* (req, res, next, _id) {
  */
 
 exports.create = wrap(function* (req, res) {
-  console.log(req.body);
-  const user = new User(req.body);
+  const user = new User(req.body.user);
   user.provider = 'local';
 
   try {
     yield user.save();
   } catch (err) {
     if (err.name === "ValidationError") {
-      console.log(err)
       for (var field in err.errors) {
         req.flash("error", err.errors[field].message);
       }
-      return   res.render('users/signup', {
+      return res.render('users/signup', {
         title: 'Sign up',
         user: user
       });
@@ -49,6 +51,46 @@ exports.create = wrap(function* (req, res) {
     if (err) req.flash('info', 'Sorry! We are not able to log you in!');
     return res.redirect('/');
   });
+});
+
+/**
+ *  Edit profile
+ */
+
+exports.edit = function (req, res) {
+  const user = req.profile;
+  res.render('users/edit', {
+    title: user.name,
+    user: user
+  });
+};
+
+exports.update = wrap(function* (req, res) {
+  const user = req.profile;
+
+  if (req.body.user.hasOwnProperty("password") && req.body.user.password.length === 0) {
+    delete req.body.user.password;
+  }
+  
+  Object.assign(user, req.body.user);
+
+  try {
+    yield user.save();
+  } catch (err) {
+    if (err.name === "ValidationError") {
+      for (var field in err.errors) {
+        req.flash("error", err.errors[field].message);
+      }
+      return res.render('users/edit', {
+        title: user.name,
+        user: user
+      });
+    } else {
+      return next(new Error(err));
+    }
+  }
+
+  res.redirect(`/users/${user.id}`);
 });
 
 /**

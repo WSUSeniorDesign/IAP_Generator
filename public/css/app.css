@@ -15,6 +15,10 @@ body {
   margin-bottom: 0;
 }
 
+#page-home #nav {
+  margin-bottom: 20px;
+}
+
 .panel-heading a.btn ~ h3 {
     white-space: nowrap;
     overflow: hidden;

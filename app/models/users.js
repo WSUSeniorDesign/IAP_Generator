@@ -93,6 +93,7 @@ UserSchema.path('username').validate(function (username) {
 
 UserSchema.path('hashed_password').validate(function (hashed_password) {
   if (this.skipValidation()) return true;
+  if (!this.isNew) return true;
   return hashed_password.length && this._password.length;
 }, 'Password cannot be blank');
 
@@ -195,7 +196,7 @@ UserSchema.statics = {
    */
 
   load: function (options, cb) {
-    options.select = options.select || 'name username email phoneNumber';
+    options.select = options.select || '';
     return this.findOne(options.criteria)
       .select(options.select)
       .exec(cb);

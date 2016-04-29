@@ -18,8 +18,9 @@ A few key highlights from the many NPM packages listed in `package.json` which o
 - [express](http://expressjs.com/) web application framework
 - [mongoose](http://mongoosejs.com/) for object modeling and simpler interaction with MongoDB
 - [passport](http://passportjs.org/) for user authentication
-- [mocha](https://mochajs.org/) testing framework
 - [swig](https://paularmstrong.github.io/swig/) template engine for generating HTML
+- [mocha](https://mochajs.org/) testing framework
+- [chai](https://mochajs.org/) test assertions and expectations
 
 ## Installation
 > In this README, a `$` followed by a command indicates that it should be executed on the command line. On Windows, 
@@ -75,11 +76,21 @@ Express app started on port 3000
 ```
 
 ## Testing
+Tests are located at `/test/`. The full suite can be run with the command
+
 ```
 $ npm test
 ```
 
+Individual tests can be run with
+
+```
+$ node_modules/.bin/cross-env NODE_ENV=test node_modules/.bin/mocha --timeout 5000 --reporter spec --ui tdd test/[filename]
+```
+
 ## File/Directory Structure
+An listing of the important files and directories within this repository:
+
 ```
 .
 ├── app
@@ -97,14 +108,13 @@ $ npm test
 │   ├── config.js       ; loads configuration when the app is run
 │   ├── express.js      ; config for Express
 │   ├── passport.js     ; config for user authentication
+│   ├── roles.js        ; config for user access controls
 │   └── routes.js       ; this is where we define our app's URLs and such
 ├── public              ; static things like images and unchanging HTML/CSS/JavaScript
 │   └── ...
-├── test                ; unit tests and specs live here
+├── test                ; unit tests
 │   └── ...
-├── Makefile
 ├── package.json        ; dependency declarations, NPM config
-├── Procfile
-├── README.md
+├── README.md           ; this README
 └── server.js           ; connects to MongoDB and runs the server
 ```

@@ -17,12 +17,15 @@ const forms = require("../app/controllers/forms");
 module.exports = function (app, passport, roles) {
 
   app.get('/', function (req, res) {
-    res.redirect('/incidents');
+    if (req.isAuthenticated()) {
+      res.redirect('/incidents');
+    } else {
+      res.render('home', {title: "IAP Generator"});
+    }
   });
 
   app.param('incidentId', incidents.load);
   app.param('periodId', periods.load);
-
   
   /**
    * User routes
@@ -31,13 +34,14 @@ module.exports = function (app, passport, roles) {
   app.get('/signup', users.signup);
   app.get('/logout', users.logout);
   app.post('/users', users.create);
-  // app.post('/users', roles.can("access non user pages"), users.create);
   app.post('/users/session',
     passport.authenticate('local', {
       failureRedirect: '/login',
       failureFlash: 'Invalid email or password.'
     }), users.session);
   app.get('/users/:userId', users.show);
+  app.get('/users/:userId/edit', users.edit);
+  app.put('/users/:userId', users.update);
   app.param('userId', users.load);
 
   /**

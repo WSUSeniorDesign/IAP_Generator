@@ -1,16 +1,15 @@
 {% extends 'auth.html' %}
 
 {% block auth %}
-  <form action="/users" method="post" role="form" class="form-horizontal">
+  <form action="/users/{{user.id}}" method="post" role="form" class="form-horizontal">
     <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+    <input type="hidden" name="_method" value="PUT">
 
     {% include "_form.html" %}
 
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
-        <button class="btn btn-primary" type="submit">Sign up</button>
-        &nbsp; or &nbsp;
-        <a href="/login" class="show-login">Log in</a>
+        <button class="btn btn-primary" type="submit">Submit</button>
       </div>
     </div>
   </form>
