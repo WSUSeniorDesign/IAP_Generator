@@ -11,20 +11,6 @@ describe("Users controller", function(done) {
 
   helpers.setupDb(User);
 
-/*
-  app.get('/login', users.login);
-  app.get('/signup', users.signup);
-  app.get('/logout', users.logout);
-  app.post('/users', users.create);
-  // app.post('/users', roles.can("access non user pages"), users.create);
-  app.post('/users/session',
-    passport.authenticate('local', {
-      failureRedirect: '/login',
-      failureFlash: 'Invalid email or password.'
-    }), users.session);
-  app.get('/users/:userId', users.show);
-*/
-
   describe("GET /login", function(done) {
     it("should return a status 200", function(done) {
       chai.request(app)
@@ -86,35 +72,43 @@ describe("Users controller", function(done) {
     });
   });
 
-  describe("POST /users", function(done) {
+  describe("GET /users/:userId/edit", function(done) {
+    it("should return a status 200 for an existing user", function(done) {
+      User.create({name:"foo",email:"foo@foo.com",password:"foo",phoneNumber:"foo",username:"foo"}, function(err, doc) {
+        if (err) return done(err);
+        chai.request(app)
+          .get(`/users/${doc._id}/edit`)
+          .end(function (err, res) {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            done();
+          });
+      });
+    });
 
-    it("should return a status 200", function(done) {
+    it("should return a status 404 for a non-existing user", function(done) {
       chai.request(app)
-        .post(`/users`)
-        .type("form")
-        .send("name=foo")
-        .send("username=foo")
-        .send("email=foo@foo.com")
-        .send("phoneNumber=foo")
-        .send("password=foo")
+        .get(`/users/notauser/edit`)
         .end(function (err, res) {
-          expect(err).to.be.null;
-          expect(res).to.redirect;
-          expect(res).to.have.status(200);
+          expect(err).not.to.be.null;
+          expect(res).to.have.status(404);
           done();
         });
     });
+  });
 
-    it("should create a user", function(done) {
+  describe("POST /users", function(done) {
+
+    it("should create a user and return status 200", function(done) {
       User.count({}, function(err, countBefore) {
         chai.request(app)
           .post(`/users`)
           .type("form")
-          .send("name=foo")
-          .send("username=foo")
-          .send("email=foo@foo.com")
-          .send("phoneNumber=foo")
-          .send("password=foo")
+          .send("user[name]=foo")
+          .send("user[username]=foo")
+          .send("user[email]=foo@foo.com")
+          .send("user[phoneNumber]=foo")
+          .send("user[password]=foo")
           .end(function (err, res) {
             User.count({}, function(err, countAfter) {
               expect(err).to.be.null;
@@ -126,6 +120,45 @@ describe("Users controller", function(done) {
           });        
       });
     });
+  });
+
+
+  describe("PUT /users/:userId", function(done) {
+    
+    beforeEach(function(done) {
+      User.create({name:"foo",email:"foo@foo.com",password:"foo",phoneNumber:"foo",username:"foo"}, done);
+    });
+
+    it("should update a user and return a status 200", function(done) {
+      User.findOne({name:"foo"}, function(err, userBefore) {
+        if (err) return done(err);
+        chai.request(app)
+          .put(`/users/${userBefore._id}`)
+          .type("form")
+          .send("user[name]=bar")
+          .send("user[username]=bar")
+          .send("user[email]=bar@bar.com")
+          .send("user[phoneNumber]=bar")
+          .send("user[password]=bar")
+          .end(function (err, res) {
+            expect(err).to.be.null;
+            expect(res).to.redirect;
+            expect(res).to.have.status(200);
+
+            User.findOne({_id: userBefore._id}, function (err, userAfter) {
+              if (err) return done(err);
+
+              expect(userAfter.name).to.equal("bar");
+              expect(userAfter.username).to.equal("bar");
+              expect(userAfter.email).to.equal("bar@bar.com");
+              expect(userAfter.phoneNumber).to.equal("bar");
+
+              done();
+            });
+          });          
+      });
+    });
+
   });
 
   describe("POST /users/session", function(done) {
